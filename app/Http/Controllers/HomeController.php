@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-       return view('Theme_2.pages.dashboard');
+        return view('pages.dashboard');
 
     }
 }

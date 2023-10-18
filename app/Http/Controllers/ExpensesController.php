@@ -15,35 +15,48 @@ class ExpensesController extends Controller
     public function index(Request $request)
     {
         $expenses = Expense::query();
+        $per_page = 10;
 
-        $per_page = request('rows') ?: 20;
 
-        $expenses->when(request('search') != null, function ($q) {
-            return $q->where('name', 'like', '%' . request('search') . '%')->orWhere(function ($query) {
-                $query->where('price', 'like', '%' . request('search') . '%');
-            });
+  /*       $expenses->when(request('search') != null, function ($q) {
+            return $q->where('service', 'like', '%' . request('search') . '%');
+        }); */
+
+        $expenses->when(request('service_filter') != null, function ($q) {
+            return $q->where('service',request('service_filter'));
+        });
+
+
+        $expenses->when(request('filter') == 'sort_asc', function ($q) {
+            return $q->orderBy('created_at', 'asc');
+        },function ($q) {
+            return $q->orderBy('created_at', 'desc');
         });
 
         if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
             $from=$request->get('from');
             $to=$request->get('to');
 
-            $expenses->whereBetween('created_at',[$from,$to]);
+            $expenses->whereBetween('expense_date',[$from,$to]);
         }
 
-        $expenses->when(request('filter') == 'high-price', function ($q) {
-            return $q->orderBy('price', 'desc');
-        },function ($q) {
-            return $q->orderBy('price', 'asc');
-        });
-
-
-        $expenses->orderBy('id', 'desc');
+        if ($request->has('rows')):
+            $per_page = $request->query('rows');
+        endif;
 
         $expenses = $expenses->paginate($per_page);
-        return view(config('app.theme').'.pages.expense.index', compact('expenses'));
+        return view('pages.expenses.index', compact('expenses'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -53,11 +66,7 @@ class ExpensesController extends Controller
      */
     public function store(Request $request)
     {
-        Expense::create($request->only([
-            'name',
-            'price'
-        ]));
-        return redirect()->back()->with('success_message', 'تم اضافة مصروف');
+        //
     }
 
     /**
@@ -79,11 +88,7 @@ class ExpensesController extends Controller
      */
     public function edit($id)
     {
-        $expense   = Expense::find($id);
-        return response()->json([
-            'status' => true,
-            'view'   => view(config('app.theme').'.pages.expense.model.edit', compact('expense'))->render()
-        ]);
+        //
     }
 
     /**
@@ -95,11 +100,7 @@ class ExpensesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $expense = Expense::where('id', $id)->update($request->only([
-            'name',
-            'price'
-        ]));
-        return redirect()->back();
+        //
     }
 
     /**
@@ -110,8 +111,6 @@ class ExpensesController extends Controller
      */
     public function destroy($id)
     {
-        $expense = Expense::find($id);
-        $expense = Expense::destroy($id);
-        return redirect()->back();
+        //
     }
 }
