@@ -52,23 +52,25 @@
                 </li>
             </ul>
         </li>
-{{--
-        <!-- invoices orders  -->
-        <li class="menu-item {{ IsActiveOnlyIf(['admin.orders.index','admin.orders.create','admin.orders.edit','admin.orders.show']) }}">
+
+             <!-- sales  -->
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.sales.index']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class='menu-icon tf-icons bx bxs-package'></i>
-                <div data-i18n="Layouts">فواتير البيع</div>
+                <div data-i18n="Layouts">المبيعات</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ IsActiveOnlyIf(['admin.orders.index','admin.orders.show','admin.orders.edit']) }}">
-                    <a href="{{ route('admin.orders.index') }}" class="menu-link">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.sales.index']) }}">
+                    <a href="{{ route('admin.sales.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">عرض</div>
                     </a>
                 </li>
             </ul>
         </li>
 
+       
+{{--
         <!-- invoices purchasing -->
         <li class="menu-item {{ IsActiveOnlyIf(['admin.purchasing-invoices.index','admin.purchasing-invoices.create','admin.purchasing-invoices.edit','admin.purchasing-invoices.show']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use App\Exports\ExportEmployee;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\EmployeeRequest;
 
 class EmployeesController extends Controller
@@ -15,6 +17,7 @@ class EmployeesController extends Controller
      */
     public function index(Request $request)
     {
+
         $employees = Employee::query();
         $per_page = 10;
 
@@ -44,7 +47,18 @@ class EmployeesController extends Controller
         endif;
 
         $employees = $employees->paginate($per_page);
+
         return view('pages.employees.index', compact('employees'));
+    }
+
+    public function exportEployee(Request $request){
+
+        
+        return Excel::download(new ExportEmployee($request->search,$request->filter),'employee.xlsx');
+
+        return redirect()->back();
+
+
     }
 
     /**

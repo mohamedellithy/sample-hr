@@ -15,6 +15,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
+        "maatwebsite/excel": "^3.1",
         "spatie/browsershot": "^3.59",
         "spatie/laravel-flash": "^1.9"
     },

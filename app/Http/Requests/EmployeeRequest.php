@@ -34,5 +34,17 @@ class EmployeeRequest extends FormRequest
             'card_expiry' => 'required|date',
             'join_date' => 'required|date',
         ];
+
+
+    }
+
+    public function messages()
+    {
+        return [
+            'required' => 'هذا الحقل مطلوب',
+            'numeric' => 'يرجى ادخال رقم',
+            'date' => 'يجب ادخال تاريخ',
+
+        ];
     }
 }

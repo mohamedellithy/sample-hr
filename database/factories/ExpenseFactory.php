@@ -18,7 +18,7 @@ class ExpenseFactory extends Factory
             'service' => fake()->randomElement(["بار","شيشه","صيانه","مطبخ","owner"]),
             'amount' => fake()->numberBetween(10,100),
             'expense_date' => fake()->date('Y_m_d'),
-            'attachment' => 'uploads/expense/defult.png',
+            'attachment' => 'http://127.0.0.1:8000/uploads/expense/default.jpg',
         ];
     }
 }

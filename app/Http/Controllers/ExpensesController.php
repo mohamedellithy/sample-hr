@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use App\Models\Expense;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use App\Http\Requests\ExpensesRequest;
 
 class ExpensesController extends Controller
 {
@@ -55,7 +60,7 @@ class ExpensesController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.expenses.create');
     }
 
     /**
@@ -64,9 +69,35 @@ class ExpensesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ExpensesRequest $request)
     {
-        //
+            $data = $request->all();
+
+            DB::beginTransaction();
+
+            try{
+                if ($request->hasfile('attachment') ) {
+                    $attachment_image = $request->file('attachment');
+                    $image_name = url('').'/uploads/expense/'.time().'.' .$attachment_image->getClientOriginalExtension();
+                  if($attachment_image->move(public_path('uploads/expense/'), $image_name)){
+
+                    $data['attachment'] = $image_name;
+
+                  }
+                } else {
+                    unset($data['attachment']);
+                }
+
+                Expense::create($data);
+
+                DB::commit();
+                return redirect()->back()->with('success_message', 'تم اضافة المصروف');
+            }
+            catch (Throwable $e) {
+                DB::rollBack();
+                throw $e;
+            }
+
     }
 
     /**
@@ -77,7 +108,8 @@ class ExpensesController extends Controller
      */
     public function show($id)
     {
-        //
+        $expense = Expense::find($id);
+        return view('pages.expenses.show', compact('expense'));
     }
 
     /**
@@ -88,7 +120,8 @@ class ExpensesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $expense = Expense::find($id);
+        return view('pages.expenses.edit', compact('expense'));
     }
 
     /**
@@ -98,9 +131,39 @@ class ExpensesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ExpensesRequest $request, $id)
     {
-        //
+           $expense = Expense::find($id);
+            $data = $request->all();
+            DB::beginTransaction();
+            try{
+                if ($request->hasfile('attachment') ) {
+                    $attachment_image = $request->file('attachment');
+                    $image_name = url('').'/uploads/expense/'.time().'.' .$attachment_image->getClientOriginalExtension();
+                  if($attachment_image->move(public_path('uploads/expense/'), $image_name)){
+                    // delete old img
+                      $imagePath = Str::after($expense->attachment, url(url('').'/'));
+                        if(File::exists($imagePath) && $expense->attachment != 'http://127.0.0.1:8000/uploads/expense/default.jpg')
+                        {
+                            File::delete($imagePath);
+                        }
+
+                    $data['attachment'] = $image_name;
+                  }
+                } else {
+                    unset($data['photo']);
+                }
+                $expense->update($data);
+
+                DB::commit();
+                return redirect()->back()->with('success_message', 'تم المصروف المصروف');
+
+            }
+            catch (Throwable $e) {
+                DB::rollBack();
+                throw $e;
+            }
+
     }
 
     /**
@@ -111,6 +174,15 @@ class ExpensesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $expense = Expense::find($id);
+        if($expense->attachment){
+            $imagePath = Str::after($expense->attachment, url(url('').'/'));
+            if(File::exists($imagePath) && $expense->attachment != 'http://127.0.0.1:8000/uploads/expense/default.jpg')
+            {
+            File::delete($imagePath);
+            }
+        }
+        $expense->delete();
+        return redirect()->route('admin.expenses.index');
     }
 }

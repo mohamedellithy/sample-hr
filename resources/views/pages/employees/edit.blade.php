@@ -108,7 +108,7 @@
 
                          <div class="row mt-4 text-center">
                             <div class="col">
-                            <button type="submit" class="btn btn-primary">تعديل موظف</button>
+                            <button type="submit" class="btn btn-danger">تعديل موظف</button>
 
                             </div>
                         </div>

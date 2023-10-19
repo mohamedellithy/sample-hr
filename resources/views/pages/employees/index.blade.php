@@ -4,6 +4,8 @@ $search = request()->query('search') ?: null;
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $filter_salary = request()->query('filter_salary') ?: null;
+$export =null;
+
 @endphp
 @section('content')
 <div class="container-fluid">
@@ -33,7 +35,7 @@ $filter_salary = request()->query('filter_salary') ?: null;
                         </div> --}}
 
                         <div class="nav-item d-flex align-items-center m-2">
-                            <select name="filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
+                            <select name="filter" id="largeSelect" onclick="myFunction2()" onchange="document.getElementById('filter-data').submit()" class="form-control">
                                 <option value="">فلتر الموظفين</option>
                                 <option value="sort_desc" @isset($filter) @if ($filter=='sort_desc' ) selected @endif @endisset>الاحدث </option>
                                 <option value="sort_asc" @isset($filter) @if ($filter=='sort_asc' ) selected @endif @endisset>الاقدم</option>
@@ -48,7 +50,15 @@ $filter_salary = request()->query('filter_salary') ?: null;
                             </select>
                         </div>
 
-                    </div>
+                           </div>
+                </form>
+                  <form  method="post" action="{{ route('admin.employees.export') }}">
+                  @csrf
+                            <div class="nav-item d-flex align-items-center m-2">
+                             <input type="hidden" name="search" value="{{ $search }}">
+                            <input type="hidden" name="filter" value="{{ $filter }}">
+                            <button type="submit" class="btn btn-primary">export</button>
+                            </div>
                 </form>
            </div>
            <div class="table-responsive text-nowrap">
@@ -151,5 +161,9 @@ $filter_salary = request()->query('filter_salary') ?: null;
            jQuery(this).parents('form').submit();
        }
    });
+
+
+
+
 </script>
 @endpush

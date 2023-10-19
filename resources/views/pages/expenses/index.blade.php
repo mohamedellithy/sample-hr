@@ -97,7 +97,14 @@ $service_filter = request()->query('service_filter') ?: null;
                                      </span>
                                 </td>
                                    <td>
-                                    {{$expense->attachment }}
+                                   @if ($expense->attachment)
+                                     <img src="{{$expense->attachment }}">
+                                     @else
+                                        <span class="badge bg-label-danger me-1">
+                                 لم يتم اضافه
+                                     </span>
+                                   @endif
+
                                 </td>
                                 <td>
                                     <div class="d-flex">
