@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sale;
+use App\Models\Client;
+use App\Models\ClientSale;
 use Illuminate\Http\Request;
-use App\Http\Requests\SaleRequest;
 
-class SalesController extends Controller
+class ClientsSalesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
-        $sales = Sale::query();
+        $clientSales = ClientSale::query();
         $per_page = 10;
 
 
@@ -23,11 +23,16 @@ class SalesController extends Controller
             $from=$request->get('from');
             $to=$request->get('to');
 
-            $sales->whereBetween('sale_date',[$from,$to]);
+            $clientSales->whereBetween('sale_date',[$from,$to]);
+        }
+
+        if ($request->has('client_filter') and $request->get('client_filter') != "") {
+
+            $clientSales->where('client_id',$request->get('client_filter'));
         }
 
 
-        $sales->when(request('filter') == 'sort_asc', function ($q) {
+        $clientSales->when(request('filter') == 'sort_asc', function ($q) {
             return $q->orderBy('sale_date', 'asc');
         },function ($q) {
             return $q->orderBy('sale_date', 'desc');
@@ -37,9 +42,9 @@ class SalesController extends Controller
             $per_page = $request->query('rows');
         endif;
 
-        $sales = $sales->paginate($per_page);
-
-        return view('pages.sales.index', compact('sales'));
+        $clientSales = $clientSales->paginate($per_page);
+        $clients = Client::get();
+        return view('pages.clientSales.index', compact('clientSales','clients'));
     }
 
     /**
@@ -58,15 +63,22 @@ class SalesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SaleRequest $request)
+    public function store(Request $request)
     {
-        Sale::create($request->only([
-            'cash',
-            'bank',
-            'discount',
-            'credit_sales',
-            'sale_date',
+        $request->validate([
+            'client_id' => 'required',
+            'amount' => ['required','numeric'],
+            'sale_date' => ['required','date']
+        ],[
+            'required' => 'هذا الحقل مطلوب',
+            'numeric' => 'يرجى ادخال رقم',
+            'date' => 'يجب ادخال تاريخ',
+        ]);
 
+        ClientSale::create($request->only([
+            'client_id',
+            'amount',
+            'sale_date',
         ]));
         return redirect()->back()->with('success_message', 'تم اضافة المبايعه');
     }
@@ -90,10 +102,12 @@ class SalesController extends Controller
      */
     public function edit($id)
     {
-        $sale   = Sale::find($id);
+        $clientSale   = ClientSale::find($id);
+        $clients = Client::get();
+
         return response()->json([
             'status' => true,
-            'view'   => view('pages.sales.model.edit', compact('sale'))->render()
+            'view'   => view('pages.clientSales.model.edit', compact('clientSale','clients'))->render()
         ]);
     }
 
@@ -104,13 +118,21 @@ class SalesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(SaleRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $sale = Sale::where('id', $id)->update($request->only([
-            'cash',
-            'bank',
-            'discount',
-            'credit_sales',
+        $request->validate([
+            'client_id' => 'required',
+            'amount' => ['required','numeric'],
+            'sale_date' => ['required','date']
+        ],[
+            'required' => 'هذا الحقل مطلوب',
+            'numeric' => 'يرجى ادخال رقم',
+            'date' => 'يجب ادخال تاريخ',
+        ]);
+
+        ClientSale::where('id', $id)->update($request->only([
+            'client_id',
+            'amount',
             'sale_date',
         ]));
         return redirect()->back();
@@ -124,8 +146,8 @@ class SalesController extends Controller
      */
     public function destroy($id)
     {
-        Sale::find($id);
-        Sale::destroy($id);
+        ClientSale::find($id);
+        ClientSale::destroy($id);
         return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
     }
 }

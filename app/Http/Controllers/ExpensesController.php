@@ -183,6 +183,6 @@ class ExpensesController extends Controller
             }
         }
         $expense->delete();
-        return redirect()->route('admin.expenses.index');
+        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
     }
 }

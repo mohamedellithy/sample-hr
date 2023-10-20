@@ -1,43 +1,81 @@
 @extends('layouts.master')
 @php
-$search = request()->query('search') ?: null;
+
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
-$filter_salary = request()->query('filter_salary') ?: null;
 $from = request()->query('from') ?: null;
 $to = request()->query('to') ?: null;
-$service_filter = request()->query('service_filter') ?: null;
+$client_filter = request()->query('client_filter') ?: null;
+$search = request()->query('search') ?: null;
+
 @endphp
 @section('content')
+
+<div class="container-fluid">
+    <br/>
+    <!-- Basic Layout -->
+    <form action="{{ route('admin.clients.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="row">
+            <div class="col-lg-11">
+                <div class="card mb-4">
+                    <h5 class="card-header">اضافةعميل جديده</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="mb-3 col-md-5">
+                                <label class="form-label" for="basic-default-fullname">اسم العميل</label>
+                                <input type="text" class="form-control" id="basic-default-fullname"
+                                    name="name"  value="{{ old('name') }}" required />
+                                @error('name')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                              <div class="mb-3 col-md-5">
+                                <label class="form-label" for="basic-default-company"> الهاتف</label>
+                                <input type="number" class="form-control" id="basic-default-fullname"
+                                    name="phone" min="0" value="{{ old('phone') }}" />
+                                @error('phone')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">اضافة</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="container-fluid">
    <!-- DataTales Example -->
    <div class="card mb-4">
        <div class="card">
-           <h5 class="card-header">عرض المصروفات</h5>
+           <h5 class="card-header">عرض العملاء</h5>
            <div class="card-header py-3 ">
-                <div class="d-flex" style="flex-direction: row-reverse;">
-                    <div class="nav-item d-flex align-items-center m-2">
-                        <a href="{{ route('admin.expenses.create') }}" class="btn btn-success btn-md" style="color:white">اضافة مصروف جديد</a>
-                    </div>
-                </div>
+
                <form id="filter-data" method="get" class=" justify-content-between">
                     <div class="d-flex justify-content-between" style="background-color: #eee;">
-                {{--         <div class="nav-item d-flex align-items-center m-2" style="background-color: #fff;padding: 2px;">
+
+                        <div class="nav-item d-flex align-items-center m-2" style="background-color: #fff;padding: 2px;">
                             <i class="bx bx-search fs-4 lh-0"></i>
                             <input type="text" class="search form-control border-0 shadow-none" onchange="document.getElementById('filter-data').submit()" placeholder="البحث ...." @isset($search) value="{{ $search }}" @endisset id="search" name="search" style="background-color:#fff;"/>
-                        </div> --}}
+                        </div>
 
 
                         <div class="nav-item d-flex align-items-center m-2">
-                            <select name="service_filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
-                                <option value="">فلتر الخدمه</option>
-                                <option value="بار" @isset($service_filter) @if ($service_filter=='بار' ) selected @endif @endisset>بار</option>
-                                <option value="شيشه" @isset($service_filter) @if ($service_filter=='شيشه' ) selected @endif @endisset>شيشه</option>
-                                <option value="صيانه" @isset($service_filter) @if ($service_filter=='صيانه' ) selected @endif @endisset>صيانه</option>
-                                <option value="مطبخ" @isset($service_filter) @if ($service_filter=='مطبخ' ) selected @endif @endisset>مطبخ</option>
-                                <option value="owner" @isset($service_filter) @if ($service_filter=='owner' ) selected @endif @endisset>owner</option>
+                            <select name="client_filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control form-select2">
+                                <option value="">فلتر العميل</option>
+                                @foreach (  $filterclients as  $filterclient)
+                                    <option value="{{ $filterclient->id }}" @isset($client_filter) @if ($client_filter == $filterclient->id ) selected @endif @endisset>{{  $filterclient->name }}</option>
+                                @endforeach
                             </select>
                         </div>
+
 
                         <div class="nav-item d-flex align-items-center m-2">
                             <label style="color: #636481;">من:</label><br>
@@ -49,7 +87,7 @@ $service_filter = request()->query('service_filter') ?: null;
 
                         <div class="nav-item d-flex align-items-center m-2">
                             <select name="filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
-                                <option value="">فلتر المصروفات</option>
+                                <option value="">فلتر العملاء</option>
                                 <option value="sort_asc" @isset($filter) @if ($filter=='sort_asc' ) selected @endif @endisset>الاقدم</option>
                                 <option value="sort_desc" @isset($filter) @if ($filter=='sort_desc' ) selected @endif @endisset>الاحدث </option>
                             </select>
@@ -71,53 +109,48 @@ $service_filter = request()->query('service_filter') ?: null;
                    <thead class="table-light">
                         <tr class="table-dark">
                            <th>#</th>
-                            <th>نوع المصروف </th>
-                            <th>المبلغ</th>
-                            <th>تاريخ الصرف</th>
-                            <th>المرفق</th>
+                            <th>الاسم</th>
+                            <th>الهاتف</th>
+                            <th>التاريخ</th>
                             <th></th>
                         </tr>
                    </thead>
                    <tbody class="table-border-bottom-0">
-                        @foreach ($expenses as $expense)
+                        @foreach ($clients as $client)
                             <tr>
                                 <td>
-                                   {{ $loop->index  + 1}}
+                                   {{$loop->index + 1 }}
                                 </td>
 
-                                <td class="width-16">
-                                        {{ $expense->service }}
+                                <td>
+                                {{  $client->name }}
                                 </td>
                                 <td>
-                                    {{ $expense->amount }}
+                                @if ($client->phone)
+                                    {{ $client->phone}}
+                                @else
+                                    <span class="badge bg-label-danger me-1">
+                                  لم يتم اضافه
+                                     </span>
+                                @endif
+
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">
-                                    {{ $expense->expense_date }}
+                                    {{ $client->created_at}}
                                      </span>
                                 </td>
-                                   <td>
-                                   @if ($expense->attachment)
-                                     <img src="{{$expense->attachment }}">
-                                     @else
-                                        <span class="badge bg-label-danger me-1">
-                                 لم يتم اضافه
-                                     </span>
-                                   @endif
 
-                                </td>
                                 <td>
                                     <div class="d-flex">
-                                        <a class="crud" href="{{ route('admin.expenses.show',$expense->id) }}">
-                                            <i class="fas fa-eye text-info"></i>
-                                        </a>
-                                        <a href="{{ route('admin.expenses.edit',$expense->id) }}" class="crud edit-product" data-product-id="{{ $expense->id }}">
+
+                                        <a  class="crud edit-client" data-client-id="{{ $client->id }}">
                                             <i class="fas fa-edit text-primary"></i>
                                         </a>
-                                        <form  method="post" action="{{ route('admin.expenses.destroy', $expense->id) }}">
+                                        <form  method="post" action="{{ route('admin.clients.destroy', $client->id) }}">
                                             @csrf
                                             @method('DELETE')
-                                            <a class="delete-item crud" data-expense-service="{{ $expense->service }}">
+                                            <a class="delete-item crud">
                                                 <i class="fas fa-trash-alt  text-danger"></i>
                                             </a>
                                         </form>
@@ -130,7 +163,7 @@ $service_filter = request()->query('service_filter') ?: null;
            </div>
            <br/><br/>
            <div class="d-flex flex-row justify-content-center">
-               {{ $expenses->links() }}
+               {{ $clients->links() }}
            </div>
        </div>
    </div>
@@ -140,9 +173,28 @@ $service_filter = request()->query('service_filter') ?: null;
 @push('script')
 <script>
 
+jQuery('.edit-client').click(function(){
+        let data_edit = jQuery(this).attr('data-client-id');
+        let Popup = jQuery('#modalCenter').modal('show');
+        let url = "{{ route('admin.clients.edit',':id') }}";
+        url = url.replace(':id',data_edit);
+        $.ajax({
+            url:url,
+            type:"GET",
+            success: function(data){
+                if(data.status == true){
+                    jQuery('#modal-content-inner').html(data.view);
+                }
+                console.log(data);
+            }
+        })
+        console.log(Popup);
+    });
+
+
    jQuery('.delete-item').click(function(){
-       let expense_service = jQuery(this).attr('data-expense-service');
-       if(confirm('هل متأكد من اتمام حذف المصروف '+ expense_service)){
+
+       if(confirm('هل متأكد من اتمام حذف')){
            jQuery(this).parents('form').submit();
        }
    });

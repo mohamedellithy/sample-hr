@@ -84,7 +84,7 @@ $export =null;
                         @foreach ($employees as $employee)
                             <tr>
                                 <td>
-                                   {{ $loop->index }}
+                                   {{ $loop->index  + 1}}
                                 </td>
 
                                 <td class="width-16">

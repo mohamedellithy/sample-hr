@@ -5,52 +5,44 @@ $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $from = request()->query('from') ?: null;
 $to = request()->query('to') ?: null;
+$client_filter = request()->query('client_filter') ?: null;
+
 @endphp
 @section('content')
 
 <div class="container-fluid">
     <br/>
     <!-- Basic Layout -->
-    <form action="{{ route('admin.sales.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.clientSales.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="col-lg-11">
                 <div class="card mb-4">
-                    <h5 class="card-header">اضافة مبايعه جديده</h5>
+                    <h5 class="card-header">اضافة مبايعه عميل جديده</h5>
                     <div class="card-body">
                         <div class="row">
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-fullname">كاش</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="cash" min="0" value="{{ old('cash') }}" required />
-                                @error('cash')
+                            <div class="mb-3 col-md-5">
+                                <label class="form-label" for="basic-default-fullname">العميل</label>
+                                    <select type="text" name="client_id" class="form-control form-select2 selectProduct" required>
+                                    <option value="">اختر عميل</option>
+                                    @foreach ($clients as $client)
+                                    <option value={{ $client->id }}>{{ $client->name }}</option>
+                                    @endforeach
+                                    </select>
+                                @error('client_id')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                          <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-company"> كريدت</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="bank" min="0" value="{{ old('bank') }}" required />
-                                @error('bank')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                                <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-company"> خصم</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="discount" min="0" value="{{ old('discount') }}" required />
-                                @error('discount')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
+
+
                         </div>
 
                         <div class="row mt-2">
                              <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> آجل</label>
+                                <label class="form-label" for="basic-default-company"> المبلغ</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="credit_sales" min="0" value="{{ old('credit_sales') }}" required />
-                                @error('credit_sales')
+                                    name="amount" min="0" value="{{ old('amount') }}" required />
+                                @error('amount')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -65,7 +57,7 @@ $to = request()->query('to') ?: null;
 
                         </div>
 
-                        <button type="submit" class="btn btn-primary">اضافة مبايعه</button>
+                        <button type="submit" class="btn btn-primary">اضافة</button>
                     </div>
                 </div>
             </div>
@@ -77,15 +69,22 @@ $to = request()->query('to') ?: null;
    <!-- DataTales Example -->
    <div class="card mb-4">
        <div class="card">
-           <h5 class="card-header">عرض المصروفات</h5>
+           <h5 class="card-header">عرض مبيعات العملاء</h5>
            <div class="card-header py-3 ">
-          {{--       <div class="d-flex" style="flex-direction: row-reverse;">
-                    <div class="nav-item d-flex align-items-center m-2">
-                        <a href="{{ route('admin.sales.create') }}" class="btn btn-success btn-md" style="color:white">اضافة مبايعه جديد</a>
-                    </div>
-                </div> --}}
+
                <form id="filter-data" method="get" class=" justify-content-between">
                     <div class="d-flex justify-content-between" style="background-color: #eee;">
+
+
+                        <div class="nav-item d-flex align-items-center m-2">
+                            <select name="client_filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control form-select2">
+                                <option value="">فلتر العميل</option>
+                                @foreach (  $clients as  $client)
+                                    <option value="{{ $client->id }}" @isset($client_filter) @if ($client_filter == $client->id ) selected @endif @endisset>{{  $client->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
 
                         <div class="nav-item d-flex align-items-center m-2">
                             <label style="color: #636481;">من:</label><br>
@@ -119,50 +118,38 @@ $to = request()->query('to') ?: null;
                    <thead class="table-light">
                         <tr class="table-dark">
                            <th>#</th>
-                            <th>كاش</th>
-                            <th>كريدت</th>
-                            <th>خصم</th>
-                            <th>آجل</th>
-                            <th>المجموع</th>
+                            <th>العميل</th>
+                            <th>المبلغ</th>
                             <th>التاريخ</th>
                             <th></th>
                         </tr>
                    </thead>
                    <tbody class="table-border-bottom-0">
-                        @foreach ($sales as $sale)
+                        @foreach ($clientSales as $clientSale)
                             <tr>
                                 <td>
                                    {{$loop->index + 1 }}
                                 </td>
 
                                 <td>
-                                {{  formate_price($sale->cash) }}
+                                {{  $clientSale->client->name }}
                                 </td>
                                 <td>
-                                    {{  formate_price($sale->bank )}}
-                                </td>
-                                <td>
-                                    {{  formate_price($sale->discount) }}
-                                </td>
-                                <td>
-                                    {{  formate_price($sale->credit_sales) }}
-                                </td>
-                                <td>
-                                    {{  formate_price($sale->cash + $sale->bank + $sale->discount + $sale->credit_sales)}}
+                                    {{  formate_price($clientSale->amount )}}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">
-                                    {{ $sale->sale_date }}
+                                    {{ $clientSale->sale_date }}
                                      </span>
                                 </td>
 
                                 <td>
                                     <div class="d-flex">
 
-                                        <a  class="crud edit-sale" data-sale-id="{{ $sale->id }}">
+                                        <a  class="crud edit-clientSale" data-clientSale-id="{{ $clientSale->id }}">
                                             <i class="fas fa-edit text-primary"></i>
                                         </a>
-                                        <form  method="post" action="{{ route('admin.sales.destroy', $sale->id) }}">
+                                        <form  method="post" action="{{ route('admin.clientSales.destroy', $clientSale->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             <a class="delete-item crud">
@@ -178,7 +165,7 @@ $to = request()->query('to') ?: null;
            </div>
            <br/><br/>
            <div class="d-flex flex-row justify-content-center">
-               {{ $sales->links() }}
+               {{ $clientSales->links() }}
            </div>
        </div>
    </div>
@@ -188,10 +175,10 @@ $to = request()->query('to') ?: null;
 @push('script')
 <script>
 
-jQuery('.edit-sale').click(function(){
-        let data_edit = jQuery(this).attr('data-sale-id');
+jQuery('.edit-clientSale').click(function(){
+        let data_edit = jQuery(this).attr('data-clientSale-id');
         let Popup = jQuery('#modalCenter').modal('show');
-        let url = "{{ route('admin.sales.edit',':id') }}";
+        let url = "{{ route('admin.clientSales.edit',':id') }}";
         url = url.replace(':id',data_edit);
         $.ajax({
             url:url,

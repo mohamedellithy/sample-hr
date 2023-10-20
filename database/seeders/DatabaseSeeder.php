@@ -23,6 +23,10 @@ class DatabaseSeeder extends Seeder
              AdminSeeder::class,
              EmployeeSeeder::class,
              ExpensesSeeder::class,
+             EmployeeSaleSeeder::class,
+             ClientsSeeder::class,
+             ClientsSalesSeeder::class,
+
         ]);
 
     }

@@ -53,7 +53,7 @@ class EmployeesController extends Controller
 
     public function exportEployee(Request $request){
 
-        
+
         return Excel::download(new ExportEmployee($request->search,$request->filter),'employee.xlsx');
 
         return redirect()->back();
@@ -151,6 +151,6 @@ class EmployeesController extends Controller
     {
         $employee = Employee::find($id);
         $employee->delete();
-        return redirect()->route('admin.employees.index');
+        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
     }
 }
