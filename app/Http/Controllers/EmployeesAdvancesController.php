@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeAdvance;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportEmployeeAdvances;
 
 class EmployeesAdvancesController extends Controller
 {
@@ -83,6 +85,15 @@ class EmployeesAdvancesController extends Controller
         ]));
         return redirect()->back()->with('success_message', 'تم اضافة المبايعه');
     }
+
+    public function exportEmployeeAdvances(Request $request){
+
+
+        return Excel::download(new ExportEmployeeAdvances( $request),'EmployeeAdvances.xlsx');
+
+         return redirect()->back();
+
+     }
 
     /**
      * Display the specified resource.

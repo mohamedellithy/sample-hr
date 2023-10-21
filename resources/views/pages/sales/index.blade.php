@@ -110,8 +110,6 @@ $to = request()->query('to') ?: null;
                                     <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
                             </select>
                         </div>
-
-                    </div>
                 </form>
                 <form  method="post" action="{{ route('admin.sales.export') }}">
                   @csrf
@@ -122,6 +120,10 @@ $to = request()->query('to') ?: null;
                             <button type="submit" class="btn btn-primary">export</button>
                             </div>
                 </form>
+                    </div>
+
+
+
            </div>
            <div class="table-responsive text-nowrap">
                <table class="table">

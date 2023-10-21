@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeSalarie;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportEmployeeSalaries;
 
 class EmployeesSalariesController extends Controller
 {
@@ -39,6 +41,15 @@ class EmployeesSalariesController extends Controller
         $employees = Employee::get();
         return view('pages.employeeSalaries.index', compact('employeeSalaries','employees'));
     }
+
+    public function exportEmployeeSalaries(Request $request){
+
+
+        return Excel::download(new ExportEmployeeSalaries( $request),'employeeSalaries.xlsx');
+
+         return redirect()->back();
+
+     }
 
     /**
      * Show the form for creating a new resource.

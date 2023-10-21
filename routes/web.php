@@ -53,6 +53,15 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('exportEployee',[ EmployeesController::class,'exportEployee'])->name('employees.export');
         Route::post('exportSales',[ SalesController::class,'exportSales'])->name('sales.export');
+        Route::post('exportExpenses',[ ExpensesController::class,'exportExpenses'])->name('expenses.export');
+        Route::post('exportEmployeeSales',[ EmployeesSalesController::class,'exportEmployeeSales'])->name('employeeSales.export');
+        Route::post('exportClients',[ ClientsController::class,'exportClients'])->name('clients.export');
+        Route::post('exportClientSales',[ ClientsSalesController::class,'exportClientSales'])->name('clientSales.export');
+        Route::post('exportEmployeeSalaries',[ EmployeesSalariesController::class,'exportEmployeeSalaries'])->name('employeeSalaries.export');
+        Route::post('exportEmployeeAdvances',[ EmployeesAdvancesController::class,'exportEmployeeAdvances'])->name('employeeAdvances.export');
+
+
+
 
 
 

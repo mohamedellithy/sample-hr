@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use App\Exports\ExportClients;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientsController extends Controller
 {
@@ -48,6 +50,15 @@ class ClientsController extends Controller
         $clients = $clients->paginate($per_page);
         $filterclients = Client::get();
         return view('pages.clients.index', compact('clients','filterclients'));
+    }
+
+    public function exportClients(Request $request){
+
+
+       return Excel::download(new ExportClients( $request),'clients.xlsx');
+
+        return redirect()->back();
+
     }
 
     /**

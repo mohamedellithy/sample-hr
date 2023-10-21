@@ -53,11 +53,8 @@ class EmployeesController extends Controller
 
     public function exportEployee(Request $request){
 
-
-        return Excel::download(new ExportEmployee($request->search,$request->filter),'employee.xlsx');
-
+        return Excel::download(new ExportEmployee($request),'employee.xlsx');
         return redirect()->back();
-
 
     }
 

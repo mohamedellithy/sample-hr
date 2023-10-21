@@ -4,21 +4,20 @@ namespace App\Exports;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class ExportEmployee implements FromCollection
+class ExportEmployee implements FromCollection,WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
     */
 
-    private $search;
-    private $filter;
+    private $request;
 
-    public function __construct($search,$filter)
+    public function __construct(Request $request)
     {
-        $this->search = $search;
-        $this->filter = $filter;
+        $this->request = $request;
     }
 
     public function collection()
@@ -26,13 +25,13 @@ class ExportEmployee implements FromCollection
 
         $employees = Employee::query();
 
-        $employees->when($this->search  != null, function ($q) {
-            return $q->where('nationality', 'like', '%' .  $this->search  . '%')
-            ->orWhere('name', 'like', '%' .  $this->search );
+        $employees->when($this->request->search  != null, function ($q) {
+            return $q->where('nationality', 'like', '%' .  $this->request->search  . '%')
+            ->orWhere('name', 'like', '%' .  $this->request->search );
 
         });
 
-        $employees->when( $this->filter == 'sort_asc', function ($q) {
+        $employees->when( $this->request->filter == 'sort_asc', function ($q) {
             return $q->orderBy('created_at', 'asc');
         },function ($q) {
             return $q->orderBy('created_at', 'desc');
@@ -40,4 +39,12 @@ class ExportEmployee implements FromCollection
 
         return $employees->get();
     }
+
+
+
+    public function headings(): array
+    {
+        return ["#","الاسم","الجنسيه","المرتب","الساعه","رقم الباسبور","تاريخ الميلاد","تاريخ انتهاء الباسبور","تاريخ انتهاء البطاقه","تاريخ الانظمام"];
+    }
+
 }

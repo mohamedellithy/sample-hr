@@ -6,8 +6,10 @@ use Throwable;
 use App\Models\Expense;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Exports\ExportExpense;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\ExpensesRequest;
 
 class ExpensesController extends Controller
@@ -51,6 +53,15 @@ class ExpensesController extends Controller
 
         $expenses = $expenses->paginate($per_page);
         return view('pages.expenses.index', compact('expenses'));
+    }
+
+    public function exportExpenses(Request $request){
+
+
+        return Excel::download(new ExportExpense( $request->service_filter,$request->from,$request->to,$request->filter),'expenses.xlsx');
+
+        return redirect()->back();
+
     }
 
     /**

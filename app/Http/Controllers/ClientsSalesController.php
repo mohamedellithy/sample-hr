@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\ClientSale;
 use Illuminate\Http\Request;
+use App\Exports\ExportClientSales;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class ClientsSalesController extends Controller
 {
@@ -46,6 +49,15 @@ class ClientsSalesController extends Controller
         $clients = Client::get();
         return view('pages.clientSales.index', compact('clientSales','clients'));
     }
+
+    public function exportClientSales(Request $request){
+
+
+        return Excel::download(new ExportClientSales( $request),'ClientSales.xlsx');
+
+         return redirect()->back();
+
+     }
 
     /**
      * Show the form for creating a new resource.

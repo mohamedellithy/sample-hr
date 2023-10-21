@@ -109,9 +109,19 @@ $client_filter = request()->query('client_filter') ?: null;
                                     <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
                             </select>
                         </div>
-
+                                </form>
+                    <form  method="post" action="{{ route('admin.clientSales.export') }}">
+                            @csrf
+                            <div class="nav-item d-flex align-items-center m-2">
+                            <input type="hidden" name="client_filter" value="{{ $client_filter }}">
+                            <input type="hidden" name="from" value="{{ $from }}">
+                            <input type="hidden" name="to" value="{{ $to }}">
+                            <input type="hidden" name="filter" value="{{ $filter }}">
+                            <button type="submit" class="btn btn-primary">export</button>
+                            </div>
+                    </form>
                     </div>
-                </form>
+
            </div>
            <div class="table-responsive text-nowrap">
                <table class="table">
