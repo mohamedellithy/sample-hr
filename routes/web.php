@@ -11,6 +11,7 @@ use App\Http\Controllers\ClientsSalesController;
 use App\Http\Controllers\EmployeesSalesController;
 use App\Http\Controllers\EmployeesAdvancesController;
 use App\Http\Controllers\EmployeesSalariesController;
+use App\Http\Controllers\EmployeeAttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('clientSales', ClientsSalesController::class);
         Route::resource('employeeAdvances', EmployeesAdvancesController::class);
         Route::resource('employeeSalaries', EmployeesSalariesController::class);
+        Route::resource('employeeAttendances', EmployeeAttendanceController::class);
 
 
         Route::post('exportEployee',[ EmployeesController::class,'exportEployee'])->name('employees.export');
