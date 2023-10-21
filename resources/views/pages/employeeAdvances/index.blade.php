@@ -5,67 +5,59 @@ $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $from = request()->query('from') ?: null;
 $to = request()->query('to') ?: null;
+$employee_filter = request()->query('employee_filter') ?: null;
+
 @endphp
 @section('content')
 
 <div class="container-fluid">
     <br/>
     <!-- Basic Layout -->
-    <form action="{{ route('admin.sales.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.employeeAdvances.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="col-lg-11">
                 <div class="card mb-4">
-                    <h5 class="card-header">اضافة مبايعه جديده</h5>
+                    <h5 class="card-header">اضافة سلف موظف جديده</h5>
                     <div class="card-body">
                         <div class="row">
-                            <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-fullname">كاش</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="cash" min="0" value="{{ old('cash') }}" required />
-                                @error('cash')
+                            <div class="mb-3 col-md-5">
+                                <label class="form-label" for="basic-default-fullname">الموظف</label>
+                                    <select type="text" name="employee_id" class="form-control form-select2 selectProduct" required>
+                                    <option value="">اختر الموظف</option>
+                                    @foreach ($employees as $employee)
+                                    <option value={{ $employee->id }}>{{ $employee->name }}</option>
+                                    @endforeach
+                                    </select>
+                                @error('employee_id')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                          <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-company"> كريدت</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="bank" min="0" value="{{ old('bank') }}" required />
-                                @error('bank')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                                <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-company"> خصم</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="discount" min="0" value="{{ old('discount') }}" required />
-                                @error('discount')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
+
+
                         </div>
 
                         <div class="row mt-2">
                              <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> آجل</label>
+                                <label class="form-label" for="basic-default-company"> المبلغ</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="credit_sales" min="0" value="{{ old('credit_sales') }}" required />
-                                @error('credit_sales')
+                                    name="amount" min="0" value="{{ old('amount') }}" required />
+                                @error('amount')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
                           <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> التاريخ</label>
                                 <input type="date" class="form-control" id="basic-default-fullname"
-                                    name="sale_date" value="{{ old('sale_date') }}" required />
-                                @error('sale_date')
+                                    name="advance_date" value="{{ old('advance_date') }}" required />
+                                @error('advance_date')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
 
                         </div>
 
-                        <button type="submit" class="btn btn-primary">اضافة مبايعه</button>
+                        <button type="submit" class="btn btn-primary">اضافة</button>
                     </div>
                 </div>
             </div>
@@ -77,15 +69,22 @@ $to = request()->query('to') ?: null;
    <!-- DataTales Example -->
    <div class="card mb-4">
        <div class="card">
-           <h5 class="card-header">عرض المصروفات</h5>
+           <h5 class="card-header">عرض سلف الموظفين</h5>
            <div class="card-header py-3 ">
-          {{--       <div class="d-flex" style="flex-direction: row-reverse;">
-                    <div class="nav-item d-flex align-items-center m-2">
-                        <a href="{{ route('admin.sales.create') }}" class="btn btn-success btn-md" style="color:white">اضافة مبايعه جديد</a>
-                    </div>
-                </div> --}}
+
                <form id="filter-data" method="get" class=" justify-content-between">
                     <div class="d-flex justify-content-between" style="background-color: #eee;">
+
+
+                        <div class="nav-item d-flex align-items-center m-2">
+                            <select name="employee_filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control form-select2">
+                                <option value="">فلتر الموظف</option>
+                                @foreach (  $employees as  $employee)
+                                    <option value="{{ $employee->id }}" @isset($employee_filter) @if ($employee_filter == $employee->id ) selected @endif @endisset>{{  $employee->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
 
                         <div class="nav-item d-flex align-items-center m-2">
                             <label style="color: #636481;">من:</label><br>
@@ -113,65 +112,44 @@ $to = request()->query('to') ?: null;
 
                     </div>
                 </form>
-                <form  method="post" action="{{ route('admin.sales.export') }}">
-                  @csrf
-                            <div class="nav-item d-flex align-items-center m-2">
-                             <input type="hidden" name="from" value="{{ $from }}">
-                               <input type="hidden" name="to" value="{{ $to }}">
-                            <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">export</button>
-                            </div>
-                </form>
            </div>
            <div class="table-responsive text-nowrap">
                <table class="table">
                    <thead class="table-light">
                         <tr class="table-dark">
                            <th>#</th>
-                            <th>كاش</th>
-                            <th>كريدت</th>
-                            <th>خصم</th>
-                            <th>آجل</th>
-                            <th>المجموع</th>
+                            <th>الموظف</th>
+                            <th>المبلغ</th>
                             <th>التاريخ</th>
                             <th></th>
                         </tr>
                    </thead>
                    <tbody class="table-border-bottom-0">
-                        @foreach ($sales as $sale)
+                        @foreach ($employeeAdvances as $employeeAdvance)
                             <tr>
                                 <td>
                                    {{$loop->index + 1 }}
                                 </td>
 
                                 <td>
-                                {{  formate_price($sale->cash) }}
+                                {{  $employeeAdvance->employee->name }}
                                 </td>
                                 <td>
-                                    {{  formate_price($sale->bank )}}
-                                </td>
-                                <td>
-                                    {{  formate_price($sale->discount) }}
-                                </td>
-                                <td>
-                                    {{  formate_price($sale->credit_sales) }}
-                                </td>
-                                <td>
-                                    {{  formate_price($sale->cash + $sale->bank + $sale->discount + $sale->credit_sales)}}
+                                    {{  formate_price($employeeAdvance->amount )}}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">
-                                    {{ $sale->sale_date }}
+                                    {{ $employeeAdvance->advance_date }}
                                      </span>
                                 </td>
 
                                 <td>
                                     <div class="d-flex">
 
-                                        <a  class="crud edit-sale" data-sale-id="{{ $sale->id }}">
+                                        <a  class="crud edit-employeeAdvance" data-employeeAdvance-id="{{ $employeeAdvance->id }}">
                                             <i class="fas fa-edit text-primary"></i>
                                         </a>
-                                        <form  method="post" action="{{ route('admin.sales.destroy', $sale->id) }}">
+                                        <form  method="post" action="{{ route('admin.employeeAdvances.destroy', $employeeAdvance->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             <a class="delete-item crud">
@@ -187,7 +165,7 @@ $to = request()->query('to') ?: null;
            </div>
            <br/><br/>
            <div class="d-flex flex-row justify-content-center">
-               {{ $sales->links() }}
+               {{ $employeeAdvances->links() }}
            </div>
        </div>
    </div>
@@ -197,10 +175,10 @@ $to = request()->query('to') ?: null;
 @push('script')
 <script>
 
-jQuery('.edit-sale').click(function(){
-        let data_edit = jQuery(this).attr('data-sale-id');
+jQuery('.edit-employeeAdvance').click(function(){
+        let data_edit = jQuery(this).attr('data-employeeAdvance-id');
         let Popup = jQuery('#modalCenter').modal('show');
-        let url = "{{ route('admin.sales.edit',':id') }}";
+        let url = "{{ route('admin.employeeAdvances.edit',':id') }}";
         url = url.replace(':id',data_edit);
         $.ajax({
             url:url,

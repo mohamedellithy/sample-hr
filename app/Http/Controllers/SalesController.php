@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
+use App\Exports\ExportSale;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaleRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalesController extends Controller
 {
@@ -47,6 +49,16 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+     public function exportSales(Request $request){
+
+        return Excel::download(new ExportSale($request->from,$request->to,$request->filter),'sales.xlsx');
+        return redirect()->back();
+
+    }
+
+
     public function create()
     {
         //

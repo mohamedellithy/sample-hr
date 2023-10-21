@@ -9,6 +9,8 @@ use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\ClientsSalesController;
 use App\Http\Controllers\EmployeesSalesController;
+use App\Http\Controllers\EmployeesAdvancesController;
+use App\Http\Controllers\EmployeesSalariesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,13 +41,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
         Route::resource('employees', EmployeesController::class);
-        Route::post('exportEployee',[ EmployeesController::class,'exportEployee'])->name('employees.export');
 
         Route::resource('expenses', ExpensesController::class);
         Route::resource('sales', SalesController::class);
         Route::resource('employeeSales', EmployeesSalesController::class);
         Route::resource('clients', ClientsController::class);
         Route::resource('clientSales', ClientsSalesController::class);
+        Route::resource('employeeAdvances', EmployeesAdvancesController::class);
+        Route::resource('employeeSalaries', EmployeesSalariesController::class);
+
+
+        Route::post('exportEployee',[ EmployeesController::class,'exportEployee'])->name('employees.export');
+        Route::post('exportSales',[ SalesController::class,'exportSales'])->name('sales.export');
 
 
 
