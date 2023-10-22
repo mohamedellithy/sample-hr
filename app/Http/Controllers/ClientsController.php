@@ -89,8 +89,9 @@ class ClientsController extends Controller
             'name',
             'phone',
         ]));
-        return redirect()->back()->with('success_message', 'تم اضافة العميل');
-    }
+        flash('تم اضافه العميل بنجاح', 'success');
+        return redirect()->back();
+     }
 
     /**
      * Display the specified resource.
@@ -131,6 +132,7 @@ class ClientsController extends Controller
             'name',
             'phone',
         ]));
+        flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
 
@@ -144,6 +146,7 @@ class ClientsController extends Controller
     {
         Client::find($id);
         Client::destroy($id);
-        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
+        flash('تم الحذف بنجاح', 'error');
+        return redirect()->back();
     }
 }

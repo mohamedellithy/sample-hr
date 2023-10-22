@@ -92,8 +92,9 @@ class ClientsSalesController extends Controller
             'amount',
             'sale_date',
         ]));
-        return redirect()->back()->with('success_message', 'تم اضافة المبايعه');
-    }
+        flash('تم الاضافه بنجاح', 'success');
+        return redirect()->back();
+       }
 
     /**
      * Display the specified resource.
@@ -147,6 +148,7 @@ class ClientsSalesController extends Controller
             'amount',
             'sale_date',
         ]));
+        flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
 
@@ -160,6 +162,7 @@ class ClientsSalesController extends Controller
     {
         ClientSale::find($id);
         ClientSale::destroy($id);
-        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
+        flash('تم الحذف بنجاح', 'error');
+        return redirect()->back();
     }
 }

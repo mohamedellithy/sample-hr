@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeAttendance;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\AttendanceRequest;
 use App\Exports\ExportEmployeeAttendances;
@@ -65,8 +67,35 @@ class EmployeeAttendanceController extends Controller
 
      public function importEmployeeAttendances(Request $request){
 
-         Excel::import(new ImportEmployeeAttendances,$request->file);
-         return redirect()->back()->with('success_message', 'تم اضافه الملف بنجاح');
+
+        DB::beginTransaction();
+        try{
+            if ($request->hasFile('file')){
+                $updateFile = $request->file('file');
+
+                $path = $updateFile->getRealPath();
+                $fileExtension = $updateFile->getClientOriginalExtension();
+
+                
+                $formats = ['xls', 'xlsx', 'ods', 'csv'];
+                if (! in_array($fileExtension, $formats)) {
+                    flash('Only supports upload .xlsx, .xls files', 'error');
+                    return redirect()->back();
+                }
+
+                $import= Excel::import(new ImportEmployeeAttendances,$request->file);
+                DB::commit();
+
+            flash(' تم اضافه الملف بنجاح', 'success');
+            return redirect()->back();
+
+           }
+        }
+        catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
 
      }
 
@@ -96,7 +125,8 @@ class EmployeeAttendanceController extends Controller
             'clock_in',
             'clock_out',
         ]));
-        return redirect()->back()->with('success_message', 'تم اضافة بنجاح');
+        flash('تم الاضافه بنجاح', 'success');
+        return redirect()->back();
     }
 
     /**
@@ -139,7 +169,8 @@ class EmployeeAttendanceController extends Controller
             'clock_in',
             'clock_out',
         ]));
-        return redirect()->back()->with('success_message', 'تم تعديل بنجاح');;
+        flash('تم التعديل بنجاح', 'warning');
+        return redirect()->back();
     }
 
     /**
@@ -152,6 +183,7 @@ class EmployeeAttendanceController extends Controller
     {
         $EmployeeAttendance = EmployeeAttendance::find($id);
         $EmployeeAttendance->delete();
-        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
+        flash('تم الحذف بنجاح', 'error');
+        return redirect()->back();
     }
 }

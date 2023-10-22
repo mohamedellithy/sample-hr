@@ -80,7 +80,8 @@ class SalesController extends Controller
             'sale_date',
 
         ]));
-        return redirect()->back()->with('success_message', 'تم اضافة المبايعه');
+        flash('تم الاضافه بنجاح', 'success');
+        return redirect()->back();
     }
 
     /**
@@ -125,6 +126,7 @@ class SalesController extends Controller
             'credit_sales',
             'sale_date',
         ]));
+        flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
 
@@ -138,6 +140,7 @@ class SalesController extends Controller
     {
         Sale::find($id);
         Sale::destroy($id);
-        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
+        flash('تم الحذف بنجاح', 'error');
+        return redirect()->back();
     }
 }

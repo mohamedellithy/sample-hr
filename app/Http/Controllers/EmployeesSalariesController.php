@@ -82,7 +82,8 @@ class EmployeesSalariesController extends Controller
             'employee_id',
             'days',
         ]));
-        return redirect()->back()->with('success_message', 'تم اضافة الايام');
+        flash('تم الاضافه بنجاح', 'success');
+        return redirect()->back();
     }
 
     /**
@@ -134,6 +135,8 @@ class EmployeesSalariesController extends Controller
             'employee_id',
             'days',
         ]));
+
+        flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
 
@@ -147,6 +150,7 @@ class EmployeesSalariesController extends Controller
     {
         EmployeeSalarie::find($id);
         EmployeeSalarie::destroy($id);
-        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
+        flash('تم الحذف بنجاح', 'error');
+        return redirect()->back();
     }
 }

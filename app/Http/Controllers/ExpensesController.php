@@ -102,7 +102,8 @@ class ExpensesController extends Controller
                 Expense::create($data);
 
                 DB::commit();
-                return redirect()->back()->with('success_message', 'تم اضافة المصروف');
+                flash('تم الاضافه بنجاح', 'success');
+                return redirect()->back();
             }
             catch (Throwable $e) {
                 DB::rollBack();
@@ -167,8 +168,8 @@ class ExpensesController extends Controller
                 $expense->update($data);
 
                 DB::commit();
-                return redirect()->back()->with('success_message', 'تم المصروف المصروف');
-
+                flash('تم التعديل بنجاح', 'warning');
+                return redirect()->back();
             }
             catch (Throwable $e) {
                 DB::rollBack();
@@ -194,6 +195,7 @@ class ExpensesController extends Controller
             }
         }
         $expense->delete();
-        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
+        flash('تم الحذف بنجاح', 'error');
+        return redirect()->back();
     }
 }

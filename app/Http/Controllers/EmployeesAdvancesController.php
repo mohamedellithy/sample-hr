@@ -91,7 +91,8 @@ class EmployeesAdvancesController extends Controller
             'amount',
             'advance_date',
         ]));
-        return redirect()->back()->with('success_message', 'تم اضافة المبايعه');
+        flash('تم الاضافه بنجاح', 'success');
+        return redirect()->back();
     }
 
 
@@ -148,6 +149,7 @@ class EmployeesAdvancesController extends Controller
             'amount',
             'advance_date',
         ]));
+        flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
 
@@ -161,6 +163,7 @@ class EmployeesAdvancesController extends Controller
     {
         EmployeeAdvance::find($id);
         EmployeeAdvance::destroy($id);
-        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
+        flash('تم الحذف بنجاح', 'error');
+        return redirect()->back();
     }
 }

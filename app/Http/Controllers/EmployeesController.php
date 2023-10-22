@@ -87,7 +87,8 @@ class EmployeesController extends Controller
             'card_expiry',
             'join_date'
         ]));
-        return redirect()->back()->with('success_message', 'تم اضافة الموظف');
+        flash('تم الاضافه بنجاح', 'success');
+        return redirect()->back();
     }
 
     /**
@@ -135,8 +136,9 @@ class EmployeesController extends Controller
             'card_expiry',
             'join_date'
         ]));
-        return redirect()->back()->with('success_message', 'تم تعديل الموظف');
-    }
+        flash('تم التعديل بنجاح', 'warning');
+        return redirect()->back();
+        }
 
     /**
      * Remove the specified resource from storage.
@@ -148,6 +150,7 @@ class EmployeesController extends Controller
     {
         $employee = Employee::find($id);
         $employee->delete();
-        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
+        flash('تم الحذف بنجاح', 'error');
+        return redirect()->back();
     }
 }
