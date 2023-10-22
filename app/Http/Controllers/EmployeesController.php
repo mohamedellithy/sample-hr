@@ -135,7 +135,7 @@ class EmployeesController extends Controller
             'card_expiry',
             'join_date'
         ]));
-        return redirect()->back()->with('success_message', 'تم تعديل الموظف');;
+        return redirect()->back()->with('success_message', 'تم تعديل الموظف');
     }
 
     /**

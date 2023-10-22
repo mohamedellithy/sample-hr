@@ -4,7 +4,10 @@
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $employee_filter = request()->query('employee_filter') ?: null;
-
+$from = request()->query('from') ?: null;
+$to = request()->query('to') ?: null;
+$in = request()->query('in') ?: null;
+$out = request()->query('out') ?: null;
 @endphp
 @section('content')
 
@@ -34,6 +37,15 @@ $employee_filter = request()->query('employee_filter') ?: null;
                             </select>
                         </div>
 
+
+                        <div class="nav-item d-flex align-items-center m-2">
+                            <label style="color: #636481;">من:</label><br>
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($from) value="{{ $from }}" @endisset id="from" name="from"/>
+                            &ensp;
+                                <label style="color: #636481;">الي:</label><br>
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($to) value="{{ $to }}" @endisset id="to" name="to"/>
+                        </div>
+
                         <div class="nav-item d-flex align-items-center m-2">
                             <select name="filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
                                 <option value="">فلتر المصروفات</option>
@@ -41,6 +53,20 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                 <option value="sort_desc" @isset($filter) @if ($filter=='sort_desc' ) selected @endif @endisset>الاحدث </option>
                             </select>
                         </div>
+
+                </div>
+                      <div class="d-flex justify-content-between" style="background-color: #eee;">
+
+
+                        <div class="nav-item d-flex align-items-center m-2">
+                            <label style="color: #636481;">الحضور </label><br>&ensp;
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="ث : د : س" @isset($in) value="{{ $in }}" @endisset id="in" name="in"/>
+                            &ensp;   &ensp;&ensp;
+                                <label style="color: #636481;">الانصراف </label><br>&ensp;
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="ث : د : س" @isset($out) value="{{ $out }}" @endisset id="out" name="out"/>
+                        </div>
+
+
                         <div class="nav-item d-flex align-items-center m-2">
                             <label style="padding: 0px 5px;color: #636481;">المعروض</label>
                             <select name="rows" onchange="document.getElementById('filter-data').submit()" id="largeSelect" class="form-select form-select-sm">
@@ -49,16 +75,22 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                     <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
                             </select>
                         </div>
-                        </form>
-          {{--       <form  method="post" action="{{ route('admin.employeeSalaries.export') }}">
+                </form>
+
+                <form  method="post" action="{{ route('admin.employeeAttendances.export') }}">
                   @csrf
                     <div class="nav-item d-flex align-items-center m-2">
-                        <input type="hidden" name="employee_filter" value="{{ $employee_filter }}">
+                    <input type="hidden" name="employee_filter" value="{{ $employee_filter }}">
+                        <input type="hidden" name="from" value="{{ $from }}">
+                        <input type="hidden" name="to" value="{{ $to }}">
                         <input type="hidden" name="filter" value="{{ $filter }}">
+                        <input type="hidden" name="in" value="{{ $in }}">
+                        <input type="hidden" name="out" value="{{ $out }}">
+                        <a href="{{ route('admin.employeeAttendances.index') }}"class="btn btn-danger">reset</a>   &ensp;&ensp;
                         <button type="submit" class="btn btn-primary">export</button>
                     </div>
-                </form> --}}
-                    </div>
+                </form>
+                </div>
 
            </div>
            <div class="table-responsive text-nowrap">
@@ -95,9 +127,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
 
                                         <td>
                                     <div class="d-flex">
-                                        <a class="crud" href="{{ route('admin.employeeAttendances.show',$employeeAttendance->id) }}">
-                                            <i class="fas fa-eye text-info"></i>
-                                        </a>
+
                                         <a href="{{ route('admin.employeeAttendances.edit',$employeeAttendance->id) }}" class="crud edit-product" data-product-id="{{ $employeeAttendance->id }}">
                                             <i class="fas fa-edit text-primary"></i>
                                         </a>
@@ -126,6 +156,11 @@ $employee_filter = request()->query('employee_filter') ?: null;
 
 @push('script')
 <script>
-
+ jQuery('.delete-item').click(function(){
+       let employee_name = jQuery(this).attr('data-employee-name');
+       if(confirm('هل متأكد من اتمام حذف  '+ employee_name)){
+           jQuery(this).parents('form').submit();
+       }
+   });
 </script>
 @endpush

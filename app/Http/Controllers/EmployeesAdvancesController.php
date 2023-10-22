@@ -49,6 +49,14 @@ class EmployeesAdvancesController extends Controller
         return view('pages.employeeAdvances.index', compact('employeeAdvances','employees'));
     }
 
+    public function exportEmployeeAdvances(Request $request){
+
+        return Excel::download(new ExportEmployeeAdvances( $request),'EmployeeAdvances.xlsx');
+
+         return redirect()->back();
+
+     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -86,14 +94,7 @@ class EmployeesAdvancesController extends Controller
         return redirect()->back()->with('success_message', 'تم اضافة المبايعه');
     }
 
-    public function exportEmployeeAdvances(Request $request){
 
-
-        return Excel::download(new ExportEmployeeAdvances( $request),'EmployeeAdvances.xlsx');
-
-         return redirect()->back();
-
-     }
 
     /**
      * Display the specified resource.

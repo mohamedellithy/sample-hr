@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeAttendance;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\AttendanceRequest;
+use App\Exports\ExportEmployeeAttendances;
+use App\Imports\ImportEmployeeAttendances;
 
 class EmployeeAttendanceController extends Controller
 {
@@ -28,6 +32,13 @@ class EmployeeAttendanceController extends Controller
             $employeeAttendances->where('employee_id',$request->get('employee_filter'));
         }
 
+        if ($request->has('in') and $request->get('in') != "") {
+            $employeeAttendances->where('clock_in', 'like', '%' .$request->get('in') . '%');
+        }
+        if ($request->has('out') and $request->get('out') != "") {
+            $employeeAttendances->where('clock_out', 'like', '%' .$request->get('out') . '%');
+        }
+
 
         $employeeAttendances->when(request('filter') == 'sort_asc', function ($q) {
             return $q->orderBy('attendance_date', 'asc');
@@ -44,6 +55,22 @@ class EmployeeAttendanceController extends Controller
         return view('pages.employeeAttendances.index', compact('employeeAttendances','employees'));
     }
 
+
+    public function exportEmployeeAttendances(Request $request){
+
+        return Excel::download(new ExportEmployeeAttendances( $request),'employeeAttendances.xlsx');
+         return redirect()->back();
+
+     }
+
+     public function importEmployeeAttendances(Request $request){
+
+         Excel::import(new ImportEmployeeAttendances,$request->file);
+         return redirect()->back()->with('success_message', 'تم اضافه الملف بنجاح');
+
+     }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -51,7 +78,8 @@ class EmployeeAttendanceController extends Controller
      */
     public function create()
     {
-        //
+        $employees = Employee::get();
+        return view('pages.employeeAttendances.create',compact('employees'));
     }
 
     /**
@@ -60,9 +88,15 @@ class EmployeeAttendanceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AttendanceRequest $request)
     {
-        //
+        EmployeeAttendance::create($request->only([
+            'employee_id',
+            'attendance_date',
+            'clock_in',
+            'clock_out',
+        ]));
+        return redirect()->back()->with('success_message', 'تم اضافة بنجاح');
     }
 
     /**
@@ -84,7 +118,10 @@ class EmployeeAttendanceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employeeAttendance = EmployeeAttendance::find($id);
+        $employees = Employee::get();
+
+        return view('pages.employeeAttendances.edit', compact('employeeAttendance',  'employees'));
     }
 
     /**
@@ -94,9 +131,15 @@ class EmployeeAttendanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AttendanceRequest $request, $id)
     {
-        //
+        EmployeeAttendance::find($id)->update($request->only([
+            'employee_id',
+            'attendance_date',
+            'clock_in',
+            'clock_out',
+        ]));
+        return redirect()->back()->with('success_message', 'تم تعديل بنجاح');;
     }
 
     /**
@@ -107,6 +150,8 @@ class EmployeeAttendanceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $EmployeeAttendance = EmployeeAttendance::find($id);
+        $EmployeeAttendance->delete();
+        return redirect()->back()->with('success_message', 'تم الحذف بنجاح');
     }
 }
