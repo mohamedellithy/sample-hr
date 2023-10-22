@@ -26,8 +26,8 @@ class AttendanceRequest extends FormRequest
         return [
             'employee_id'        => 'required|numeric',
             'attendance_date'    => 'required|date',
-            'clock_in' => 'required|date_format:H:i:s',
-            'clock_out' => 'required|date_format:H:i:s',
+            'clock_in' => 'required',
+            'clock_out' => 'required',
 
         ];
     }

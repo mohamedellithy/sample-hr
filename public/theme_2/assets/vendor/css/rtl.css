@@ -330,6 +330,12 @@
         animation: fromBottomToTop .5s forwards 0s ease-in-out;
     }
 
+    .show-notify.alert-warning {
+        background-color: #ccaf11;
+        color: white !important;
+        animation: fromBottomToTop .5s forwards 0s ease-in-out;
+    }
+
     .show-notify.alert-danger {
         background-color: #ee4c30;
         color: white !important;

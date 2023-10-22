@@ -4,15 +4,7 @@
     <div class="container-fluid mt-4">
         <h4 class="fw-bold py-3  mb-3" style="padding-bottom: 0rem !important;">عرض موظف</h4>
         <!-- Basic Layout -->
-        @if (flash()->message)
-            <div class="{{ flash()->class }}">
-                {{ flash()->message }}
-            </div>
 
-            @if (flash()->level === 'error')
-                This was an error.
-            @endif
-        @endif
 
             <div class="row">
                 <div class="col-lg-12">

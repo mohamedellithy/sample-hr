@@ -75,8 +75,6 @@ class EmployeeAttendanceController extends Controller
 
                 $path = $updateFile->getRealPath();
                 $fileExtension = $updateFile->getClientOriginalExtension();
-
-                
                 $formats = ['xls', 'xlsx', 'ods', 'csv'];
                 if (! in_array($fileExtension, $formats)) {
                     flash('Only supports upload .xlsx, .xls files', 'error');
