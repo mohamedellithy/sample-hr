@@ -16,11 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('nationality');
             $table->double('salary',8, 2);
-            $table->integer('hour');
             $table->string('passport_no');
             $table->date('birthday');
             $table->date('passport_expiry');
-            $table->date('card_expiry');
             $table->date('join_date');
             $table->timestamps();
         });

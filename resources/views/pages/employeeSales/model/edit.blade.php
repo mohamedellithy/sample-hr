@@ -8,7 +8,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                         <div class="row">
-                            <div class="mb-3 col-md-10">
+                            <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-fullname">الموظف</label>
                                 <select name="employee_id" id="largeSelect" class="form-control form-select2" required>
                                 <option value=""> الموظف</option>
@@ -20,14 +20,22 @@
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                        </div>
-
-                        <div class="row mt-2">
                              <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> المبلغ</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
                                     name="amount" min="0" value="{{  $employeeSale->amount }}" required />
                                 @error('amount')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                             <div class="mb-3 col-md-5">
+                                <label class="form-label" for="basic-default-company"> آجل</label>
+                                <input type="number" class="form-control" id="basic-default-fullname"
+                                    name="remained" min="0" value="{{  $employeeSale->remained }}" required />
+                                @error('remained')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>

@@ -80,6 +80,7 @@ class EmployeesSalesController extends Controller
         $request->validate([
             'employee_id' => 'required',
             'amount' => ['required','numeric'],
+            'remained' => ['required','numeric'],
             'sale_date' => ['required','date']
         ],[
             'required' => 'هذا الحقل مطلوب',
@@ -90,6 +91,7 @@ class EmployeesSalesController extends Controller
         EmployeeSale::create($request->only([
             'employee_id',
             'amount',
+            'remained',
             'sale_date',
         ]));
         flash('تم الاضافه بنجاح', 'success');
@@ -136,6 +138,7 @@ class EmployeesSalesController extends Controller
         $request->validate([
             'employee_id' => 'required',
             'amount' => ['required','numeric'],
+            'remained' => ['required','numeric'],
             'sale_date' => ['required','date']
         ],[
             'required' => 'هذا الحقل مطلوب',
@@ -146,6 +149,7 @@ class EmployeesSalesController extends Controller
         EmployeeSale::where('id', $id)->update($request->only([
             'employee_id',
             'amount',
+            'remained',
             'sale_date',
         ]));
         flash('تم التعديل بنجاح', 'warning');

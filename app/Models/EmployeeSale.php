@@ -10,7 +10,7 @@ class EmployeeSale extends Model
     use HasFactory;
 
     protected $fillable = [
-        'employee_id','amount','sale_date',
+        'employee_id','amount','remained','sale_date',
     ];
 
     public function employee()

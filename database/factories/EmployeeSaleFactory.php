@@ -19,7 +19,8 @@ class EmployeeSaleFactory extends Factory
     {
         return [
             'employee_id'=>Employee::all()->random()->id,
-            'amount'=>fake()->numberBetween(10,100),
+            'amount'=>fake()->numberBetween(50,100),
+            'remained'=>fake()->numberBetween(0,50),
             'sale_date'=>fake()->date('Y_m_d'),
         ];
     }

@@ -28,12 +28,6 @@ class EmployeesController extends Controller
 
         });
 
-   /*      $employees->when(request('filter_salary') == 'sort_asc', function ($q) {
-            return $q->orderBy('salary', 'asc');
-        },function ($q) {
-            return $q->orderBy('salary', 'desc');
-        });
- */
         $employees->when(request('filter') == 'sort_asc', function ($q) {
             return $q->orderBy('created_at', 'asc');
         },function ($q) {
@@ -80,11 +74,9 @@ class EmployeesController extends Controller
             'name',
             'nationality',
             'salary',
-            'hour',
             'passport_no',
             'birthday',
             'passport_expiry',
-            'card_expiry',
             'join_date'
         ]));
         flash('تم الاضافه بنجاح', 'success');
@@ -129,11 +121,9 @@ class EmployeesController extends Controller
             'name',
             'nationality',
             'salary',
-            'hour',
             'passport_no',
             'birthday',
             'passport_expiry',
-            'card_expiry',
             'join_date'
         ]));
         flash('تم التعديل بنجاح', 'warning');

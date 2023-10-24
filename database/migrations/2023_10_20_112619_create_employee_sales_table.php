@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('set null');
             $table->double('amount',8, 2);
+            $table->double('remained',8, 2);
             $table->date('sale_date');
             $table->timestamps();
         });

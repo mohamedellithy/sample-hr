@@ -12,6 +12,7 @@ $client_filter = request()->query('client_filter') ?: null;
 
 <div class="container-fluid">
     <br/>
+
     <!-- Basic Layout -->
     <form action="{{ route('admin.clientSales.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -142,7 +143,10 @@ $client_filter = request()->query('client_filter') ?: null;
                                 </td>
 
                                 <td>
-                                {{  $clientSale->client->name }}
+                                @if ($clientSale->client)
+                                  {{  $clientSale->client->name }}
+                                @endif
+
                                 </td>
                                 <td>
                                     {{  formate_price($clientSale->amount )}}

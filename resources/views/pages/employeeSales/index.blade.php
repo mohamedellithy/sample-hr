@@ -34,15 +34,24 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                 @enderror
                             </div>
 
+                            <div class="mb-3 col-md-5">
+                                <label class="form-label" for="basic-default-company"> المبلغ الكلي</label>
+                                <input type="number" class="form-control" id="basic-default-fullname"
+                                    name="amount" min="0" value="{{ old('amount') }}" required />
+                                @error('amount')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                        </div>
+
 
                         </div>
 
                         <div class="row mt-2">
                              <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> المبلغ</label>
+                                <label class="form-label" for="basic-default-company"> آجل</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="amount" min="0" value="{{ old('amount') }}" required />
-                                @error('amount')
+                                    name="remained" min="0" value="{{ old('remained') }}" required />
+                                @error('remained')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>

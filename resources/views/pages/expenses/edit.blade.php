@@ -5,15 +5,7 @@
         <h4 class="fw-bold py-3  mb-3" style="padding-bottom: 0rem !important;">عرض مصروف </h4>
         <!-- Basic Layout -->
 
-    @if (flash()->message)
-            <div class="{{ flash()->class }}">
-                {{ flash()->message }}
-            </div>
-
-            @if (flash()->level === 'error')
-                This was an error.
-            @endif
-        @endif
+ 
 
             <form action="{{ route('admin.expenses.update',$expense->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf

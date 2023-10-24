@@ -18,11 +18,6 @@
                                     name="name" readOnly/>
                             </div>
 
-                            <div class="col">
-                                <label class="form-label" for="basic-default-company">الجنسيه</label>
-                                <input type="text" value="{{ $employee->nationality }}" class="form-control" placeholder="ادخل جنسيه الموظف"  name="nationality" readOnly/>
-
-                            </div>
                         </div>
 
                         <div class="row mt-3">
@@ -32,9 +27,10 @@
 
                             </div>
 
+
                             <div class="col">
-                                <label class="form-label" for="basic-default-company">الساعه</label>
-                                <input type="number" min="0" value="{{ $employee->hour }}" class="form-control" placeholder="ادخل ساعه الموظف" name="hour" readOnly/>
+                                <label class="form-label" for="basic-default-company">الجنسيه</label>
+                                <input type="text" value="{{ $employee->nationality }}" class="form-control" placeholder="ادخل جنسيه الموظف"  name="nationality" readOnly/>
 
                             </div>
                         </div>
@@ -58,12 +54,6 @@
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">تاريخ انتهاء الباسبور</label>
                                 <input type="date" value="{{ $employee->passport_expiry }}" class="form-control" placeholder="ادخل  رقم الباسبور"name="passport_expiry" readOnly/>
-
-                            </div>
-
-                            <div class="col">
-                                <label class="form-label" for="basic-default-company">تاريخ انتهاء البطاقه</label>
-                                <input type="date"  value="{{ $employee->card_expiry }}" class="form-control" placeholder="" name="card_expiry" readOnly/>
 
                             </div>
 

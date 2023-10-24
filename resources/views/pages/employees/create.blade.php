@@ -4,7 +4,7 @@
     <div class="container-fluid mt-4">
         <h4 class="fw-bold py-3  mb-3" style="padding-bottom: 0rem !important;"> اضافة موظف جديدة</h4>
         <!-- Basic Layout -->
- 
+
         <form action="{{ route('admin.employees.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -22,13 +22,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col">
-                                <label class="form-label" for="basic-default-company">الجنسيه</label>
-                                <input type="text" value="{{ old('nationality') }}" class="form-control" placeholder="ادخل جنسيه الموظف"  name="nationality" required/>
-                                @error('nationality')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
+
                         </div>
 
                         <div class="row mt-3">
@@ -39,11 +33,10 @@
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-
                             <div class="col">
-                                <label class="form-label" for="basic-default-company">الساعه</label>
-                                <input type="number" min="0" value="{{ old('hour') }}" class="form-control" placeholder="ادخل ساعه الموظف" name="hour" required/>
-                                @error('hour')
+                                <label class="form-label" for="basic-default-company">الجنسيه</label>
+                                <input type="text" value="{{ old('nationality') }}" class="form-control" placeholder="ادخل جنسيه الموظف"  name="nationality" required/>
+                                @error('nationality')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -77,13 +70,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col">
-                                <label class="form-label" for="basic-default-company">تاريخ انتهاء البطاقه</label>
-                                <input type="date"  value="{{ old('card_expiry') }}" class="form-control" placeholder="" name="card_expiry" required/>
-                                @error('card_expiry')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
+                     
 
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">تاريخ الانضمام</label>
