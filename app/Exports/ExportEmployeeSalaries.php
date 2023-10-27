@@ -2,6 +2,9 @@
 
 namespace App\Exports;
 
+use DateTime;
+use Carbon\Carbon;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeSalarie;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -11,7 +14,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 class ExportEmployeeSalaries implements FromCollection ,WithMapping ,WithHeadings
 {
 
-    private $request;
+    private $request,$employee,$startDate,$endDate;
 
     public function __construct(Request $request)
     {
@@ -22,41 +25,54 @@ class ExportEmployeeSalaries implements FromCollection ,WithMapping ,WithHeading
     */
     public function collection()
     {
-        $employeeSalaries = EmployeeSalarie::query();
-        $employeeSalaries= $employeeSalaries->with('employee');
+          // Calculate the first and end day of the given year and month and week
+        $startDate = Carbon::create($this->request->year, $this->request->month, 1)->startOfMonth();
+        $startDate->addWeeks($this->request->week - 1);
+        $endDate =$startDate->copy()->addWeeks(1);
+        $this->startDate = $startDate->toDateString();
+        $this->endDate = $endDate->toDateString();
 
-        if ($this->request->has('employee_filter') and $this->request->get('employee_filter') != "") {
+        $employeeSalarie = EmployeeSalarie::with('employee')->where('employee_id',$this->request->employee_id)->whereBetween('date',[$this->startDate,$this->endDate])->get();
 
-            $employeeSalaries->where('employee_id',$this->request->get('employee_filter'));
-        }
+        $employeeSalarie->push([
+            'Total',
+            '',
+            $employeeSalarie->sum('advances'),
+            $employeeSalarie->sum('sales'),
+            $employeeSalarie->sum('deduction'),
+            $employeeSalarie->sum('over_time'),
+            $employeeSalarie->sum('advances')+$employeeSalarie->sum('sales')+$employeeSalarie->sum('deduction')+$employeeSalarie->sum('over_time'),
+
+        ]);
 
 
-        $employeeSalaries->when($this->request->filter == 'sort_asc', function ($q) {
-            return $q->orderBy('created_at', 'asc');
-        },function ($q) {
-            return $q->orderBy('created_at', 'desc');
-        });
+       return $employeeSalarie;
 
-        return $employeeSalaries->get();
 
     }
 
-    public function map($employeeSalaries): array
+    public function map($row): array
     {
-        return [
-            $employeeSalaries->employee->name,
-            $employeeSalaries->days,
-            $employeeSalaries->employee->salary,
-            $employeeSalaries->employee->hour,
-            $employeeSalaries->days > 30 ?  formate_price(($employeeSalaries->days - 30 ) * 24 * $employeeSalaries->employee->hour): null,
-            $employeeSalaries->created_at,
+        if(isset($row['employee'])){
+            return [
+                $row['employee']['name'],
+                $row['date'],
+                $row['advances'],
+                $row['sales'],
+                $row['deduction'],
+                $row['over_time'],
+                $row['advances'] + $row['sales'] + $row['deduction'] + $row['over_time']
 
-        ];
+            ];
+        }else{
+            return $row;
+        }
+
     }
 
 
     public function headings(): array
     {
-        return ["الاسم","الايام","المرتب","الساعه","اضافي","التاريخ"];
+        return ["الاسم","التاريخ","السلف","آجل المبيعات","الخصومات","الاضافي","المجموع"];
     }
 }

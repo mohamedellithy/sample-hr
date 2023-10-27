@@ -1,4 +1,6 @@
 <?php
+
+use Carbon\Carbon;
 if (!function_exists('IsActiveOnlyIf')) {
     function IsActiveOnlyIf($routes = [])
     {
@@ -30,6 +32,27 @@ if(!function_exists('formate_price')) {
     function formate_price($price)
     {
         return round($price,2).' '.' جنيه ';
+    }
+}
+
+if(!function_exists('formate_time')) {
+    function formate_time($time,$numb)
+    {
+            $result = explode('-',$time);
+            $carbonTime = Carbon::parse( $result[$numb]);
+            $time24HourFormat = $carbonTime->format('H:i');
+            return $time24HourFormat;
+
+    }
+}
+
+if(!function_exists('formate_time2')) {
+    function formate_time2($time)
+    {
+        $carbonTime = Carbon::createFromFormat('H:i:s', $time);
+        $time12HourFormat = $carbonTime->format('A g');
+        return $time12HourFormat;
+
     }
 }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\EmployeeSale;
 use Illuminate\Http\Request;
+use App\Models\EmployeeSalarie;
 use App\Exports\ExportEmployeeSales;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -94,6 +95,18 @@ class EmployeesSalesController extends Controller
             'remained',
             'sale_date',
         ]));
+
+        $salary= EmployeeSalarie::where('employee_id',$request->employee_id)->where('date',$request->sale_date)->first();
+        if($salary){
+            $salary->sales += $request->remained;
+            $salary->save();
+        }else{
+            EmployeeSalarie::create([
+                'employee_id'=>$request->employee_id,
+                'date'=>$request->sale_date,
+                'sales'=>$request->remained,
+            ]);
+        }
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
     }
@@ -146,12 +159,36 @@ class EmployeesSalesController extends Controller
             'date' => 'يجب ادخال تاريخ',
         ]);
 
+        $EmployeeSale= EmployeeSale::find($id);
+
+        $salary= EmployeeSalarie::where('employee_id',$EmployeeSale->employee_id)->where('date',$EmployeeSale->sale_date)->first();
+
+        if($salary){
+            $salary->sales -= $EmployeeSale->remained;
+            $salary->save();
+        }
+
         EmployeeSale::where('id', $id)->update($request->only([
             'employee_id',
             'amount',
             'remained',
             'sale_date',
         ]));
+
+
+        $salary= EmployeeSalarie::where('employee_id',$request->employee_id)->where('date',$request->sale_date)->first();
+        if($salary){
+            $salary->sales += $request->remained;
+            $salary->save();
+        }else{
+            EmployeeSalarie::create([
+                'employee_id'=>$request->employee_id,
+                'date'=>$request->sale_date,
+                'sales'=>$request->remained,
+            ]);
+        }
+
+
         flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
@@ -164,7 +201,12 @@ class EmployeesSalesController extends Controller
      */
     public function destroy($id)
     {
-        EmployeeSale::find($id);
+        $EmployeeSale=EmployeeSale::find($id);
+        $salary= EmployeeSalarie::where('employee_id',$EmployeeSale->employee_id)->where('date',$EmployeeSale->sale_date)->first();
+        if($salary){
+            $salary->sales -= $EmployeeSale->remained;
+            $salary->save();
+        }
         EmployeeSale::destroy($id);
         flash('تم الحذف بنجاح', 'error');
         return redirect()->back();

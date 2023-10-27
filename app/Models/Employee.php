@@ -12,4 +12,14 @@ class Employee extends Model
         'name','nationality','salary','passport_no','birthday','passport_expiry','join_date',
     ];
 
+    public function advances()
+    {
+        return $this->hasMany(EmployeeAdvance::class);
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(EmployeeSale::class);
+    }
+
 }

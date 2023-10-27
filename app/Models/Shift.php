@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EmployeeSalarie extends Model
+class Shift extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'employee_id','date','advances','sales','deduction','over_time',
+        'employee_id','date',"clock_in","clock_out"
     ];
 
     public function employee()

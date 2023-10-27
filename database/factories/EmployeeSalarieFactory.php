@@ -19,7 +19,7 @@ class EmployeeSalarieFactory extends Factory
     {
         return [
             'employee_id'=>Employee::all()->random()->id,
-            'days'=>fake()->numberBetween(10,40),
+           
         ];
     }
 }

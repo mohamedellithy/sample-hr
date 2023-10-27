@@ -8,10 +8,11 @@ $employee_filter = request()->query('employee_filter') ?: null;
 @endphp
 @section('content')
 
+
 <div class="container-fluid">
     <br/>
     <!-- Basic Layout -->
-    <form action="{{ route('admin.employeeSalaries.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.employeeSalaries.export') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="col-lg-11">
@@ -19,7 +20,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                     <h5 class="card-header">اضافة ايام موظف </h5>
                     <div class="card-body">
                         <div class="row">
-                            <div class="mb-3 col-md-5">
+                            <div class="mb-3 col-md-3">
                                 <label class="form-label" for="basic-default-fullname">الموظف</label>
                                     <select type="text" name="employee_id" class="form-control form-select2 selectProduct" required>
                                     <option value="">اختر الموظف</option>
@@ -32,21 +33,51 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                 @enderror
                             </div>
 
-                             <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> الايام</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="days" min="0" value="{{ old('days') }}" required />
-                                @error('days')
+                             <div class="mb-3 col-md-3">
+                                <label class="form-label" for="basic-default-company"> الاسبوع</label>
+                                  <select type="text" name="week" class="form-control selectProduct" required>
+                                    <option value="">اختر الاسبوع</option>
+                                    <option value="1">الاول</option>
+                                    <option value="2">الثاني</option>
+                                    <option value="3">الثالث</option>
+                                    <option value="4">الرابع</option>
+                                    </select>
+                                @error('week')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="basic-default-company"> الشهر</label>
+                                  <select type="text" name="month" class="form-control selectProduct form-select2 " required>
+                                    <option value="">اختر الشهر</option>
+                                    <option value="1">1 - يناير</option>
+                                    <option value="2">2 - فبراير</option>
+                                    <option value="3">3 - مارس</option>
+                                    <option value="4">4 - ابريل</option>
+                                    <option value="5">5 - مايو</option>
+                                    <option value="6">6 - يونيو</option>
+                                    <option value="7">7 - يوليو</option>
+                                    <option value="8">8 - اغسطس</option>
+                                    <option value="9">9 - سبتمبر</option>
+                                    <option value="10">10 - اكتوبر</option>
+                                    <option value="11">11 - نوفمبر</option>
+                                    <option value="12">12 - ديسمبر</option>
+                                    </select>
+                                @error('month')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                                    <div class="mb-3 col-md-3">
+                                <label class="form-label" for="basic-default-company"> السنه</label>
+                             <input type="number" min="2000" max="2050" name="year"value=""class="form-control"title="ادخل سنه مابين 2000-2050" placeholder="ادخل السنه">
+                                @error('year')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
 
-
                         </div>
 
-
-
-                        <button type="submit" class="btn btn-primary">اضافة</button>
+                        <button type="submit" class="btn btn-primary">تصدير</button>
                     </div>
                 </div>
             </div>
@@ -90,14 +121,14 @@ $employee_filter = request()->query('employee_filter') ?: null;
                             </select>
                         </div>
                         </form>
-                <form  method="post" action="{{ route('admin.employeeSalaries.export') }}">
+           {{--      <form  method="post" action="{{ route('admin.employeeSalaries.export') }}">
                   @csrf
                     <div class="nav-item d-flex align-items-center m-2">
-                        <input type="hidden" name="employee_filter" value="{{ $employee_filter }}">
+                        <input type="hidden" name="employee_id" value="{{ $employee_filter }}">
                         <input type="hidden" name="filter" value="{{ $filter }}">
                         <button type="submit" class="btn btn-primary">export</button>
                     </div>
-                </form>
+                </form> --}}
                     </div>
 
            </div>
@@ -107,10 +138,12 @@ $employee_filter = request()->query('employee_filter') ?: null;
                         <tr class="table-dark">
                            <th>#</th>
                             <th>الموظف</th>
-                            <th>الايام</th>
-                            <th>المرتب</th>
-                            <th>اضافي</th>
                             <th>التاريخ</th>
+                            <th>السلف</th>
+                            <th>آجل مبيعات</th>
+                            <th>الخصومات</th>
+                            <th>الاضافي</th>
+                            <th>المجموع</th>
                             <th></th>
                         </tr>
                    </thead>
@@ -125,41 +158,24 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                 {{  $employeeSalarie->employee->name }}
                                 </td>
                                 <td>
-                                    {{  $employeeSalarie->days }}
-                                </td>
-                                <td>
-                                    {{  formate_price($employeeSalarie->employee->salary )}}
-                                </td>
-                                <td>
-                                @if ($employeeSalarie->days > 30)
-                                 {{  formate_price(($employeeSalarie->days - 30 ) * 24 * $employeeSalarie->employee->hour)}}
-                                 @else
-                                   <span class="badge bg-label-danger me-1">
-                                  لا يوجد
-                                     </span>
-                                @endif
-
-                                </td>
-                                <td>
-                                     <span class="badge bg-label-primary me-1">
-                                    {{ $employeeSalarie->created_at }}
+                                 <span class="badge bg-label-primary me-1">
+                                    {{  $employeeSalarie->date }}
                                      </span>
                                 </td>
-
                                 <td>
-                                    <div class="d-flex">
-
-                                        <a  class="crud edit-employeeSalarie" data-employeeSalarie-id="{{ $employeeSalarie->id }}">
-                                            <i class="fas fa-edit text-primary"></i>
-                                        </a>
-                                        <form  method="post" action="{{ route('admin.employeeSalaries.destroy', $employeeSalarie->id) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <a class="delete-item crud">
-                                                <i class="fas fa-trash-alt  text-danger"></i>
-                                            </a>
-                                        </form>
-                                    </div>
+                                    {{  formate_price($employeeSalarie->advances )}}
+                                </td>
+                                 <td>
+                                    {{  formate_price($employeeSalarie->sales )}}
+                                </td>
+                                 <td>
+                                    {{  formate_price($employeeSalarie->deduction )}}
+                                </td>
+                                  <td>
+                                    {{  formate_price($employeeSalarie->over_time )}}
+                                </td>
+                                <td>
+            {{  formate_price($employeeSalarie->advances + $employeeSalarie->sales+ $employeeSalarie->deduction )}}
                                 </td>
                             </tr>
                         @endforeach
@@ -203,5 +219,11 @@ jQuery('.edit-employeeSalarie').click(function(){
            jQuery(this).parents('form').submit();
        }
    });
+
+
+$(() => {
+  $('#date').datepicker({ dateFormat: 'mm-yy' });
+});
+
 </script>
 @endpush

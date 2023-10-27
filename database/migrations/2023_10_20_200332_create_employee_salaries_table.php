@@ -16,8 +16,13 @@ return new class extends Migration
         Schema::create('employee_salaries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id')->nullable();
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('set null');
-            $table->integer('days');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->date('date');
+            $table->double('advances',8, 2)->default(0);
+            $table->double('sales',8, 2)->default(0);
+            $table->double('deduction',8, 2)->default(0);
+            $table->double('over_time',8, 2)->default(0);
+
             $table->timestamps();
         });
     }

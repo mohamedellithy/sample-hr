@@ -139,6 +139,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                            <th>#</th>
                             <th>الموظف</th>
                             <th>المبلغ</th>
+                            <th>آجل</th>
                             <th>التاريخ</th>
                             <th></th>
                         </tr>
@@ -155,6 +156,9 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                 </td>
                                 <td>
                                     {{  formate_price($employeeSale->amount )}}
+                                </td>
+                                    <td>
+                                    {{  formate_price($employeeSale->remained )}}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">

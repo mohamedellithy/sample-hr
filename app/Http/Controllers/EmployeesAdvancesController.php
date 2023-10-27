@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeAdvance;
+use App\Models\EmployeeSalarie;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportEmployeeAdvances;
 
@@ -91,6 +92,20 @@ class EmployeesAdvancesController extends Controller
             'amount',
             'advance_date',
         ]));
+
+        $salary= EmployeeSalarie::where('employee_id',$request->employee_id)->where('date',$request->advance_date)->first();
+        if($salary){
+            $salary->advances += $request->amount;
+            $salary->save();
+        }else{
+            EmployeeSalarie::create([
+                'employee_id'=>$request->employee_id,
+                'date'=>$request->advance_date,
+                'advances'=>$request->amount,
+            ]);
+        }
+
+
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
     }
@@ -144,11 +159,35 @@ class EmployeesAdvancesController extends Controller
             'date' => 'يجب ادخال تاريخ',
         ]);
 
+        $EmployeeAdvance= EmployeeAdvance::find($id);
+
+        $salary= EmployeeSalarie::where('employee_id',$EmployeeAdvance->employee_id)->where('date',$EmployeeAdvance->advance_date)->first();
+
+        if($salary){
+
+            $salary->advances -= $EmployeeAdvance->amount;
+            $salary->save();
+
+        }
+
         EmployeeAdvance::where('id', $id)->update($request->only([
             'employee_id',
             'amount',
             'advance_date',
         ]));
+
+        $salary= EmployeeSalarie::where('employee_id',$request->employee_id)->where('date',$request->advance_date)->first();
+        if($salary){
+            $salary->advances += $request->amount;
+            $salary->save();
+        }else{
+            EmployeeSalarie::create([
+                'employee_id'=>$request->employee_id,
+                'date'=>$request->advance_date,
+                'advances'=>$request->amount,
+            ]);
+        }
+
         flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
@@ -161,7 +200,12 @@ class EmployeesAdvancesController extends Controller
      */
     public function destroy($id)
     {
-        EmployeeAdvance::find($id);
+        $EmployeeAdvance=EmployeeAdvance::find($id);
+        $salary= EmployeeSalarie::where('employee_id',$EmployeeAdvance->employee_id)->where('date',$EmployeeAdvance->advance_date)->first();
+        if($salary){
+            $salary->advances -= $EmployeeAdvance->amount;
+            $salary->save();
+        }
         EmployeeAdvance::destroy($id);
         flash('تم الحذف بنجاح', 'error');
         return redirect()->back();

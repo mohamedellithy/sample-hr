@@ -135,6 +135,24 @@
             </ul>
         </li>
 
+       <!-- shifts  -->
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.shifts.index']) }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class='menu-icon tf-icons bx bxs-package'></i>
+                <div data-i18n="Layouts">الشفتات</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.shifts.index']) }}">
+                    <a href="{{ route('admin.shifts.index') }}" class="menu-link">
+                        <div data-i18n="Without navbar">عرض</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+
         <!-- employeeAttendances  -->
         <li class="menu-item {{ IsActiveOnlyIf(['admin.employeeAttendances.index']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">

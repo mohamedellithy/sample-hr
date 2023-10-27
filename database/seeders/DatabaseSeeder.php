@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
              ClientsSeeder::class,
              ClientsSalesSeeder::class,
              EmployeeAdvancesSeeder::class,
-             EmployeeSalariesSeeder::class,
+             //EmployeeSalariesSeeder::class,
              EmployeeAttendancesSeeder::class,
         ]);
 
