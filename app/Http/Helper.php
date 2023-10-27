@@ -50,7 +50,7 @@ if(!function_exists('formate_time2')) {
     function formate_time2($time)
     {
         $carbonTime = Carbon::createFromFormat('H:i:s', $time);
-        $time12HourFormat = $carbonTime->format('A g');
+        $time12HourFormat = $carbonTime->format('h:i A');
         return $time12HourFormat;
 
     }

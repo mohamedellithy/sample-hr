@@ -25,7 +25,7 @@ class AttendanceRequest extends FormRequest
     {
         return [
             'employee_id'        => 'required|numeric',
-            'attendance_date'    => 'required|date',
+            'attendance_date'    => 'required|date|unique:employee_attendances,attendance_date',
             'clock_in' => 'required',
             'clock_out' => 'required',
 
@@ -35,6 +35,7 @@ class AttendanceRequest extends FormRequest
     public function messages()
     {
         return [
+            'unique'=>'هذا التاريخ موجود من قبل',
             'required' => 'هذا الحقل مطلوب',
             'numeric' => 'يرجى ادخال رقم',
             'date' => 'يجب ادخال تاريخ',

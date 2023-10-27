@@ -27,11 +27,9 @@ class EmployeeRequest extends FormRequest
             'name'        => 'required',
             'nationality' => 'required',
             'salary'      => 'required|numeric',
-            'hour'        => 'required|numeric',
             'passport_no' => 'required',
             'birthday'    => 'required|date',
             'passport_expiry' => 'required|date',
-            'card_expiry' => 'required|date',
             'join_date' => 'required|date',
         ];
 

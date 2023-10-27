@@ -119,10 +119,11 @@ $out = request()->query('out') ?: null;
                                     {{  $employeeAttendance->attendance_date }}
                                 </td>
                                 <td>
-                                    {{  $employeeAttendance->clock_in }}
+                                  {{ formate_time2($employeeAttendance->clock_in) }}
+
                                 </td>
                                 <td>
-                                    {{  $employeeAttendance->clock_out }}
+                                   {{  formate_time2($employeeAttendance->clock_out )}}
                                 </td>
 
                                         <td>

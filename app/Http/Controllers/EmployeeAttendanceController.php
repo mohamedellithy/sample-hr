@@ -3,17 +3,34 @@
 namespace App\Http\Controllers;
 
 use Throwable;
+use Carbon\Carbon;
+use App\Models\Shift;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use App\Models\EmployeeSalarie;
 use App\Models\EmployeeAttendance;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\AttendanceRequest;
 use App\Exports\ExportEmployeeAttendances;
 use App\Imports\ImportEmployeeAttendances;
+use App\Services\CalculateHourSalaryService;
+use App\Services\DeductionsAndOvertimeService;
 
 class EmployeeAttendanceController extends Controller
 {
+
+    protected $CalcSalSE;
+    protected $attendanceService;
+
+    public function __construct(CalculateHourSalaryService $CalcSalSE,DeductionsAndOvertimeService $attendanceService)
+    {
+        $this->CalcSalSE = $CalcSalSE;
+        $this->attendanceService = $attendanceService;
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -117,12 +134,16 @@ class EmployeeAttendanceController extends Controller
      */
     public function store(AttendanceRequest $request)
     {
-        EmployeeAttendance::create($request->only([
+        $employeeAttendance = EmployeeAttendance::create($request->only([
             'employee_id',
             'attendance_date',
             'clock_in',
             'clock_out',
         ]));
+
+       $this->attendanceService->calculateDeductionsAndOvertime($request);
+
+
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
     }
@@ -159,8 +180,21 @@ class EmployeeAttendanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AttendanceRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'employee_id'        => 'required|numeric',
+            'attendance_date'    => 'required|date|unique:employee_attendances,attendance_date,'.$id,
+            'clock_in' => 'required',
+            'clock_out' => 'required',
+        ],[
+            'unique'=>'هذا التاريخ موجود من قبل',
+            'required' => 'هذا الحقل مطلوب',
+            'numeric' => 'يرجى ادخال رقم',
+            'date' => 'يجب ادخال تاريخ',
+            'date_format' => 'يجب ادخال وقت',
+        ]);
+
         EmployeeAttendance::find($id)->update($request->only([
             'employee_id',
             'attendance_date',
