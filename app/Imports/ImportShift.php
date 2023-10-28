@@ -32,6 +32,13 @@ class ImportShift implements ToCollection
             if($employee){
                 for ($x = 2; $x <= 8; $x++) {
                         if(isset($row[$x])){
+
+                            // delete old Shift if exist
+                            $Shift= Shift::where('employee_id',$employee->id)->where('date',$this->transformDate($rows[2][$x]))->first();
+                            if($Shift){
+                                $Shift->delete();
+                            }
+
                             Shift::create([
                                 'employee_id'=>$employee->id,
                                 'date'=>$this->transformDate($rows[2][$x]),

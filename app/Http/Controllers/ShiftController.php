@@ -84,6 +84,14 @@ class ShiftController extends Controller
     public function store(ShiftRequest $request)
     {
 
+        $Shift= Shift::where('employee_id',$request->employee_id)->where('date',$request->date)->first();
+        if($Shift){
+
+          flash('هذا التاريخ موجود من قبل', 'warning');
+          return redirect()->back();
+        }
+
+
         Shift::create($request->only([
             'employee_id',
             'date',
@@ -128,7 +136,14 @@ class ShiftController extends Controller
      */
     public function update(ShiftRequest $request, $id)
     {
-     
+
+    $Shift= Shift::where('employee_id',$request->employee_id)->where('date',$request->date)->first();
+
+        if($Shift && $Shift->id!=$id){
+
+          flash('هذا التاريخ موجود من قبل', 'warning');
+          return redirect()->back();
+        }
         Shift::find($id)->update($request->only([
             'employee_id',
             'date',
