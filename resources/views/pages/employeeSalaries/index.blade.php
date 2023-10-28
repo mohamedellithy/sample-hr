@@ -175,7 +175,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                     {{  formate_price($employeeSalarie->over_time )}}
                                 </td>
                                 <td>
-            {{  formate_price($employeeSalarie->advances + $employeeSalarie->sales+ $employeeSalarie->deduction )}}
+            {{  formate_price($employeeSalarie->advances + $employeeSalarie->sales+ $employeeSalarie->deduction - $employeeSalarie->over_time)}}
                                 </td>
                             </tr>
                         @endforeach

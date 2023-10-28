@@ -98,7 +98,7 @@ class EmployeeAttendanceController extends Controller
                     return redirect()->back();
                 }
 
-                $import= Excel::import(new ImportEmployeeAttendances,$request->file);
+                $import= Excel::import(new ImportEmployeeAttendances($this->attendanceService),$request->file);
                 DB::commit();
 
             flash(' تم اضافه الملف بنجاح', 'success');
@@ -134,6 +134,13 @@ class EmployeeAttendanceController extends Controller
      */
     public function store(AttendanceRequest $request)
     {
+
+        $attendance= EmployeeAttendance::where('employee_id',$request->employee_id)->where('attendance_date',$request->attendance_date)->first();
+      if($attendance){
+        flash('هذا التاريخ موجود من قبل', 'warning');
+        return redirect()->back();
+      }
+
         $employeeAttendance = EmployeeAttendance::create($request->only([
             'employee_id',
             'attendance_date',
@@ -180,20 +187,25 @@ class EmployeeAttendanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AttendanceRequest $request, $id)
     {
-        $request->validate([
-            'employee_id'        => 'required|numeric',
-            'attendance_date'    => 'required|date|unique:employee_attendances,attendance_date,'.$id,
-            'clock_in' => 'required',
-            'clock_out' => 'required',
-        ],[
-            'unique'=>'هذا التاريخ موجود من قبل',
-            'required' => 'هذا الحقل مطلوب',
-            'numeric' => 'يرجى ادخال رقم',
-            'date' => 'يجب ادخال تاريخ',
-            'date_format' => 'يجب ادخال وقت',
-        ]);
+
+        $attendance= EmployeeAttendance::where('employee_id',$request->employee_id)->where('attendance_date',$request->attendance_date)->first();
+
+        if($attendance && $attendance->id!=$id){
+
+          flash('هذا التاريخ موجود من قبل', 'warning');
+          return redirect()->back();
+        }
+
+        $EmployeeAttendance= EmployeeAttendance::find($id);
+        $salary= EmployeeSalarie::where('employee_id',$EmployeeAttendance->employee_id)->where('date',$EmployeeAttendance->attendance_date)->first();
+
+        if($salary){
+            $salary->deduction = 0;
+            $salary->over_time = 0;
+            $salary->save();
+        }
 
         EmployeeAttendance::find($id)->update($request->only([
             'employee_id',
@@ -201,6 +213,9 @@ class EmployeeAttendanceController extends Controller
             'clock_in',
             'clock_out',
         ]));
+
+        $this->attendanceService->calculateDeductionsAndOvertime($request);
+
         flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
@@ -214,6 +229,13 @@ class EmployeeAttendanceController extends Controller
     public function destroy($id)
     {
         $EmployeeAttendance = EmployeeAttendance::find($id);
+        $salary= EmployeeSalarie::where('employee_id',$EmployeeAttendance->employee_id)->where('date',$EmployeeAttendance->attendance_date)->first();
+        if($salary){
+            $salary->deduction = 0;
+            $salary->over_time = 0;
+            $salary->save();
+        }
+
         $EmployeeAttendance->delete();
         flash('تم الحذف بنجاح', 'error');
         return redirect()->back();

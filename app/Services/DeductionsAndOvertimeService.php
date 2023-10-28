@@ -29,6 +29,7 @@ class DeductionsAndOvertimeService
         $shift = Shift::where('employee_id',$request->employee_id)->where('date',$request->attendance_date)->first();
 
         if($shift){
+
             $shift_clock_in = Carbon::parse($shift->clock_in);
             $shift_clock_out = Carbon::parse($shift->clock_out);
 
@@ -57,13 +58,13 @@ class DeductionsAndOvertimeService
                 $deductionAmount = $this->CalcSalSE->calculateHourlyWage($employee->salary,$BasicWorkHours);
 
                 if($salary){
-                    $salary->deduction =  $clock_in_Minutes/60 * $deductionAmount;
+                    $salary->deduction = round($clock_in_Minutes/60 * $deductionAmount);
                     $salary->save();
                 }else{
                     EmployeeSalarie::create([
                         'employee_id'=>$request->employee_id,
                         'date'=>$request->attendance_date,
-                        'deduction'=> $clock_in * $deductionAmount,
+                        'deduction'=> round($clock_in_Minutes/60 * $deductionAmount),
                     ]);
                 }
 
@@ -74,13 +75,13 @@ class DeductionsAndOvertimeService
                 $overTimeAmount = $this->CalcSalSE->calculateHourlyWage($employee->salary,$BasicWorkHours);
 
                 if($salary){
-                    $salary->over_time =  $clock_in * $overTimeAmount;
+                    $salary->over_time = round($clock_in_Minutes/60 * $overTimeAmount);
                     $salary->save();
                 }else{
                     EmployeeSalarie::create([
                         'employee_id'=>$request->employee_id,
                         'date'=>$request->attendance_date,
-                        'over_time'=>  $clock_in * $overTimeAmount,
+                        'over_time'=>  round($clock_in_Minutes/60 * $overTimeAmount),
                     ]);
                 }
 
@@ -99,13 +100,13 @@ class DeductionsAndOvertimeService
                 $deductionAmount = $this->CalcSalSE->calculateHourlyWage($employee->salary,$BasicWorkHours);
 
                 if($salary){
-                    $salary->deduction =  $clock_out_Minutes/60 * $deductionAmount;
+                    $salary->deduction =  round($clock_out_Minutes/60 * $deductionAmount);
                     $salary->save();
                 }else{
                     EmployeeSalarie::create([
                         'employee_id'=>$request->employee_id,
                         'date'=>$request->attendance_date,
-                        'deduction'=> $clock_out * $deductionAmount,
+                        'deduction'=> round($clock_out_Minutes/60 * $deductionAmount),
                     ]);
                 }
 
@@ -116,13 +117,13 @@ class DeductionsAndOvertimeService
                 $overTimeAmount = $this->CalcSalSE->calculateHourlyWage($employee->salary,$BasicWorkHours);
 
                 if($salary){
-                    $salary->over_time =  $clock_out_Minutes/60 * $overTimeAmount;
+                    $salary->over_time =  round($clock_out_Minutes/60 * $overTimeAmount);
                     $salary->save();
                 }else{
                     EmployeeSalarie::create([
                         'employee_id'=>$request->employee_id,
                         'date'=>$request->attendance_date,
-                        'over_time'=>  $clock_out_Minutes/60 * $overTimeAmount,
+                        'over_time'=>  round($clock_out_Minutes/60 * $overTimeAmount),
                     ]);
                 }
 
@@ -140,15 +141,15 @@ class DeductionsAndOvertimeService
                 $salary= EmployeeSalarie::where('employee_id',$request->employee_id)->where('date',$request->attendance_date)->first();
 
                 $deductionAmount = $this->CalcSalSE->calculateHourlyWage($employee->salary,$BasicWorkHours);
-
+    
                 if($salary){
-                    $salary->deduction =  $clock_in_Minutes/60 * $deductionAmount;
+                    $salary->deduction =round($clock_in_Minutes/60 * $deductionAmount);
                     $salary->save();
                 }else{
                     EmployeeSalarie::create([
                         'employee_id'=>$request->employee_id,
                         'date'=>$request->attendance_date,
-                        'deduction'=> $clock_in_Minutes/60 * $deductionAmount,
+                        'deduction'=> round($clock_in_Minutes/60 * $deductionAmount),
                     ]);
                 }
 
@@ -159,13 +160,13 @@ class DeductionsAndOvertimeService
                 $overTimeAmount = $this->CalcSalSE->calculateHourlyWage($employee->salary,$BasicWorkHours);
 
                 if($salary){
-                    $salary->over_time =  $clock_in_Minutes/60 * $overTimeAmount;
+                    $salary->over_time =  round($clock_in_Minutes/60 * $overTimeAmount);
                     $salary->save();
                 }else{
                     EmployeeSalarie::create([
                         'employee_id'=>$request->employee_id,
                         'date'=>$request->attendance_date,
-                        'over_time'=>  $clock_in_Minutes/60 * $overTimeAmount,
+                        'over_time'=>  round($clock_in_Minutes/60 * $overTimeAmount),
                     ]);
                 }
 
@@ -182,13 +183,13 @@ class DeductionsAndOvertimeService
                 $deductionAmount = $this->CalcSalSE->calculateHourlyWage($employee->salary,$BasicWorkHours);
 
                 if($salary){
-                    $salary->deduction =  $clock_out_Minutes/60 * $deductionAmount;
+                    $salary->deduction =  round($clock_out_Minutes/60 * $deductionAmount);
                     $salary->save();
                 }else{
                     EmployeeSalarie::create([
                         'employee_id'=>$request->employee_id,
                         'date'=>$request->attendance_date,
-                        'deduction'=> $clock_out_Minutes/60 * $deductionAmount,
+                        'deduction'=> round($clock_out_Minutes/60 * $deductionAmount),
                     ]);
                 }
 
@@ -199,13 +200,13 @@ class DeductionsAndOvertimeService
                 $overTimeAmount = $this->CalcSalSE->calculateHourlyWage($employee->salary,$BasicWorkHours);
 
                 if($salary){
-                    $salary->over_time =  $clock_out_Minutes/60 * $overTimeAmount;
+                    $salary->over_time =  round($clock_out_Minutes/60 * $overTimeAmount);
                     $salary->save();
                 }else{
                     EmployeeSalarie::create([
                         'employee_id'=>$request->employee_id,
                         'date'=>$request->attendance_date,
-                        'over_time'=>  $clock_out_Minutes/60 * $overTimeAmount,
+                        'over_time'=>  round($clock_out_Minutes/60 * $overTimeAmount),
                     ]);
                 }
 

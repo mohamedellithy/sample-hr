@@ -41,7 +41,7 @@ class ExportEmployeeSalaries implements FromCollection ,WithMapping ,WithHeading
             $employeeSalarie->sum('sales'),
             $employeeSalarie->sum('deduction'),
             $employeeSalarie->sum('over_time'),
-            $employeeSalarie->sum('advances')+$employeeSalarie->sum('sales')+$employeeSalarie->sum('deduction')+$employeeSalarie->sum('over_time'),
+            $employeeSalarie->sum('advances')+$employeeSalarie->sum('sales')+$employeeSalarie->sum('deduction')-$employeeSalarie->sum('over_time'),
 
         ]);
 
@@ -61,7 +61,7 @@ class ExportEmployeeSalaries implements FromCollection ,WithMapping ,WithHeading
                 $row['sales'],
                 $row['deduction'],
                 $row['over_time'],
-                $row['advances'] + $row['sales'] + $row['deduction'] + $row['over_time']
+                $row['advances'] + $row['sales'] + $row['deduction'] - $row['over_time']
 
             ];
         }else{

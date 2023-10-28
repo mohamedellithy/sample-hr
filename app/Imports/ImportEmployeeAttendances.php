@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\EmployeeAttendance;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use App\Services\DeductionsAndOvertimeService;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -16,10 +17,11 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
 
 
     private $employees;
-    private $errors = [];
-    public function __construct()
+    protected $attendanceService;
+    public function __construct(DeductionsAndOvertimeService $attendanceService)
     {
         $this->employees = Employee::select('id','name')->get();
+        $this->attendanceService = $attendanceService;
     }
 
     /**
@@ -34,13 +36,32 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
  */
             $employee = $this->employees->where('name',$row['employee'])->first();
             if($employee){
-                return new EmployeeAttendance([
-                    'employee_id'=> $employee->id,
-                    'attendance_date'=>$row['date'],
-                    'clock_in'=>$row['clock_in'],
-                    'clock_out'=>$row['clock_out'],
 
-                ]);
+                // delete EmployeeAttendance if exist
+                $attendance= EmployeeAttendance::where('employee_id',$employee->id)->where('attendance_date',$this->transformDate($row['date']))->first();
+                if($attendance){
+                    $attendance->delete();
+                }
+
+                 // make request to send  to calculate Deductions And Overtime
+                $request = new \Illuminate\Http\Request();
+                $request->replace([
+                'employee_id'=>$employee->id,
+                'attendance_date'=>$this->transformDate($row['date']),
+                'clock_in'=>$row['clock_in'],
+                'clock_out'=>$row['clock_out']
+            ]);
+
+            $this->attendanceService->calculateDeductionsAndOvertime($request);
+
+            //create new EmployeeAttendance
+            return new EmployeeAttendance([
+                'employee_id'=> $employee->id,
+                'attendance_date'=>$this->transformDate($row['date']),
+                'clock_in'=>$row['clock_in'],
+                'clock_out'=>$row['clock_out'],
+            ]);
+
             }
             return;
 
