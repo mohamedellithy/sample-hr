@@ -70,14 +70,7 @@ $export =null;
                             <th>الاسم </th>
                             <th>الجنسيه</th>
                             <th>المرتب</th>
-                            <th>الساعه</th>
-
-                    {{--
-                            <th>تاريخ الميلاد</th>
-                            <th>رقم الباسبور</th>
-                            <th>تاريخ انتهاء الباسبور</th>
-                            <th>تاريخ انتهاء البطاقه</th>
-                            <th>تاريخ الانضمام</th> --}}
+                          <th>تاريخ الانضمام</th>
                               <th></th>
                         </tr>
                    </thead>
@@ -100,28 +93,9 @@ $export =null;
                                     {{ formate_price($employee->salary) }}
                                 </td>
                                     <td>
-                                    {{ $employee->hour }}
-                                </td>
-
-                   {{--
-                                 <td>
-                                    <span class="badge bg-label-primary me-1">
-                                        {{ $employee->birthday }}
-                                    </span>
-                                </td>
-                                <td>
-                                    {{ $employee->passport_no }}
-                                </td>
-
-                                 <td>
-                                    {{ $employee->passport_expiry }}
-                                </td>
-                                 <td>
-                                    {{ $employee->card_expiry }}
-                                </td>
-                                 <td>
                                     {{ $employee->join_date }}
-                                </td> --}}
+                                </td>
+
                                 <td>
                                     <div class="d-flex">
                                         <a class="crud" href="{{ route('admin.employees.show',$employee->id) }}">
