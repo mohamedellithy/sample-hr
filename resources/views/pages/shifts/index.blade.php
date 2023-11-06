@@ -4,8 +4,7 @@
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $employee_filter = request()->query('employee_filter') ?: null;
-$from = request()->query('from') ?: null;
-$to = request()->query('to') ?: null;
+$datefilter = request()->query('datefilter') ?: null;
 $in = request()->query('in') ?: null;
 $out = request()->query('out') ?: null;
 @endphp
@@ -39,11 +38,9 @@ $out = request()->query('out') ?: null;
 
 
                         <div class="nav-item d-flex align-items-center m-2">
-                            <label style="color: #636481;">من:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($from) value="{{ $from }}" @endisset id="from" name="from"/>
-                            &ensp;
-                                <label style="color: #636481;">الي:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($to) value="{{ $to }}" @endisset id="to" name="to"/>
+
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="من - الي  " @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
+
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
@@ -51,6 +48,15 @@ $out = request()->query('out') ?: null;
                                 <option value="">فلتر المصروفات</option>
                                 <option value="sort_asc" @isset($filter) @if ($filter=='sort_asc' ) selected @endif @endisset>الاقدم</option>
                                 <option value="sort_desc" @isset($filter) @if ($filter=='sort_desc' ) selected @endif @endisset>الاحدث </option>
+                            </select>
+                        </div>
+
+                                  <div class="nav-item d-flex align-items-center m-2">
+                            <label style="padding: 0px 5px;color: #636481;">المعروض</label>
+                            <select name="rows" onchange="document.getElementById('filter-data').submit()" id="largeSelect" class="form-select form-select-sm">
+                                    <option >10</option>
+                                    <option value="50" @isset($rows) @if ($rows=='50' ) selected @endif @endisset>50</option>
+                                    <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
                             </select>
                         </div>
 
@@ -67,27 +73,19 @@ $out = request()->query('out') ?: null;
                         </div>
 
 
-                        <div class="nav-item d-flex align-items-center m-2">
-                            <label style="padding: 0px 5px;color: #636481;">المعروض</label>
-                            <select name="rows" onchange="document.getElementById('filter-data').submit()" id="largeSelect" class="form-select form-select-sm">
-                                    <option >10</option>
-                                    <option value="50" @isset($rows) @if ($rows=='50' ) selected @endif @endisset>50</option>
-                                    <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
-                            </select>
-                        </div>
+
                 </form>
 
-                <form  method="post" action="{{ route('admin.employeeAttendances.export') }}">
+                <form  method="post" action="{{ route('admin.shifts.export') }}">
                   @csrf
                     <div class="nav-item d-flex align-items-center m-2">
                     <input type="hidden" name="employee_filter" value="{{ $employee_filter }}">
-                        <input type="hidden" name="from" value="{{ $from }}">
-                        <input type="hidden" name="to" value="{{ $to }}">
+                        <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                         <input type="hidden" name="filter" value="{{ $filter }}">
                         <input type="hidden" name="in" value="{{ $in }}">
                         <input type="hidden" name="out" value="{{ $out }}">
-                        <a href="{{ route('admin.employeeAttendances.index') }}"class="btn btn-danger">reset</a>   &ensp;&ensp;
-                        <button type="submit" class="btn btn-primary">export</button>
+                        <a href="{{ route('admin.shifts.index') }}"class="btn btn-danger">reset</a>   &ensp;&ensp;
+                        <button type="submit" class="btn btn-primary">تصدير</button>
                     </div>
                 </form>
                 </div>
@@ -100,7 +98,7 @@ $out = request()->query('out') ?: null;
                            <th>#</th>
                             <th>الموظف</th>
                             <th>التاريخ</th>
-                        
+
                             <th>الحضور</th>
                             <th>الانصراف</th>
                             <th></th>

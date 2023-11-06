@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Employee;
 use App\Models\EmployeeSale;
 use Illuminate\Http\Request;
@@ -22,10 +23,12 @@ class EmployeesSalesController extends Controller
         $per_page = 10;
 
 
-        if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
-            $from=$request->get('from');
-            $to=$request->get('to');
+    
 
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $employeeSales->whereBetween('sale_date',[$from,$to]);
         }
 
@@ -54,7 +57,7 @@ class EmployeesSalesController extends Controller
     public function exportEmployeeSales(Request $request){
 
 
-        return Excel::download(new ExportEmployeeSales( $request->employee_filter,$request->from,$request->to,$request->filter),'expenses.xlsx');
+        return Excel::download(new ExportEmployeeSales( $request->employee_filter,$request->datefilter,$request->filter),'expenses.xlsx');
 
         return redirect()->back();
 

@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\EmployeeAdvance;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -27,11 +28,14 @@ class ExportEmployeeAdvances implements FromCollection,WithMapping ,WithHeadings
         $employeeAdvances = EmployeeAdvance::query();
         $employeeAdvances= $employeeAdvances->with('employee');
 
-        if ($this->request->has('from') and $this->request->has('to') and $this->request->get('from') != "" and $this->request->get('to') != "") {
-            $from=$this->request->get('from');
-            $to=$this->request->get('to');
 
+        if ($this->request->has('datefilter')  and $this->request->get('datefilter') != "" ) {
+
+            $result = explode('-',$this->request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $employeeAdvances->whereBetween('advance_date',[$from,$to]);
+
         }
 
         if ($this->request->has('employee_filter') and $this->request->get('employee_filter') != "") {

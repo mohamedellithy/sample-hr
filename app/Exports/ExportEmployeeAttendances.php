@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\EmployeeAttendance;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -27,11 +28,13 @@ class ExportEmployeeAttendances implements FromCollection,WithMapping ,WithHeadi
         $request = $this->request;
 
         $employeeAttendances = EmployeeAttendance::query();
-        if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
-            $from=$request->get('from');
-            $to=$request->get('to');
 
+        if ($this->request->has('datefilter')  and $this->request->get('datefilter') != "" ) {
+            $result = explode('-',$this->request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $employeeAttendances->whereBetween('attendance_date',[$from,$to]);
+
         }
 
         if ($request->has('employee_filter') and $request->get('employee_filter') != "") {

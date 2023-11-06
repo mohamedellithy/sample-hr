@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Client;
 use App\Models\ClientSale;
 use Illuminate\Http\Request;
@@ -22,10 +23,10 @@ class ClientsSalesController extends Controller
         $per_page = 10;
 
 
-        if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
-            $from=$request->get('from');
-            $to=$request->get('to');
-
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $clientSales->whereBetween('sale_date',[$from,$to]);
         }
 
@@ -80,6 +81,7 @@ class ClientsSalesController extends Controller
         $request->validate([
             'client_id' => 'required',
             'amount' => ['required','numeric'],
+            'remained' => ['required','numeric'],
             'sale_date' => ['required','date']
         ],[
             'required' => 'هذا الحقل مطلوب',
@@ -90,6 +92,7 @@ class ClientsSalesController extends Controller
         ClientSale::create($request->only([
             'client_id',
             'amount',
+            'remained',
             'sale_date',
         ]));
         flash('تم الاضافه بنجاح', 'success');
@@ -136,6 +139,7 @@ class ClientsSalesController extends Controller
         $request->validate([
             'client_id' => 'required',
             'amount' => ['required','numeric'],
+            'remained' => ['required','numeric'],
             'sale_date' => ['required','date']
         ],[
             'required' => 'هذا الحقل مطلوب',
@@ -146,6 +150,7 @@ class ClientsSalesController extends Controller
         ClientSale::where('id', $id)->update($request->only([
             'client_id',
             'amount',
+            'remained',
             'sale_date',
         ]));
         flash('تم التعديل بنجاح', 'warning');

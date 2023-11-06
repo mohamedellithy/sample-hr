@@ -39,10 +39,17 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
 
                 // delete EmployeeAttendance if exist
                 $attendance= EmployeeAttendance::where('employee_id',$employee->id)->where('attendance_date',$this->transformDate($row['date']))->first();
+
                 if($attendance){
                     $attendance->delete();
                 }
 
+                if (is_float($row['clock_in']) || is_double($row['clock_in'])) {
+                    $row['clock_in'] =  Date::excelToDateTimeObject($row['clock_in'])->format('H:i:s');
+                }
+                if (is_float($row['clock_out']) || is_double($row['clock_out'])) {
+                    $row['clock_out'] =  Date::excelToDateTimeObject($row['clock_out'])->format('H:i:s');
+                }
                  // make request to send  to calculate Deductions And Overtime
                 $request = new \Illuminate\Http\Request();
                 $request->replace([
@@ -51,6 +58,7 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
                 'clock_in'=>$row['clock_in'],
                 'clock_out'=>$row['clock_out']
             ]);
+
 
             $this->attendanceService->calculateDeductionsAndOvertime($request);
 

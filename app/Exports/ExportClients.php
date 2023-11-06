@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -36,13 +37,14 @@ class ExportClients implements FromCollection ,WithHeadings
         });
 
 
-        if ($this->request->has('from') and $this->request->has('to') and $this->request->get('from') != "" and $this->request->get('to') != "") {
-            $from=$this->request->get('from');
-            $to=$this->request->get('to');
-
+        if ($this->request->has('datefilter')  and $this->request->get('datefilter') != "" ) {
+            $result = explode('-',$this->request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $clients->whereBetween('created_at',[$from,$to]);
         }
 
+    
 
         $clients->when($this->request->get('filter') == 'sort_asc', function ($q) {
             return $q->orderBy('created_at', 'asc');

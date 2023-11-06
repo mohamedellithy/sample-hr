@@ -55,7 +55,7 @@ $export =null;
                             <div class="nav-item d-flex align-items-center m-2">
                              <input type="hidden" name="search" value="{{ $search }}">
                             <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">export</button>
+                            <button type="submit" class="btn btn-primary">تصدير</button>
                             </div>
                     </form>
                 </div>

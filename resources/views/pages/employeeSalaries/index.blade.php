@@ -4,6 +4,7 @@
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $employee_filter = request()->query('employee_filter') ?: null;
+$datefilter = request()->query('datefilter') ?: null;
 
 @endphp
 @section('content')
@@ -105,6 +106,13 @@ $employee_filter = request()->query('employee_filter') ?: null;
                             </select>
                         </div>
 
+
+                        <div class="nav-item d-flex align-items-center m-2">
+
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="من - الي  " @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
+
+                        </div>
+
                         <div class="nav-item d-flex align-items-center m-2">
                             <select name="filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
                                 <option value="">فلتر المصروفات</option>
@@ -126,7 +134,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                     <div class="nav-item d-flex align-items-center m-2">
                         <input type="hidden" name="employee_id" value="{{ $employee_filter }}">
                         <input type="hidden" name="filter" value="{{ $filter }}">
-                        <button type="submit" class="btn btn-primary">export</button>
+                        <button type="submit" class="btn btn-primary">تصدير</button>
                     </div>
                 </form> --}}
                     </div>

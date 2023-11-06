@@ -4,8 +4,8 @@ $search = request()->query('search') ?: null;
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $filter_salary = request()->query('filter_salary') ?: null;
-$from = request()->query('from') ?: null;
-$to = request()->query('to') ?: null;
+$datefilter = request()->query('datefilter') ?: null;
+
 $service_filter = request()->query('service_filter') ?: null;
 @endphp
 @section('content')
@@ -40,11 +40,9 @@ $service_filter = request()->query('service_filter') ?: null;
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
-                            <label style="color: #636481;">من:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($from) value="{{ $from }}" @endisset id="from" name="from"/>
-                            &ensp;
-                                <label style="color: #636481;">الي:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($to) value="{{ $to }}" @endisset id="to" name="to"/>
+
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control"  @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
+
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
@@ -67,10 +65,9 @@ $service_filter = request()->query('service_filter') ?: null;
                             @csrf
                             <div class="nav-item d-flex align-items-center m-2">
                             <input type="hidden" name="service_filter" value="{{ $service_filter }}">
-                            <input type="hidden" name="from" value="{{ $from }}">
-                            <input type="hidden" name="to" value="{{ $to }}">
+                            <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                             <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">export</button>
+                            <button type="submit" class="btn btn-primary">تصدير</button>
                             </div>
                     </form>
                     </div>
@@ -148,6 +145,7 @@ $service_filter = request()->query('service_filter') ?: null;
 @endsection
 
 @push('script')
+
 <script>
 
    jQuery('.delete-item').click(function(){

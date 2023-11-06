@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeAdvance;
@@ -22,10 +23,11 @@ class EmployeesAdvancesController extends Controller
         $per_page = 10;
 
 
-        if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
-            $from=$request->get('from');
-            $to=$request->get('to');
 
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $employeeAdvances->whereBetween('advance_date',[$from,$to]);
         }
 

@@ -3,8 +3,7 @@
 
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
-$from = request()->query('from') ?: null;
-$to = request()->query('to') ?: null;
+$datefilter = request()->query('datefilter') ?: null;
 $client_filter = request()->query('client_filter') ?: null;
 
 @endphp
@@ -34,16 +33,24 @@ $client_filter = request()->query('client_filter') ?: null;
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-
+                          <div class="mb-3 col-md-5">
+                                <label class="form-label" for="basic-default-company"> المبلغ الكلي</label>
+                                <input type="number" class="form-control" id="basic-default-fullname"
+                                    name="amount" min="0" value="{{ old('amount') }}" required />
+                                @error('amount')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
 
                         </div>
 
                         <div class="row mt-2">
-                             <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> المبلغ</label>
+
+                            <div class="mb-3 col-md-5">
+                                <label class="form-label" for="basic-default-company"> آجل</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="amount" min="0" value="{{ old('amount') }}" required />
-                                @error('amount')
+                                    name="remained" min="0" value="{{ old('remained') }}" required />
+                                @error('remained')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -88,11 +95,8 @@ $client_filter = request()->query('client_filter') ?: null;
 
 
                         <div class="nav-item d-flex align-items-center m-2">
-                            <label style="color: #636481;">من:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($from) value="{{ $from }}" @endisset id="from" name="from"/>
-                            &ensp;
-                                <label style="color: #636481;">الي:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($to) value="{{ $to }}" @endisset id="to" name="to"/>
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder=" من - الي" @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
+
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
@@ -115,10 +119,9 @@ $client_filter = request()->query('client_filter') ?: null;
                             @csrf
                             <div class="nav-item d-flex align-items-center m-2">
                             <input type="hidden" name="client_filter" value="{{ $client_filter }}">
-                            <input type="hidden" name="from" value="{{ $from }}">
-                            <input type="hidden" name="to" value="{{ $to }}">
+                            <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                             <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">export</button>
+                            <button type="submit" class="btn btn-primary">تصدير</button>
                             </div>
                     </form>
                     </div>
@@ -131,6 +134,7 @@ $client_filter = request()->query('client_filter') ?: null;
                            <th>#</th>
                             <th>العميل</th>
                             <th>المبلغ</th>
+                            <th>آجل</th>
                             <th>التاريخ</th>
                             <th></th>
                         </tr>
@@ -150,6 +154,9 @@ $client_filter = request()->query('client_filter') ?: null;
                                 </td>
                                 <td>
                                     {{  formate_price($clientSale->amount )}}
+                                </td>
+                                    <td>
+                                    {{  formate_price($clientSale->remained )}}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">
@@ -187,6 +194,7 @@ $client_filter = request()->query('client_filter') ?: null;
 @endsection
 
 @push('script')
+
 <script>
 
 jQuery('.edit-clientSale').click(function(){

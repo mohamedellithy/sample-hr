@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Shift;
 use App\Models\Employee;
+use App\Exports\ExportShift;
 use App\Imports\ImportShift;
 use Illuminate\Http\Request;
 use App\Http\Requests\ShiftRequest;
@@ -20,10 +22,12 @@ class ShiftController extends Controller
     {
         $shifts = Shift::query();
         $per_page = 10;
-        if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
-            $from=$request->get('from');
-            $to=$request->get('to');
 
+
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $shifts->whereBetween('date',[$from,$to]);
         }
 
@@ -53,6 +57,13 @@ class ShiftController extends Controller
         $employees = Employee::get();
         return view('pages.shifts.index', compact('shifts','employees'));
     }
+
+    public function exportShift(Request $request){
+
+        return Excel::download(new ExportShift( $request),'shifts.xlsx');
+         return redirect()->back();
+
+     }
 
     public function importShifts(Request $request){
 

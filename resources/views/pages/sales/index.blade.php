@@ -3,8 +3,7 @@
 
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
-$from = request()->query('from') ?: null;
-$to = request()->query('to') ?: null;
+$datefilter = request()->query('datefilter') ?: null;
 @endphp
 @section('content')
 
@@ -79,20 +78,12 @@ $to = request()->query('to') ?: null;
        <div class="card">
            <h5 class="card-header">عرض المصروفات</h5>
            <div class="card-header py-3 ">
-          {{--       <div class="d-flex" style="flex-direction: row-reverse;">
-                    <div class="nav-item d-flex align-items-center m-2">
-                        <a href="{{ route('admin.sales.create') }}" class="btn btn-success btn-md" style="color:white">اضافة مبايعه جديد</a>
-                    </div>
-                </div> --}}
+
                <form id="filter-data" method="get" class=" justify-content-between">
                     <div class="d-flex justify-content-between" style="background-color: #eee;">
 
                         <div class="nav-item d-flex align-items-center m-2">
-                            <label style="color: #636481;">من:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($from) value="{{ $from }}" @endisset id="from" name="from"/>
-                            &ensp;
-                                <label style="color: #636481;">الي:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($to) value="{{ $to }}" @endisset id="to" name="to"/>
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control"  @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
@@ -114,10 +105,9 @@ $to = request()->query('to') ?: null;
                 <form  method="post" action="{{ route('admin.sales.export') }}">
                   @csrf
                             <div class="nav-item d-flex align-items-center m-2">
-                             <input type="hidden" name="from" value="{{ $from }}">
-                               <input type="hidden" name="to" value="{{ $to }}">
+                             <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                             <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">export</button>
+                            <button type="submit" class="btn btn-primary">تصدير</button>
                             </div>
                 </form>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Exports\ExportClients;
@@ -29,10 +30,10 @@ class ClientsController extends Controller
         });
 
 
-        if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
-            $from=$request->get('from');
-            $to=$request->get('to');
-
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $clients->whereBetween('created_at',[$from,$to]);
         }
 
@@ -53,10 +54,7 @@ class ClientsController extends Controller
     }
 
     public function exportClients(Request $request){
-
-
        return Excel::download(new ExportClients( $request),'clients.xlsx');
-
         return redirect()->back();
 
     }

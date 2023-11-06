@@ -4,8 +4,7 @@
 $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $employee_filter = request()->query('employee_filter') ?: null;
-$from = request()->query('from') ?: null;
-$to = request()->query('to') ?: null;
+$datefilter = request()->query('datefilter') ?: null;
 $in = request()->query('in') ?: null;
 $out = request()->query('out') ?: null;
 @endphp
@@ -39,11 +38,9 @@ $out = request()->query('out') ?: null;
 
 
                         <div class="nav-item d-flex align-items-center m-2">
-                            <label style="color: #636481;">من:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($from) value="{{ $from }}" @endisset id="from" name="from"/>
-                            &ensp;
-                                <label style="color: #636481;">الي:</label><br>
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="يوم - شهر - سنه" @isset($to) value="{{ $to }}" @endisset id="to" name="to"/>
+
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="من - الي" @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
+
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
@@ -81,13 +78,12 @@ $out = request()->query('out') ?: null;
                   @csrf
                     <div class="nav-item d-flex align-items-center m-2">
                     <input type="hidden" name="employee_filter" value="{{ $employee_filter }}">
-                        <input type="hidden" name="from" value="{{ $from }}">
-                        <input type="hidden" name="to" value="{{ $to }}">
+                        <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                         <input type="hidden" name="filter" value="{{ $filter }}">
                         <input type="hidden" name="in" value="{{ $in }}">
                         <input type="hidden" name="out" value="{{ $out }}">
                         <a href="{{ route('admin.employeeAttendances.index') }}"class="btn btn-danger">reset</a>   &ensp;&ensp;
-                        <button type="submit" class="btn btn-primary">export</button>
+                        <button type="submit" class="btn btn-primary">تصدير</button>
                     </div>
                 </form>
                 </div>

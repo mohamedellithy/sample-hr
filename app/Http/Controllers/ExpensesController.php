@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Throwable;
+use Carbon\Carbon;
 use App\Models\Expense;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -25,10 +26,6 @@ class ExpensesController extends Controller
         $per_page = 10;
 
 
-  /*       $expenses->when(request('search') != null, function ($q) {
-            return $q->where('service', 'like', '%' . request('search') . '%');
-        }); */
-
         $expenses->when(request('service_filter') != null, function ($q) {
             return $q->where('service',request('service_filter'));
         });
@@ -40,10 +37,10 @@ class ExpensesController extends Controller
             return $q->orderBy('created_at', 'desc');
         });
 
-        if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
-            $from=$request->get('from');
-            $to=$request->get('to');
-
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $expenses->whereBetween('expense_date',[$from,$to]);
         }
 
@@ -58,7 +55,7 @@ class ExpensesController extends Controller
     public function exportExpenses(Request $request){
 
 
-        return Excel::download(new ExportExpense( $request->service_filter,$request->from,$request->to,$request->filter),'expenses.xlsx');
+        return Excel::download(new ExportExpense( $request->service_filter,$request->datefilter,$request->filter),'expenses.xlsx');
 
         return redirect()->back();
 

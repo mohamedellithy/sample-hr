@@ -20,6 +20,7 @@ class ClientSaleFactory extends Factory
         return [
             'client_id'=>Client::all()->random()->id,
             'amount'=>fake()->numberBetween(10,100),
+            'remained'=>fake()->numberBetween(0,50),
             'sale_date'=>fake()->date('Y_m_d'),
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use App\Models\EmployeeSale;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -11,15 +12,13 @@ class ExportEmployeeSales implements FromCollection ,WithMapping ,WithHeadings
 {
 
     private $employee_filter;
-    private $from;
-    private $to;
+    private $datefilter;
     private $filter;
 
-    public function __construct($employee_filter,$from,$to,$filter)
+    public function __construct($employee_filter,$datefilter,$filter)
     {
         $this->employee_filter = $employee_filter;
-        $this->from = $from;
-        $this->to = $to;
+        $this->datefilter = $datefilter;
         $this->filter = $filter;
     }
 
@@ -31,10 +30,12 @@ class ExportEmployeeSales implements FromCollection ,WithMapping ,WithHeadings
     {
         $employeeSales = EmployeeSale::query();
         $employeeSales = $employeeSales->with('employee');
-        if ($this->from and $this->to and $this->from != "" and $this->to != "") {
 
-
-            $employeeSales->whereBetween('sale_date',[$this->from,$this->to]);
+        if ($this->datefilter and $this->datefilter != "") {
+            $result = explode('-',$this->datefilter);
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
+            $employeeSales->whereBetween('sale_date',[$from,$to]);
         }
 
         if ( $this->employee_filter and  $this->employee_filter != "") {

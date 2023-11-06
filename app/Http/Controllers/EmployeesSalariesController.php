@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeSalarie;
@@ -26,11 +27,17 @@ class EmployeesSalariesController extends Controller
             $employeeSalaries->where('employee_id',$request->get('employee_filter'));
         }
 
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
+            $employeeSalaries->whereBetween('date',[$from,$to]);
+        }
 
         $employeeSalaries->when(request('filter') == 'sort_asc', function ($q) {
-            return $q->orderBy('created_at', 'asc');
+            return $q->orderBy('date', 'asc');
         },function ($q) {
-            return $q->orderBy('created_at', 'desc');
+            return $q->orderBy('date', 'desc');
         });
 
         if ($request->has('rows')):
@@ -44,7 +51,7 @@ class EmployeesSalariesController extends Controller
 
     public function exportEmployeeSalaries(Request $request){
 
-         
+
         return Excel::download(new ExportEmployeeSalaries( $request),'employeeSalaries.xlsx');
 
          return redirect()->back();

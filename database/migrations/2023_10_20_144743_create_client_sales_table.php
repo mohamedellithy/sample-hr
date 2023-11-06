@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id')->nullable();
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->double('amount',8, 2);
+            $table->double('remained',8, 2);
             $table->date('sale_date');
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use App\Models\ClientSale;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -23,11 +24,14 @@ class ExportClientSales implements FromCollection,WithMapping ,WithHeadings
     {
         $clientSales = ClientSale::query();
         $clientSales = $clientSales->with('client');
-        if ($this->request->has('from') and $this->request->has('to') and $this->request->get('from') != "" and $this->request->get('to') != "") {
-            $from=$this->request->get('from');
-            $to=$this->request->get('to');
 
+        if ($this->request->has('datefilter')  and $this->request->get('datefilter') != "" ) {
+
+            $result = explode('-',$this->request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $clientSales->whereBetween('sale_date',[$from,$to]);
+
         }
 
         if ($this->request->has('client_filter') and $this->request->get('client_filter') != "") {
@@ -51,6 +55,7 @@ class ExportClientSales implements FromCollection,WithMapping ,WithHeadings
         return [
             $clientSales->client->name,
             $clientSales->amount,
+            $clientSales->remained,
             $clientSales->sale_date,
 
         ];
@@ -59,6 +64,6 @@ class ExportClientSales implements FromCollection,WithMapping ,WithHeadings
 
     public function headings(): array
     {
-        return ["الاسم","المبلغ","التاريخ"];
+        return ["الاسم","المبلغ","آجل","التاريخ"];
     }
 }

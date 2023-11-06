@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use App\Models\Expense;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -9,15 +10,13 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 class ExportExpense implements FromCollection ,WithHeadings
 {
     private $service_filter;
-    private $from;
-    private $to;
+    private $datefilter;
     private $filter;
 
-    public function __construct($service_filter,$from,$to,$filter)
+    public function __construct($service_filter,$datefilter,$filter)
     {
         $this->service_filter = $service_filter;
-        $this->from = $from;
-        $this->to = $to;
+        $this->datefilter = $datefilter;
         $this->filter = $filter;
     }
 
@@ -40,9 +39,12 @@ class ExportExpense implements FromCollection ,WithHeadings
             return $q->orderBy('created_at', 'desc');
         });
 
-        if ($this->from and$this->to and $this->from != "" and $this->to != "") {
 
-            $expenses->whereBetween('expense_date',[$this->from,$this->to]);
+        if ($this->datefilter and $this->datefilter != "") {
+            $result = explode('-',$this->datefilter);
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
+            $expenses->whereBetween('expense_date',[$from,$to]);
         }
 
         return $expenses->select('service','amount','expense_date')->get();

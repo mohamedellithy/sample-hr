@@ -40,10 +40,12 @@ class EmployeeAttendanceController extends Controller
     {
         $employeeAttendances = EmployeeAttendance::query();
         $per_page = 10;
-        if ($request->has('from') and $request->has('to') and $request->get('from') != "" and $request->get('to') != "") {
-            $from=$request->get('from');
-            $to=$request->get('to');
 
+
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
             $employeeAttendances->whereBetween('attendance_date',[$from,$to]);
         }
 
