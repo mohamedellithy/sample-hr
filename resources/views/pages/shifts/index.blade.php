@@ -66,10 +66,10 @@ $out = request()->query('out') ?: null;
 
                         <div class="nav-item d-flex align-items-center m-2">
                             <label style="color: #636481;">الحضور </label><br>&ensp;
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="ث : د : س" @isset($in) value="{{ $in }}" @endisset id="in" name="in"/>
+                            <input type="time" onchange="document.getElementById('filter-data').submit()" class=" form-control" @isset($in) value="{{ $in }}" @endisset id="in" name="in"/>
                             &ensp;   &ensp;&ensp;
                                 <label style="color: #636481;">الانصراف </label><br>&ensp;
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="ث : د : س" @isset($out) value="{{ $out }}" @endisset id="out" name="out"/>
+                            <input type="time" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder="ث : د : س" @isset($out) value="{{ $out }}" @endisset id="out" name="out"/>
                         </div>
 
 
