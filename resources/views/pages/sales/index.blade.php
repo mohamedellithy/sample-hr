@@ -13,7 +13,7 @@ $datefilter = request()->query('datefilter') ?: null;
     <form action="{{ route('admin.sales.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
-            <div class="col-lg-11">
+            <div class="col-lg-12">
                 <div class="card mb-4">
                     <h5 class="card-header">اضافة مبايعه جديده</h5>
                     <div class="card-body">

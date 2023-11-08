@@ -15,7 +15,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
     <form action="{{ route('admin.employeeAdvances.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
-            <div class="col-lg-11">
+            <div class="col-lg-12">
                 <div class="card mb-4">
                     <h5 class="card-header">اضافة سلف موظف جديده</h5>
                     <div class="card-body">

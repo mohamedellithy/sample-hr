@@ -16,7 +16,7 @@ $client_filter = request()->query('client_filter') ?: null;
     <form action="{{ route('admin.clientSales.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
-            <div class="col-lg-11">
+            <div class="col-lg-12">
                 <div class="card mb-4">
                     <h5 class="card-header">اضافة مبايعه عميل جديده</h5>
                     <div class="card-body">
