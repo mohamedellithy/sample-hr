@@ -2,7 +2,7 @@
     <div class="app-brand demo">
         <a href="{{ route('home') }}" target="_blank" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <img src="{{ asset('theme_2/logo.png') }}" />
+                <img style="width:35px !important" src="{{ asset('theme_2/logo.png') }}" />
             </span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -14,17 +14,17 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item {{ IsActiveOnlyIf(['admin.dashboard']) }}">
+        {{-- <li class="menu-item {{ IsActiveOnlyIf(['admin.dashboard']) }}">
             <a href="{{ route('admin.dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">الرئيسية</div>
             </a>
-        </li>
+        </li> --}}
 
        <!-- employees -->
         <li class="menu-item {{ IsActiveOnlyIf(['admin.employees.index','admin.employees.create','admin.products.edit']) }}">
             <a href="{{ route('admin.employees.index') }}" class="menu-link menu-toggle">
-                <i class='menu-icon tf-icons bx bxs-category'></i>
+                <i class='menu-icon tf-icons bx bxs-package'></i>
                 <div data-i18n="Layouts">الموظفيين</div>
             </a>
 
