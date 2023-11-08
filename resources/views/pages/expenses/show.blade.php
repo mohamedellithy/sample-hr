@@ -34,17 +34,6 @@
 
                             </div>
                         </div>
-
-
-
-                         <div class="row mt-4 text-center">
-                            <div class="col">
-                           <img style="width:550px;height:450px;"src="{{ $expense->attachment  }}">
-                            </div>
-                        </div>
-
-
-
                         </div>
                     </div>
                 </div>

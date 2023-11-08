@@ -81,7 +81,6 @@ $service_filter = request()->query('service_filter') ?: null;
                             <th>نوع المصروف </th>
                             <th>المبلغ</th>
                             <th>تاريخ الصرف</th>
-                            <th>المرفق</th>
                             <th></th>
                         </tr>
                    </thead>
@@ -102,16 +101,6 @@ $service_filter = request()->query('service_filter') ?: null;
                                      <span class="badge bg-label-primary me-1">
                                     {{ $expense->expense_date }}
                                      </span>
-                                </td>
-                                   <td>
-                                   @if ($expense->attachment)
-                                     <img src="{{$expense->attachment }}">
-                                     @else
-                                        <span class="badge bg-label-danger me-1">
-                                 لم يتم اضافه
-                                     </span>
-                                   @endif
-
                                 </td>
                                 <td>
                                     <div class="d-flex">

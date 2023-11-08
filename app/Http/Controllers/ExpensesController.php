@@ -84,17 +84,6 @@ class ExpensesController extends Controller
             DB::beginTransaction();
 
             try{
-                if ($request->hasfile('attachment') ) {
-                    $attachment_image = $request->file('attachment');
-                    $image_name = url('').'/uploads/expense/'.time().'.' .$attachment_image->getClientOriginalExtension();
-                  if($attachment_image->move(public_path('uploads/expense/'), $image_name)){
-
-                    $data['attachment'] = $image_name;
-
-                  }
-                } else {
-                    unset($data['attachment']);
-                }
 
                 Expense::create($data);
 
@@ -146,22 +135,6 @@ class ExpensesController extends Controller
             $data = $request->all();
             DB::beginTransaction();
             try{
-                if ($request->hasfile('attachment') ) {
-                    $attachment_image = $request->file('attachment');
-                    $image_name = url('').'/uploads/expense/'.time().'.' .$attachment_image->getClientOriginalExtension();
-                  if($attachment_image->move(public_path('uploads/expense/'), $image_name)){
-                    // delete old img
-                      $imagePath = Str::after($expense->attachment, url(url('').'/'));
-                        if(File::exists($imagePath) && $expense->attachment != 'http://127.0.0.1:8000/uploads/expense/default.jpg')
-                        {
-                            File::delete($imagePath);
-                        }
-
-                    $data['attachment'] = $image_name;
-                  }
-                } else {
-                    unset($data['photo']);
-                }
                 $expense->update($data);
 
                 DB::commit();
@@ -184,13 +157,6 @@ class ExpensesController extends Controller
     public function destroy($id)
     {
         $expense = Expense::find($id);
-        if($expense->attachment){
-            $imagePath = Str::after($expense->attachment, url(url('').'/'));
-            if(File::exists($imagePath) && $expense->attachment != 'http://127.0.0.1:8000/uploads/expense/default.jpg')
-            {
-            File::delete($imagePath);
-            }
-        }
         $expense->delete();
         flash('تم الحذف بنجاح', 'error');
         return redirect()->back();

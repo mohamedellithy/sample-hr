@@ -5,7 +5,7 @@
         <h4 class="fw-bold py-3  mb-3" style="padding-bottom: 0rem !important;">عرض مصروف </h4>
         <!-- Basic Layout -->
 
- 
+
 
             <form action="{{ route('admin.expenses.update',$expense->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -51,13 +51,6 @@
                                 @enderror
 
                             </div>
-                                <div class="col">
-                                <label class="form-label" for="basic-default-company">المرفق</label>
-                                <input type="file"  value="{{ old('attachment') }}" class="form-control" placeholder="اختر مرفق" name="attachment" accept="image/gif, image/jpeg, image/png"/>
-                                @error('attachment')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
                         </div>
 
                              <div class="row mt-4 text-center">
@@ -66,18 +59,6 @@
 
                             </div>
                         </div>
-
-                          @if ( $expense->attachment )
-                        <div class="row mt-4 text-center">
-                            <div class="col">
-                                <img style="width:550px;height:450px;"src="{{ $expense->attachment  }}">
-                            </div>
-                        </div>
-
-                          @endif
-
-
-
                         </div>
                     </div>
                 </div>

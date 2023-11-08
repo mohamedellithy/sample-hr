@@ -4,7 +4,7 @@
     <div class="container-fluid mt-4">
         <h4 class="fw-bold py-3  mb-3" style="padding-bottom: 0rem !important;">اضافة مصروف جديد</h4>
         <!-- Basic Layout -->
-  
+
         <form action="{{ route('admin.expenses.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -44,14 +44,6 @@
                                 <label class="form-label" for="basic-default-company">تاريخ الصرف</label>
                                 <input type="date" value="{{ old('expense_date') }}" class="form-control" placeholder="ادخل  تاريخ الصرف" name="expense_date" required/>
                                 @error('expense_date')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="col">
-                                <label class="form-label" for="basic-default-company">المرفق</label>
-                                <input type="file"  value="{{ old('attachment') }}" class="form-control" placeholder="اختر مرفق" name="attachment" accept="image/gif, image/jpeg, image/png"/>
-                                @error('attachment')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
