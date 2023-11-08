@@ -79,7 +79,13 @@ class ExpensesController extends Controller
      */
     public function store(ExpensesRequest $request)
     {
-            $data = $request->all();
+            $data = $request->only([
+                'pending_amount',
+                'supplier',
+                'service',
+                'amount',
+                'expense_date'
+            ]);
 
             DB::beginTransaction();
 
@@ -131,8 +137,14 @@ class ExpensesController extends Controller
      */
     public function update(ExpensesRequest $request, $id)
     {
-           $expense = Expense::find($id);
-            $data = $request->all();
+            $expense = Expense::find($id);
+            $data = $request->only([
+                'pending_amount',
+                'supplier',
+                'service',
+                'amount',
+                'expense_date'
+            ]);
             DB::beginTransaction();
             try{
                 $expense->update($data);

@@ -18,7 +18,8 @@ return new class extends Migration
              $table->string('service');
              $table->double('amount',8, 2);
              $table->date('expense_date');
-             $table->string('attachment')->nullable();
+             $table->double('pending_amount',8, 2)->nullable();
+             $table->text('supplier')->nullable();
              $table->timestamps();
         });
     }

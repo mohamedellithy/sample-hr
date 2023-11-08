@@ -80,6 +80,8 @@ $service_filter = request()->query('service_filter') ?: null;
                            <th>#</th>
                             <th>نوع المصروف </th>
                             <th>المبلغ</th>
+                            <th>مبلغ الاجل</th>
+                            <th>المورد</th>
                             <th>تاريخ الصرف</th>
                             <th></th>
                         </tr>
@@ -95,7 +97,13 @@ $service_filter = request()->query('service_filter') ?: null;
                                         {{ $expense->service }}
                                 </td>
                                 <td>
-                                    {{ $expense->amount }}
+                                    {{ formate_price($expense->amount) }}
+                                </td>
+                                <td>
+                                    {{ formate_price($expense->pending_amount) }}
+                                </td>
+                                <td>
+                                    {{ $expense->supplier }}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">

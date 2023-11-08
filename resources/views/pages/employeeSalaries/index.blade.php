@@ -68,9 +68,9 @@ $datefilter = request()->query('datefilter') ?: null;
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                                    <div class="mb-3 col-md-3">
+                            <div class="mb-3 col-md-3">
                                 <label class="form-label" for="basic-default-company"> السنه</label>
-                             <input type="number" min="2000" max="2050" name="year"value=""class="form-control"title="ادخل سنه مابين 2000-2050" placeholder="ادخل السنه">
+                                    <input type="number" min="2000" max="2050" name="year"value=""class="form-control"title="ادخل سنه مابين 2000-2050" placeholder="ادخل السنه">
                                 @error('year')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror

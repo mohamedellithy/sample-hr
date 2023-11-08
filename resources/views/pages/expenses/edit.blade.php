@@ -40,6 +40,24 @@
                             </div>
                         </div>
 
+                        <div class="row mt-3">
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">الاجل</label>
+                                <input type="number" value="{{ $expense->pending_amount }}" class="form-control" placeholder="ادخل  مبلغ الاجل"  name="pending_amount"/>
+                                @error('pending_amount')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">المصروف تابع ل</label>
+                                <input type="text" value="{{ $expense->supplier }}" class="form-control" placeholder="الاسم التابع له المصروف" name="supplier"/>
+                                @error('supplier')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+
 
                         <div class="row mt-3">
 

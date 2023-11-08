@@ -14,6 +14,14 @@ $export =null;
        <div class="card">
            <h5 class="card-header">عرض الموظفيين</h5>
            <div class="card-header py-3 ">
+                <div class="d-flex">
+                    <div class="">
+                        <label>عدد الموظفين</label>
+                        <label style="color: black;padding: 0px 6px;font-weight: bold;">
+                            {{ $all_employess ?: 0 }}
+                        </label>
+                    </div>
+                </div>
                 <div class="d-flex" style="flex-direction: row-reverse;">
                     <div class="nav-item d-flex align-items-center m-2">
                         <a href="{{ route('admin.employees.create') }}" class="btn btn-success btn-md" style="color:white">اضافة موظف جديد</a>
@@ -25,14 +33,6 @@ $export =null;
                             <i class="bx bx-search fs-4 lh-0"></i>
                             <input type="text" class="search form-control border-0 shadow-none" placeholder="البحث ...." @isset($search) value="{{ $search }}" @endisset id="search" name="search" style="background-color:#fff;"/>
                         </div>
-
-                  {{--       <div class="nav-item d-flex align-items-center m-2">
-                            <select name="filter_salary" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
-                                <option value="">فلتر المرتب</option>
-                                <option value="sort_desc" @isset($filter_salary) @if ($filter_salary=='sort_desc' ) selected @endif @endisset>الاعلي </option>
-                                <option value="sort_asc" @isset($filter_salary) @if ($filter_salary=='sort_asc' ) selected @endif @endisset>الاقل</option>
-                            </select>
-                        </div> --}}
 
                         <div class="nav-item d-flex align-items-center m-2">
                             <select name="filter" id="largeSelect" onclick="myFunction2()" onchange="document.getElementById('filter-data').submit()" class="form-control">
@@ -59,8 +59,6 @@ $export =null;
                             </div>
                     </form>
                 </div>
-
-
            </div>
            <div class="table-responsive text-nowrap">
                <table class="table">
@@ -70,8 +68,10 @@ $export =null;
                             <th>الاسم </th>
                             <th>الجنسيه</th>
                             <th>المرتب</th>
-                          <th>تاريخ الانضمام</th>
-                              <th></th>
+                            <th>رقم الباسبور</th>
+                            <th>تاريخ الانضمام</th>
+                            <th>تاريخ انتهاء الباسبور</th>
+                            <th></th>
                         </tr>
                    </thead>
                    <tbody class="table-border-bottom-0">
@@ -92,8 +92,14 @@ $export =null;
                                 <td>
                                     {{ formate_price($employee->salary) }}
                                 </td>
-                                    <td>
+                                <td>
+                                    {{ $employee->passport_no }}
+                                </td>
+                                <td>
                                     {{ $employee->join_date }}
+                                </td>
+                                <td>
+                                    {{ $employee->passport_expiry }}
                                 </td>
 
                                 <td>

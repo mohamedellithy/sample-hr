@@ -20,11 +20,13 @@ class EmployeesController extends Controller
 
         $employees = Employee::query();
         $per_page = 10;
+        $all_employess = $employees->count();
 
 
         $employees->when(request('search') != null, function ($q) {
             return $q->where('nationality', 'like', '%' . request('search') . '%')
-            ->orWhere('name', 'like', '%' . request('search'));
+            ->orWhere('name', 'like', '%' . request('search'))
+            ->orWhere('passport_no', 'like', '%' . request('search'));
 
         });
 
@@ -42,7 +44,7 @@ class EmployeesController extends Controller
 
         $employees = $employees->paginate($per_page);
 
-        return view('pages.employees.index', compact('employees'));
+        return view('pages.employees.index', compact('employees','all_employess'));
     }
 
     public function exportEployee(Request $request){
