@@ -5,7 +5,7 @@
         <h4 class="fw-bold py-3  mb-3" style="padding-bottom: 0rem !important;">عرض مصروف </h4>
         <!-- Basic Layout -->
 
- 
+
 
             <form action="{{ route('admin.expenses.update',$expense->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -27,6 +27,14 @@
                                 <option value="owner" @isset($expense->service) @if ($expense->service=='owner' ) selected @endif @endisset>owner</option>
                             </select>
                               @error('service')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">الشركه</label>
+                                <input type="text" name="company" value="{{$expense->company }}" class="form-control" required/>
+                              @error('company')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>

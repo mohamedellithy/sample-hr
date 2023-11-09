@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Exports\ExportEmployee;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\EmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 
 class EmployeesController extends Controller
 {
@@ -115,8 +116,22 @@ class EmployeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EmployeeRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'name'        => 'required|unique:employees,name,'.$id,
+            'nationality' => 'required',
+            'salary'      => 'required|numeric',
+            'passport_no' => 'required',
+            'birthday'    => 'required|date',
+            'passport_expiry' => 'required|date',
+            'join_date' => 'required|date',
+        ],[
+            'required' => 'هذا الحقل مطلوب',
+            'unique'=>'هذا الاسم موجود سابقا',
+            'numeric' => 'يرجى ادخال رقم',
+            'date' => 'يجب ادخال تاريخ',
+        ]);
          Employee::find($id)->update($request->only([
             'name',
             'nationality',

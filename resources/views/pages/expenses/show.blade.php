@@ -17,6 +17,11 @@
                               <input type="text" value="{{$expense->service }}" class="form-control" readOnly/>
 
                             </div>
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">الشركه</label>
+                                <input type="text" value="{{$expense->company }}" class="form-control"  readOnly/>
+
+                            </div>
 
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">المبلغ</label>

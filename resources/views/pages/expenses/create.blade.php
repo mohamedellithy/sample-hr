@@ -4,7 +4,7 @@
     <div class="container-fluid mt-4">
         <h4 class="fw-bold py-3  mb-3" style="padding-bottom: 0rem !important;">اضافة مصروف جديد</h4>
         <!-- Basic Layout -->
-  
+
         <form action="{{ route('admin.expenses.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -28,6 +28,13 @@
                                 @enderror
                             </div>
 
+                                 <div class="col">
+                                <label class="form-label" for="basic-default-company">الشركه</label>
+                                <input type="text" value="{{ old('company') }}" class="form-control"   name="company" required/>
+                                @error('company')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">المبلغ</label>
                                 <input type="number" value="{{ old('amount') }}" class="form-control" placeholder="ادخل  مبلغ المصروف"  name="amount" required/>

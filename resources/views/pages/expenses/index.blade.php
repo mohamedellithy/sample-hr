@@ -79,6 +79,7 @@ $service_filter = request()->query('service_filter') ?: null;
                         <tr class="table-dark">
                            <th>#</th>
                             <th>نوع المصروف </th>
+                            <th>الشركه</th>
                             <th>المبلغ</th>
                             <th>تاريخ الصرف</th>
                             <th>المرفق</th>
@@ -94,6 +95,9 @@ $service_filter = request()->query('service_filter') ?: null;
 
                                 <td class="width-16">
                                         {{ $expense->service }}
+                                </td>
+                                 <td class="width-16">
+                                        {{ $expense->company }}
                                 </td>
                                 <td>
                                     {{ $expense->amount }}

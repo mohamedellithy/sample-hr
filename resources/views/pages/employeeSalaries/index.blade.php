@@ -18,7 +18,7 @@ $datefilter = request()->query('datefilter') ?: null;
         <div class="row">
             <div class="col-lg-11">
                 <div class="card mb-4">
-                    <h5 class="card-header">اضافة ايام موظف </h5>
+                    <h5 class="card-header">التصدير الاسبوعي</h5>
                     <div class="card-body">
                         <div class="row">
                             <div class="mb-3 col-md-3">
@@ -70,7 +70,7 @@ $datefilter = request()->query('datefilter') ?: null;
                             </div>
                                     <div class="mb-3 col-md-3">
                                 <label class="form-label" for="basic-default-company"> السنه</label>
-                             <input type="number" min="2000" max="2050" name="year"value=""class="form-control"title="ادخل سنه مابين 2000-2050" placeholder="ادخل السنه">
+                             <input type="number" min="2000" max="2050" name="year"value=""class="form-control"title="ادخل سنه مابين 2000-2050" placeholder="ادخل السنه" required>
                                 @error('year')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
