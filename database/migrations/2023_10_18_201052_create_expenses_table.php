@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
              $table->string('service');
-             $table->string('company');
              $table->double('amount',8, 2);
              $table->date('expense_date');
-             $table->string('attachment')->nullable();
+             $table->double('pending_amount',8, 2)->nullable();
+             $table->text('supplier')->nullable();
              $table->timestamps();
         });
     }

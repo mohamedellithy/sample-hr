@@ -74,7 +74,7 @@
                     <div class="menu-wrap">
                         <nav class="menu-nav">
                             <div class="logo">
-                                <a href="{{ url('/') }}"><img src="{{ $logo_url ?: asset('theme_2/front/assets/img/logo/logo.png') }}" alt="Logo"></a>
+                                <a href="{{ url('/') }}"><img  src="{{ $logo_url ?: asset('theme_2/front/assets/img/logo/logo.png') }}" alt="Logo"></a>
                             </div>
                             <div class="navbar-wrap main-menu d-none d-lg-flex">
                                 <ul class="navigation">

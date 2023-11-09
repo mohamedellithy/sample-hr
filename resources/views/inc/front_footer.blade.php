@@ -7,8 +7,8 @@
                     <div class="col-lg-4 col-md-7">
                         <div class="footer-widget">
                             <div class="fw-logo">
-                                <a href="index.html">
-                                    <img src="{{ asset('theme_2/front/assets/img/logo/logo.png') }}" alt="" style="max-height: 100px;">
+                                <a href="#">
+                                    <img  src="{{ asset('theme_2/front/assets/img/logo/logo.png') }}" alt="" style="max-height: 100px;">
                                 </a>
                             </div>
                             <div class="footer-content">

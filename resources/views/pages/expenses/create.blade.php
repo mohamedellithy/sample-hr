@@ -28,13 +28,6 @@
                                 @enderror
                             </div>
 
-                                 <div class="col">
-                                <label class="form-label" for="basic-default-company">الشركه</label>
-                                <input type="text" value="{{ old('company') }}" class="form-control"   name="company" required/>
-                                @error('company')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">المبلغ</label>
                                 <input type="number" value="{{ old('amount') }}" class="form-control" placeholder="ادخل  مبلغ المصروف"  name="amount" required/>
@@ -44,21 +37,28 @@
                             </div>
                         </div>
 
+                        <div class="row mt-3">
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">الاجل</label>
+                                <input type="number" value="{{ old('pending_amount') }}" class="form-control" placeholder="ادخل  مبلغ الاجل"  name="pending_amount"/>
+                                @error('pending_amount')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">المصروف تابع ل</label>
+                                <input type="text" value="{{ old('supplier') }}" class="form-control" placeholder="الاسم التابع له المصروف" name="supplier"/>
+                                @error('supplier')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="row mt-3">
-
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">تاريخ الصرف</label>
                                 <input type="date" value="{{ old('expense_date') }}" class="form-control" placeholder="ادخل  تاريخ الصرف" name="expense_date" required/>
                                 @error('expense_date')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="col">
-                                <label class="form-label" for="basic-default-company">المرفق</label>
-                                <input type="file"  value="{{ old('attachment') }}" class="form-control" placeholder="اختر مرفق" name="attachment" accept="image/gif, image/jpeg, image/png"/>
-                                @error('attachment')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>

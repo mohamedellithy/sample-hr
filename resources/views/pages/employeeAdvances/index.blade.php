@@ -15,7 +15,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
     <form action="{{ route('admin.employeeAdvances.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
-            <div class="col-lg-11">
+            <div class="col-lg-12">
                 <div class="card mb-4">
                     <h5 class="card-header">اضافة سلف موظف جديده</h5>
                     <div class="card-body">
@@ -48,7 +48,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                           <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> التاريخ</label>
                                 <input type="date" class="form-control" id="basic-default-fullname"
-                                    name="advance_date" value="{{ old('advance_date') }}" required />
+                                    name="advance_date" value="{{ old('advance_date') ?: date('Y-m-d') }}" required />
                                 @error('advance_date')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror

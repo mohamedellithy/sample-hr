@@ -79,10 +79,10 @@ $service_filter = request()->query('service_filter') ?: null;
                         <tr class="table-dark">
                            <th>#</th>
                             <th>نوع المصروف </th>
-                            <th>الشركه</th>
                             <th>المبلغ</th>
+                            <th>مبلغ الاجل</th>
+                            <th>المورد</th>
                             <th>تاريخ الصرف</th>
-                            <th>المرفق</th>
                             <th></th>
                         </tr>
                    </thead>
@@ -96,26 +96,20 @@ $service_filter = request()->query('service_filter') ?: null;
                                 <td class="width-16">
                                         {{ $expense->service }}
                                 </td>
-                                 <td class="width-16">
-                                        {{ $expense->company }}
+                             
+                                <td>
+                                    {{ formate_price($expense->amount) }}
                                 </td>
                                 <td>
-                                    {{ $expense->amount }}
+                                    {{ formate_price($expense->pending_amount) }}
+                                </td>
+                                <td>
+                                    {{ $expense->supplier }}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">
                                     {{ $expense->expense_date }}
                                      </span>
-                                </td>
-                                   <td>
-                                   @if ($expense->attachment)
-                                     <img src="{{$expense->attachment }}">
-                                     @else
-                                        <span class="badge bg-label-danger me-1">
-                                 لم يتم اضافه
-                                     </span>
-                                   @endif
-
                                 </td>
                                 <td>
                                     <div class="d-flex">

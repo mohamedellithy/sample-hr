@@ -32,14 +32,6 @@
                             </div>
 
                             <div class="col">
-                                <label class="form-label" for="basic-default-company">الشركه</label>
-                                <input type="text" name="company" value="{{$expense->company }}" class="form-control" required/>
-                              @error('company')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="col">
                                 <label class="form-label" for="basic-default-company">المبلغ</label>
                                 <input type="number" name="amount" value="{{$expense->amount }}" class="form-control" required/>
                               @error('amount')
@@ -47,6 +39,24 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="row mt-3">
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">الاجل</label>
+                                <input type="number" value="{{ $expense->pending_amount }}" class="form-control" placeholder="ادخل  مبلغ الاجل"  name="pending_amount"/>
+                                @error('pending_amount')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">المصروف تابع ل</label>
+                                <input type="text" value="{{ $expense->supplier }}" class="form-control" placeholder="الاسم التابع له المصروف" name="supplier"/>
+                                @error('supplier')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
 
 
                         <div class="row mt-3">
@@ -59,13 +69,6 @@
                                 @enderror
 
                             </div>
-                                <div class="col">
-                                <label class="form-label" for="basic-default-company">المرفق</label>
-                                <input type="file"  value="{{ old('attachment') }}" class="form-control" placeholder="اختر مرفق" name="attachment" accept="image/gif, image/jpeg, image/png"/>
-                                @error('attachment')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
                         </div>
 
                              <div class="row mt-4 text-center">
@@ -74,18 +77,6 @@
 
                             </div>
                         </div>
-
-                          @if ( $expense->attachment )
-                        <div class="row mt-4 text-center">
-                            <div class="col">
-                                <img style="width:550px;height:450px;"src="{{ $expense->attachment  }}">
-                            </div>
-                        </div>
-
-                          @endif
-
-
-
                         </div>
                     </div>
                 </div>

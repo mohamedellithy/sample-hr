@@ -17,11 +17,7 @@
                               <input type="text" value="{{$expense->service }}" class="form-control" readOnly/>
 
                             </div>
-                            <div class="col">
-                                <label class="form-label" for="basic-default-company">الشركه</label>
-                                <input type="text" value="{{$expense->company }}" class="form-control"  readOnly/>
 
-                            </div>
 
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">المبلغ</label>
@@ -29,8 +25,18 @@
 
                             </div>
                         </div>
+                    <div class="row mt-3">
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">الاجل</label>
+                                <input type="number" value="{{$expense->pending_amount }}" class="form-control" placeholder="ادخل  مبلغ الاجل"  name="pending_amount" readOnly/>
 
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">المصروف تابع ل</label>
+                                <input type="text" value="{{$expense->supplier }}" class="form-control" placeholder="الاسم التابع له المصروف" name="supplier" readOnly/>
 
+                            </div>
+                        </div>
                         <div class="row mt-3">
 
                             <div class="col">
@@ -39,17 +45,6 @@
 
                             </div>
                         </div>
-
-
-
-                         <div class="row mt-4 text-center">
-                            <div class="col">
-                           <img style="width:550px;height:450px;"src="{{ $expense->attachment  }}">
-                            </div>
-                        </div>
-
-
-
                         </div>
                     </div>
                 </div>

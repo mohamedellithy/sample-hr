@@ -47,11 +47,11 @@ class ExportExpense implements FromCollection ,WithHeadings
             $expenses->whereBetween('expense_date',[$from,$to]);
         }
 
-        return $expenses->select('service','amount','expense_date')->get();
+        return $expenses->select('service','amount','pending_amount','supplier','expense_date')->get();
     }
 
     public function headings(): array
     {
-        return ["service","amount","date"];
+        return ["service","amount",'pending_amount','supplier',"date"];
     }
 }
