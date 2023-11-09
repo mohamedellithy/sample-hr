@@ -20,7 +20,7 @@ class ExpenseFactory extends Factory
             'expense_date' => fake()->date('Y_m_d'),
             'pending_amount' =>  fake()->numberBetween(10,100),
             'supplier' => fake()->name(),
-            'attachment' => 'http://127.0.0.1:8000/uploads/expense/default.jpg',
+          /*   'attachment' => 'http://127.0.0.1:8000/uploads/expense/default.jpg', */
         ];
     }
 }

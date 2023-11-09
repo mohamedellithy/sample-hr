@@ -117,8 +117,8 @@ $datefilter = request()->query('datefilter') ?: null;
                         <div class="nav-item d-flex align-items-center m-2">
                             <select name="filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
                                 <option value="">فلتر المصروفات</option>
-                                <option value="sort_asc" @isset($filter) @if ($filter=='sort_asc' ) selected @endif @endisset>الاقدم</option>
-                                <option value="sort_desc" @isset($filter) @if ($filter=='sort_desc' ) selected @endif @endisset>الاحدث </option>
+                                <option value="asc" @isset($filter) @if ($filter=='asc' ) selected @endif @endisset>الاقدم</option>
+                                <option value="desc" @isset($filter) @if ($filter=='desc' ) selected @endif @endisset>الاحدث </option>
                             </select>
                         </div>
                         <div class="nav-item d-flex align-items-center m-2">
@@ -130,14 +130,7 @@ $datefilter = request()->query('datefilter') ?: null;
                             </select>
                         </div>
                         </form>
-           {{--      <form  method="post" action="{{ route('admin.employeeSalaries.export') }}">
-                  @csrf
-                    <div class="nav-item d-flex align-items-center m-2">
-                        <input type="hidden" name="employee_id" value="{{ $employee_filter }}">
-                        <input type="hidden" name="filter" value="{{ $filter }}">
-                        <button type="submit" class="btn btn-primary">تصدير</button>
-                    </div>
-                </form> --}}
+
                     </div>
 
            </div>
@@ -147,7 +140,8 @@ $datefilter = request()->query('datefilter') ?: null;
                         <tr class="table-dark">
                            <th>#</th>
                             <th>الموظف</th>
-                            <th>التاريخ</th>
+                            <th>الشهر</th>
+                            <th>المرتب</th>
                             <th>السلف</th>
                             <th>آجل مبيعات</th>
                             <th>الخصومات</th>
@@ -164,27 +158,33 @@ $datefilter = request()->query('datefilter') ?: null;
                                 </td>
 
                                 <td>
-                                {{  $employeeSalarie->employee->name }}
+                                {{  $employeeSalarie->name }}
                                 </td>
-                                <td>
+                                 <td>
                                  <span class="badge bg-label-primary me-1">
-                                    {{  $employeeSalarie->date }}
-                                     </span>
+                                    {{  $employeeSalarie->months }}
+                                </span>
                                 </td>
                                 <td>
-                                    {{  formate_price($employeeSalarie->advances )}}
+                                {{  $employeeSalarie->salary }}
+                                </td>
+
+
+                                <td>
+                                    {{  formate_price($employeeSalarie->sumAdvances )}}
+                                </td>
+
+                                 <td>
+                                    {{  formate_price($employeeSalarie->sumSales )}}
                                 </td>
                                  <td>
-                                    {{  formate_price($employeeSalarie->sales )}}
-                                </td>
-                                 <td>
-                                    {{  formate_price($employeeSalarie->deduction )}}
+                                    {{  formate_price($employeeSalarie->sumDeduction )}}
                                 </td>
                                   <td>
-                                    {{  formate_price($employeeSalarie->over_time )}}
+                                    {{  formate_price($employeeSalarie->sumOver_time )}}
                                 </td>
                                 <td>
-            {{  formate_price($employeeSalarie->advances + $employeeSalarie->sales+ $employeeSalarie->deduction - $employeeSalarie->over_time)}}
+            {{  formate_price($employeeSalarie->salary + $employeeSalarie->sumOver_time  - $employeeSalarie->sumAdvances - $employeeSalarie->sumSales - $employeeSalarie->sumDeduction )}}
                                 </td>
                             </tr>
                         @endforeach
@@ -193,7 +193,7 @@ $datefilter = request()->query('datefilter') ?: null;
            </div>
            <br/><br/>
            <div class="d-flex flex-row justify-content-center">
-               {{ $employeeSalaries->links() }}
+              {{--  {{ $employeeSalaries->links() }} --}}
            </div>
        </div>
    </div>

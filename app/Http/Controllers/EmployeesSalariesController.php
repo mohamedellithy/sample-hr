@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeSalarie;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportEmployeeSalaries;
 
@@ -18,33 +19,45 @@ class EmployeesSalariesController extends Controller
      */
     public function index(Request $request)
     {
-        $employeeSalaries = EmployeeSalarie::query();
+
+     $employeeSalaries = DB::table('employees');
         $per_page = 10;
 
-
-        if ($request->has('employee_filter') and $request->get('employee_filter') != "") {
-
-            $employeeSalaries->where('employee_id',$request->get('employee_filter'));
-        }
 
         if ($request->has('datefilter') and $request->get('datefilter') != "") {
             $result = explode('-',$request->get('datefilter'));
             $from = Carbon::parse($result[0])->format('Y-m-d');
             $to= Carbon::parse($result[1])->format('Y-m-d');
-            $employeeSalaries->whereBetween('date',[$from,$to]);
         }
+        $employeeSalaries =  $employeeSalaries->Join('employee_salaries', 'employee_salaries.employee_id','=','employees.id')->select(
+            DB::raw('sum(employee_salaries.advances) as sumAdvances'),
+            DB::raw('sum(employee_salaries.sales) as sumSales'),
+            DB::raw('sum(employee_salaries.deduction) as sumDeduction'),
+            DB::raw('sum(employee_salaries.over_time) as sumOver_time'),
+            DB::raw("DATE_FORMAT(employee_salaries.date,'%M %Y') as months"),
+            DB::raw("DATE_FORMAT(employee_salaries.date,'%m') as monthKey"), 'employees.name','employees.salary',
+            )->when(
+                $request->employee_filter,
+                fn($query) => $query->where('employee_salaries.employee_id', $request->employee_filter)
+            )
+            ->when(
+                $request->datefilter,
+                fn($query) => $query->whereBetween('date',[$from,$to])
+            )
+            ->when(
+                $request->filter,
+                fn($query) => $query->orderBy('date',$request->filter)
+            )
 
-        $employeeSalaries->when(request('filter') == 'sort_asc', function ($q) {
-            return $q->orderBy('date', 'asc');
-        },function ($q) {
-            return $q->orderBy('date', 'desc');
-        });
+            ->groupBy('months', 'monthKey')
+            ->groupBy('employees.name','employees.salary');
 
-        if ($request->has('rows')):
-            $per_page = $request->query('rows');
-        endif;
+            
+            if ($request->has('rows')):
+                $per_page = $request->query('rows');
+            endif;
+            $employeeSalaries = $employeeSalaries->paginate($per_page);
 
-        $employeeSalaries = $employeeSalaries->paginate($per_page);
         $employees = Employee::get();
         return view('pages.employeeSalaries.index', compact('employeeSalaries','employees'));
     }
