@@ -19,23 +19,21 @@ class EmployeesSalariesController extends Controller
      */
     public function index(Request $request)
     {
-
-     $employeeSalaries = DB::table('employees');
         $per_page = 10;
-
-
         if ($request->has('datefilter') and $request->get('datefilter') != "") {
             $result = explode('-',$request->get('datefilter'));
             $from = Carbon::parse($result[0])->format('Y-m-d');
             $to= Carbon::parse($result[1])->format('Y-m-d');
         }
+        $employeeSalaries = DB::table('employees');
         $employeeSalaries =  $employeeSalaries->Join('employee_salaries', 'employee_salaries.employee_id','=','employees.id')->select(
             DB::raw('sum(employee_salaries.advances) as sumAdvances'),
             DB::raw('sum(employee_salaries.sales) as sumSales'),
             DB::raw('sum(employee_salaries.deduction) as sumDeduction'),
             DB::raw('sum(employee_salaries.over_time) as sumOver_time'),
             DB::raw("DATE_FORMAT(employee_salaries.date,'%M %Y') as months"),
-            DB::raw("DATE_FORMAT(employee_salaries.date,'%m') as monthKey"), 'employees.name','employees.salary',
+            DB::raw("DATE_FORMAT(employee_salaries.date,'%m-%Y') as months_path"),
+            DB::raw("DATE_FORMAT(employee_salaries.date,'%m') as monthKey"),'employees.id as employee_id','employees.name','employees.salary',
             )->when(
                 $request->employee_filter,
                 fn($query) => $query->where('employee_salaries.employee_id', $request->employee_filter)
@@ -49,14 +47,14 @@ class EmployeesSalariesController extends Controller
                 fn($query) => $query->orderBy('date',$request->filter)
             )
 
-            ->groupBy('months', 'monthKey')
-            ->groupBy('employees.name','employees.salary');
+            ->groupBy('months','months_path','monthKey')
+            ->groupBy('employees.id','employees.name','employees.salary');
 
-            
+
             if ($request->has('rows')):
                 $per_page = $request->query('rows');
             endif;
-            $employeeSalaries = $employeeSalaries->paginate($per_page);
+        $employeeSalaries = $employeeSalaries->paginate($per_page);
 
         $employees = Employee::get();
         return view('pages.employeeSalaries.index', compact('employeeSalaries','employees'));
@@ -115,6 +113,26 @@ class EmployeesSalariesController extends Controller
     public function show($id)
     {
         //
+        list($month,$year) = explode('-',request()->query('month'));
+        $salary = EmployeeSalarie::find($id);
+        $employeeSalary = DB::table('employees');
+        $employeeSalary =  $employeeSalary->where('employees.id',$id)->Join('employee_salaries', 'employee_salaries.employee_id','=','employees.id')->select(
+            DB::raw('sum(employee_salaries.advances) as sumAdvances'),
+            DB::raw('sum(employee_salaries.sales) as sumSales'),
+            DB::raw('sum(employee_salaries.deduction) as sumDeduction'),
+            DB::raw('sum(employee_salaries.over_time) as sumOver_time'),
+            DB::raw("DATE_FORMAT(employee_salaries.date,'%M %Y') as months"),
+            DB::raw("DATE_FORMAT(employee_salaries.date,'%m') as month_path"),
+            DB::raw("DATE_FORMAT(employee_salaries.date,'%Y') as year_path"),
+            DB::raw("DATE_FORMAT(employee_salaries.date,'%m') as monthKey"),'employees.name','employees.salary',
+            )
+            ->groupBy('months','month_path','year_path','monthKey')
+            ->groupBy('employees.name','employees.salary');
+        //$employeeSalaries = $employeeSalaries->get();
+        
+        $employeeSalary = $employeeSalary->havingRaw('month_path = '.$month.' And '.'year_path = '.$year)->first();
+        //dd($employeeSalaries);
+        return view('pages.employeeSalaries.show', compact('employeeSalary'));
     }
 
     /**

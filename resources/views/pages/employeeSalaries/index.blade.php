@@ -147,6 +147,7 @@ $datefilter = request()->query('datefilter') ?: null;
                             <th>الخصومات</th>
                             <th>الاضافي</th>
                             <th>المجموع</th>
+                            <th>الحالة</th>
                             <th></th>
                         </tr>
                    </thead>
@@ -184,7 +185,23 @@ $datefilter = request()->query('datefilter') ?: null;
                                     {{  formate_price($employeeSalarie->sumOver_time )}}
                                 </td>
                                 <td>
-            {{  formate_price($employeeSalarie->salary + $employeeSalarie->sumOver_time  - $employeeSalarie->sumAdvances - $employeeSalarie->sumSales - $employeeSalarie->sumDeduction )}}
+                                    {{  formate_price($employeeSalarie->salary + $employeeSalarie->sumOver_time  - $employeeSalarie->sumAdvances - $employeeSalarie->sumSales - $employeeSalarie->sumDeduction )}}
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-success btn-sm">
+                                        تسديد
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ route('admin.employeeSalaries.show',[
+                                        'employeeSalary' => $employeeSalarie->employee_id,
+                                        'month'          =>$employeeSalarie->months_path
+                                    ]) }}" class="">
+                                        <i class="far fa-eye text-dark"></i>
+                                     </a>
+                                    <a class="delete-item crud" data-product-id="162">
+                                        <i class="fas fa-trash-alt  text-danger"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -193,7 +210,7 @@ $datefilter = request()->query('datefilter') ?: null;
            </div>
            <br/><br/>
            <div class="d-flex flex-row justify-content-center">
-              {{--  {{ $employeeSalaries->links() }} --}}
+               {{ $employeeSalaries->links() }}
            </div>
        </div>
    </div>

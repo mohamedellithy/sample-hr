@@ -69,13 +69,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('importEmployeeAttendances',[ EmployeeAttendanceController::class,'importEmployeeAttendances'])->name('employeeAttendances.import');
 
         Route::post('importShifts',[ ShiftController::class,'importShifts'])->name('shifts.import');
-
-
-
-
-
-
-
     });
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
