@@ -52,7 +52,7 @@ class EmployeesSalariesController extends Controller
             ->groupBy('months', 'monthKey')
             ->groupBy('employees.name','employees.salary');
 
-            
+
             if ($request->has('rows')):
                 $per_page = $request->query('rows');
             endif;
