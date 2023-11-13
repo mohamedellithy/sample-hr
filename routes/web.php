@@ -8,6 +8,7 @@ use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\EmployeesController;
+use App\Http\Controllers\InvoicesPdfController;
 use App\Http\Controllers\ClientsSalesController;
 use App\Http\Controllers\EmployeesSalesController;
 use App\Http\Controllers\EmployeesAdvancesController;
@@ -52,6 +53,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('employeeAdvances', EmployeesAdvancesController::class);
         Route::resource('employeeSalaries', EmployeesSalariesController::class);
         Route::resource('employeeAttendances', EmployeeAttendanceController::class);
+        Route::post('add-salary/{employee_id}',[EmployeesSalariesController::class,'employee_add_salary'])->name('employee.add-salary');
+        Route::post('print-salary-invoice/{id}',[InvoicesPdfController::class,'download_pdf_salary'])->name('print-salary-invoice');
         Route::resource('shifts', ShiftController::class);
 
 

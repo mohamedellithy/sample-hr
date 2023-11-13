@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Employee;
+use App\Models\EmployeePaid;
 use Illuminate\Http\Request;
 use App\Models\EmployeeSalarie;
 use Illuminate\Support\Facades\DB;
@@ -26,15 +27,16 @@ class EmployeesSalariesController extends Controller
             $to= Carbon::parse($result[1])->format('Y-m-d');
         }
         $employeeSalaries = DB::table('employees');
-        $employeeSalaries =  $employeeSalaries->Join('employee_salaries', 'employee_salaries.employee_id','=','employees.id')->select(
-            DB::raw('sum(employee_salaries.advances) as sumAdvances'),
-            DB::raw('sum(employee_salaries.sales) as sumSales'),
-            DB::raw('sum(employee_salaries.deduction) as sumDeduction'),
-            DB::raw('sum(employee_salaries.over_time) as sumOver_time'),
-            DB::raw("DATE_FORMAT(employee_salaries.date,'%M %Y') as months"),
-            DB::raw("DATE_FORMAT(employee_salaries.date,'%m-%Y') as months_path"),
-            DB::raw("DATE_FORMAT(employee_salaries.date,'%m') as monthKey"),'employees.id as employee_id','employees.name','employees.salary',
-            )->when(
+        $employeeSalaries =  $employeeSalaries
+        ->Join('employee_attendances',function($join){
+            $join->on('employees.id','=','employee_attendances.employee_id');
+        })
+        ->select(
+            DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%M %Y') as attendances_date"),
+            DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%m') as month_path"),
+            DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%Y') as year_path"),
+            'employees.name','employees.salary','employees.id'
+        )->when(
                 $request->employee_filter,
                 fn($query) => $query->where('employee_salaries.employee_id', $request->employee_filter)
             )
@@ -47,14 +49,16 @@ class EmployeesSalariesController extends Controller
                 fn($query) => $query->orderBy('date',$request->filter)
             )
 
-            ->groupBy('months','months_path','monthKey')
-            ->groupBy('employees.id','employees.name','employees.salary');
+            ->groupBy('attendances_date','month_path','year_path')
+            ->groupBy('employees.id');
 
 
             if ($request->has('rows')):
                 $per_page = $request->query('rows');
             endif;
         $employeeSalaries = $employeeSalaries->paginate($per_page);
+
+        //dd($employeeSalaries->get());
 
         $employees = Employee::get();
         return view('pages.employeeSalaries.index', compact('employeeSalaries','employees'));
@@ -116,22 +120,47 @@ class EmployeesSalariesController extends Controller
         list($month,$year) = explode('-',request()->query('month'));
         $salary = EmployeeSalarie::find($id);
         $employeeSalary = DB::table('employees');
-        $employeeSalary =  $employeeSalary->where('employees.id',$id)->Join('employee_salaries', 'employee_salaries.employee_id','=','employees.id')->select(
-            DB::raw('sum(employee_salaries.advances) as sumAdvances'),
-            DB::raw('sum(employee_salaries.sales) as sumSales'),
+        $employeeSalary =  $employeeSalary->where('employees.id',$id)
+        ->Join('employee_attendances',function($join) use($month,$year){
+            $join->on('employees.id','=','employee_attendances.employee_id')
+            ->whereMonth('employee_attendances.attendance_date',$month)
+            ->whereYear('employee_attendances.attendance_date',$year);
+        })
+        ->LeftJoin('employee_advances',function($join) use($month,$year){
+            $join->on('employees.id','=','employee_advances.employee_id')
+            ->whereMonth('employee_advances.advance_date',$month)
+            ->whereYear('employee_advances.advance_date',$year);
+        })
+        ->LeftJoin('employee_sales',function($join) use($month,$year){
+            $join->on('employees.id','=','employee_sales.employee_id')
+            ->whereMonth('employee_sales.sale_date',$month)
+            ->whereYear('employee_sales.sale_date',$year);
+        })
+        ->LeftJoin('employee_salaries',function($join) use($month,$year){
+            $join->on('employee_salaries.employee_id','=','employees.id')
+            ->whereMonth('employee_salaries.date',$month)
+            ->whereYear('employee_salaries.date',$year);
+        })
+        ->leftJoin('employee_paids',function($join) use($month,$year){
+            $join->on('employee_paids.employee_id','=','employees.id')
+            ->whereMonth('employee_paids.month',$month)
+            ->whereYear('employee_paids.month',$year);
+        })
+        ->select(
+            DB::raw('sum(employee_advances.amount) as sumAdvances'),
+            DB::raw('sum(distinct employee_paids.paid) as sumPaid'),
+            DB::raw('sum(employee_sales.remained) as sumSales'),
+            DB::raw('count(employee_attendances.id) as countAttends'),
             DB::raw('sum(employee_salaries.deduction) as sumDeduction'),
             DB::raw('sum(employee_salaries.over_time) as sumOver_time'),
-            DB::raw("DATE_FORMAT(employee_salaries.date,'%M %Y') as months"),
-            DB::raw("DATE_FORMAT(employee_salaries.date,'%m') as month_path"),
-            DB::raw("DATE_FORMAT(employee_salaries.date,'%Y') as year_path"),
-            DB::raw("DATE_FORMAT(employee_salaries.date,'%m') as monthKey"),'employees.name','employees.salary',
-            )
-            ->groupBy('months','month_path','year_path','monthKey')
-            ->groupBy('employees.name','employees.salary');
-        //$employeeSalaries = $employeeSalaries->get();
-        
+            DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%M %Y') as attendances_date"),
+            DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%m') as month_path"),
+            DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%Y') as year_path"),
+            'employees.name','employees.salary','employees.id'
+        )
+        ->groupBy('month_path','year_path','attendances_date','employees.id');
         $employeeSalary = $employeeSalary->havingRaw('month_path = '.$month.' And '.'year_path = '.$year)->first();
-        //dd($employeeSalaries);
+        //dd($employeeSalary);
         return view('pages.employeeSalaries.show', compact('employeeSalary'));
     }
 
@@ -190,5 +219,15 @@ class EmployeesSalariesController extends Controller
         EmployeeSalarie::destroy($id);
         flash('تم الحذف بنجاح', 'error');
         return redirect()->back();
+    }
+
+    public function employee_add_salary(Request $request,$employee_id){
+        EmployeePaid::create([
+            'employee_id' => $employee_id,
+            'month'       => $request->input('monthes'),
+            'paid'        => $request->input('value')
+        ]);
+
+        return back();
     }
 }
