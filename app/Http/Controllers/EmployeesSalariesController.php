@@ -132,12 +132,12 @@ class EmployeesSalariesController extends Controller
             ->whereYear('employee_paids.month',$year);
         })
         ->select(
-            DB::raw('sum(employee_advances.amount) as sumAdvances'),
+            DB::raw('sum(distinct employee_advances.amount) as sumAdvances'),
             DB::raw('sum(distinct employee_paids.paid) as sumPaid'),
-            DB::raw('sum(employee_sales.remained) as sumSales'),
-            DB::raw('count(employee_attendances.id) as countAttends'),
-            DB::raw('sum(employee_salaries.deduction) as sumDeduction'),
-            DB::raw('sum(employee_salaries.over_time) as sumOver_time'),
+            DB::raw('sum(distinct employee_sales.remained) as sumSales'),
+            DB::raw('count(distinct employee_attendances.id) as countAttends'),
+            DB::raw('sum(distinct employee_salaries.deduction) as sumDeduction'),
+            DB::raw('sum(distinct employee_salaries.over_time) as sumOver_time'),
             DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%M %Y') as attendances_date"),
             DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%m') as month_path"),
             DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%Y') as year_path"),
