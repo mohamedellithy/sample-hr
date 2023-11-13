@@ -9,8 +9,8 @@
             <div class="card">
                 <div class="">
                     <form method="post" action="{{ route('admin.print-salary-invoice',[
-                        'id' => $employeeSalary->id,
-                        'month' => $employeeSalary->month_path.'-'.$employeeSalary->year_path
+                        'id' => $employee->id,
+                        'month' => $employee->month_path.'-'.$employee->year_path
                     ]) }}">
                         @csrf
                         <button type="submit" class="btn btn-info">طباعة</button>
@@ -19,7 +19,7 @@
                 <div class="card-header" style="text-align: center">
                     <p style="text-align: center">
                         <h4 style="color:black">OPERA CAFEE</h4>
-                        <h6 style="color:red">SALARY SHEET FOR {{ $employeeSalary->attendances_date }}</h6>
+                        <h6 style="color:red">SALARY SHEET FOR {{ $employee->attendances_date }}</h6>
                     </p>
                 </div>
                 <div class="card-body">
@@ -47,39 +47,39 @@
                             </thead>
                             <tbody class="table-border-bottom-0">
                                 @php
-                                    $calculateDayWage = (new App\Services\CalculateHourSalaryService())->calculateDayWage($employeeSalary->salary,$employeeSalary->countAttends);
+                                    $calculateDayWage = (new App\Services\CalculateHourSalaryService())->calculateDayWage($employee->salary,$employee->countAttends);
                                     $net_salary       = 0;
                                     $over_time        = 0;
                                     $net_deduction    = 0;
                                 @endphp
                                 <tr>
                                     <td>
-                                        {{  $employeeSalary->name }}
+                                        {{  $employee->name }}
                                     </td>
                                     <td>
-                                        {{  $employeeSalary->salary }}
-                                        @php $net_salary += $employeeSalary->salary @endphp
+                                        {{  $employee->salary }}
+                                        @php $net_salary += $employee->salary @endphp
                                     </td>
                                     <td>
-                                        {{ $employeeSalary->countAttends }}
+                                        {{ $employee->countAttends }}
                                     </td>
                                     <td>
-                                        {{   $over_time   = $employeeSalary->sumOver_time + abs($calculateDayWage > 0 ? $calculateDayWage : 0) }}
+                                        {{   $over_time   = $employee->sumOver_time + abs($calculateDayWage > 0 ? $calculateDayWage : 0) }}
                                         @php $net_salary += $over_time @endphp
                                     </td>
                                     <td>
                                         {{  $net_salary }}
                                     </td>
                                     <td>
-                                        {{   $deduction_delay = $employeeSalary->sumDeduction + abs($calculateDayWage < 0 ? $calculateDayWage : 0) }}
+                                        {{   $deduction_delay = $employee->sumDeduction + abs($calculateDayWage < 0 ? $calculateDayWage : 0) }}
                                         @php $net_deduction  += $deduction_delay  @endphp
                                     </td>
                                     <td>
-                                        {{  $deduction_advances = $employeeSalary->sumAdvances ?: 0 }}
+                                        {{  $deduction_advances = $employee->sumAdvances ?: 0 }}
                                         @php $net_deduction     += $deduction_advances  @endphp
                                     </td>
                                     <td>
-                                        {{  $deduction_sales   = $employeeSalary->sumSales ?: 0 }}
+                                        {{  $deduction_sales   = $employee->sumSales ?: 0 }}
                                         @php $net_deduction    += $deduction_sales  @endphp
                                     </td>
                                     <td>
@@ -89,29 +89,29 @@
                                         {{ $net_salary = $net_salary - $net_deduction }}
                                     </td>
                                     <td>
-                                        {{ $employeeSalary->sumPaid ?: 0 }}
+                                        {{ $employee->sumPaid ?: 0 }}
                                     </td>
                                     <td>
-                                        {{ $net_salary - $employeeSalary->sumPaid }}
+                                        {{ $net_salary - $employee->sumPaid }}
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    @if(!isset($employeeSalary->sumPaid))
+                    @if($employee->sumPaid == 0)
                         <form method="post" action="{{ route('admin.employee.add-salary',[
-                            'employee_id' => $employeeSalary->id
+                            'employee_id' => $employee->id
                         ]) }}">
                             @csrf
-                            <input name="monthes" type="hidden" value="{{ $employeeSalary->year_path.'-'.$employeeSalary->month_path.'-01' }}" />
-                            <input name="value" type="hidden" value="{{ $net_salary - $employeeSalary->sumPaid }}" />
+                            <input name="monthes" type="hidden" value="{{ $employee->year_path.'-'.$employee->month_path.'-01' }}" />
+                            <input name="value" type="hidden" value="{{ $net_salary - $employee->sumPaid }}" />
                             <button type="submit" class="btn btn-danger btn-sm">
                                 تسديد المرتب
                             </button>
                         </form>
                     @endif
                 </div>
-                @if($employeeSalary->sumPaid)
+                @if($employee->sumPaid != 0)
                     <div class="card-footer">
                         <ul style="display: flex;flex-wrap: nowrap;justify-content: space-between;">
                             <li style="list-style:none;color:black;">
@@ -156,10 +156,10 @@
                                 <tbody>
                                     <tr>
                                         <td style="color:black !important;border:2px solid black">
-                                            {{ $employeeSalary->sumPaid  - intval($employeeSalary->sumPaid)}}
+                                            {{ $employee->sumPaid  - intval($employee->sumPaid)}}
                                         </td>
                                         <td style="color:black !important;border:2px solid black">
-                                            {{ intval($employeeSalary->sumPaid) }}
+                                            {{ intval($employee->sumPaid) }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -170,7 +170,7 @@
                             <li style="list-style: none;font-weight: bold;color:black;">
                                 مدفوع الى السيد الفاضل   
                                 <strong style="padding-right:10%;color:rgb(104 104 104);">
-                                    {{ $employeeSalary->name }}
+                                    {{ $employee->name }}
                                 </strong>
                                 <label style="float:left">
                                     Paid to Mr./M/S: 
@@ -180,7 +180,7 @@
                             <li style="list-style: none;font-weight: bold;color:black;">
                                 مبلغ و قدرة ريال عمانى
                                 <strong style="padding-right:10%;color:rgb(104 104 104);">
-                                    {{ $employeeSalary->name }}
+                                    {{ $employee->name }}
                                 </strong>
                                 <label style="float:left">
                                     :The Sum of Riyals Omani
@@ -190,7 +190,7 @@
                             <li style="list-style: none;font-weight: bold;color:black;">
                                 و ذالك عن 
                                 <strong style="padding-right:10%;color:rgb(104 104 104);">
-                                    salary of {{ $employeeSalary->attendances_date }}
+                                    salary of {{ $employee->attendances_date }}
                                 </strong>
                                 <label style="float:left">
                                     : Being
