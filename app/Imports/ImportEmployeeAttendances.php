@@ -3,6 +3,8 @@
 namespace App\Imports;
 
 
+
+use DateTime;
 use Carbon\Carbon;
 use App\Models\Employee;
 use App\Models\EmployeeAttendance;
@@ -11,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use App\Services\DeductionsAndOvertimeService;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+
 
 class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
 {
@@ -37,10 +40,16 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
             $employee = $this->employees->where('name',$row['employee'])->first();
             if($employee){
 
-                // delete EmployeeAttendance if exist
-               $attendanceDate =strtotime($row['date']);
-               $attendanceDate =Date::excelToDateTimeObject($row['date'])->format('Y-m-d');
-        //    dd(Date::excelToDateTimeObject($row['date'])->format('Y-m-d'));
+
+                if (is_string($row['date'])) {
+                    $attendanceDate = Carbon::parse($row['date'])->format('Y-m-d');
+                }else {
+                    $attendanceDate =Date::excelToDateTimeObject($row['date'])->format('Y-m-d');
+                }
+
+             
+
+                  // delete EmployeeAttendance if exist
                $attendance = EmployeeAttendance::where('employee_id', $employee->id)
                     ->where('attendance_date', $attendanceDate)
                     ->first();

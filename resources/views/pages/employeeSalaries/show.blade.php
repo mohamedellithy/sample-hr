@@ -168,12 +168,12 @@
                         </ul>
                         <ul>
                             <li style="list-style: none;font-weight: bold;color:black;">
-                                مدفوع الى السيد الفاضل   
+                                مدفوع الى السيد الفاضل
                                 <strong style="padding-right:10%;color:rgb(104 104 104);">
                                     {{ $employeeSalary->name }}
                                 </strong>
                                 <label style="float:left">
-                                    Paid to Mr./M/S: 
+                                    Paid to Mr./M/S:
                                 </label>
                                 <hr style="margin-top: 2px;height: 2px;color: #706f6f;"/>
                             </li>
@@ -188,7 +188,7 @@
                                 <hr style="margin-top: 2px;height: 2px;color: #706f6f;"/>
                             </li>
                             <li style="list-style: none;font-weight: bold;color:black;">
-                                و ذالك عن 
+                                و ذالك عن
                                 <strong style="padding-right:10%;color:rgb(104 104 104);">
                                     salary of {{ $employeeSalary->attendances_date }}
                                 </strong>
@@ -205,7 +205,7 @@
                             </li>
 
                             <li style="list-style:none;text-align: left;">
-                                ………………………………: ccountant Signature 
+                                ………………………………: ccountant Signature
                             </li>
                         </ul>
                     </div>
