@@ -91,7 +91,7 @@ $datefilter = request()->query('datefilter') ?: null;
    <!-- DataTales Example -->
    <div class="card mb-4">
        <div class="card">
-           <h5 class="card-header">عرض مرتبات الموظفين</h5>
+           <h5 class="card-header"> مرتبات الموظفين</h5>
            <div class="card-header py-3 ">
 
                <form id="filter-data" method="get" class=" justify-content-between">
@@ -141,14 +141,7 @@ $datefilter = request()->query('datefilter') ?: null;
                            <th>#</th>
                             <th>الموظف</th>
                             <th>الشهر</th>
-                            <th>ايام العمل</th>
-                            <th>المرتب</th>
-                            <th>السلف</th>
-                            <th>آجل مبيعات</th>
-                            <th>الخصومات</th>
-                            <th>الاضافي</th>
-                            <th>المجموع</th>
-                            <th>الحالة</th>
+                            <th> المرتب الاساسي</th>
                             <th></th>
                         </tr>
                    </thead>
@@ -164,48 +157,19 @@ $datefilter = request()->query('datefilter') ?: null;
                                 </td>
                                  <td>
                                  <span class="badge bg-label-primary me-1">
-                                    {{  $employeeSalarie->months }}
+                                    {{  $employeeSalarie->attendances_date }}
                                 </span>
                                 </td>
                                 <td>
-                                {{  $employeeSalarie->totalAttendanceCount }}
-                                </td>
-                                <td>
-                                {{  $employeeSalarie->salary }}
-                                </td>
-
-
-                                <td>
-                                    {{  formate_price($employeeSalarie->sumAdvances )}}
-                                </td>
-
-                                 <td>
-                                    {{  formate_price($employeeSalarie->sumSales )}}
-                                </td>
-                                 <td>
-                                    {{  formate_price($employeeSalarie->sumDeduction )}}
-                                </td>
-                                  <td>
-                                    {{  formate_price($employeeSalarie->sumOver_time )}}
-                                </td>
-                                <td>
-                                    {{  formate_price($employeeSalarie->salary + $employeeSalarie->sumOver_time  - $employeeSalarie->sumAdvances - $employeeSalarie->sumSales - $employeeSalarie->sumDeduction )}}
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-success btn-sm">
-                                        تسديد
-                                    </a>
+                                {{  formate_price($employeeSalarie->salary) }}
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.employeeSalaries.show',[
-                                        'employeeSalary' => $employeeSalarie->employee_id,
-                                        'month'          =>$employeeSalarie->months_path
+                                        'employeeSalary' => $employeeSalarie->id,
+                                        'month'          => $employeeSalarie->month_path.'-'.$employeeSalarie->year_path
                                     ]) }}" class="">
                                         <i class="far fa-eye text-dark"></i>
                                      </a>
-                                    <a class="delete-item crud" data-product-id="162">
-                                        <i class="fas fa-trash-alt  text-danger"></i>
-                                    </a>
                                 </td>
                             </tr>
                         @endforeach

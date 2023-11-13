@@ -20,13 +20,13 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            /*   AdminSeeder::class,
-             EmployeeSeeder::class, */
+             AdminSeeder::class,
+    /*          EmployeeSeeder::class,
              ExpensesSeeder::class,
              EmployeeSaleSeeder::class,
              ClientsSeeder::class,
              ClientsSalesSeeder::class,
-             EmployeeAdvancesSeeder::class,
+             EmployeeAdvancesSeeder::class, */
 
         ]);
 

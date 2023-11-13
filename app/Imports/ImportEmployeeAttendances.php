@@ -38,9 +38,15 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
             if($employee){
 
                 // delete EmployeeAttendance if exist
-                $attendance= EmployeeAttendance::where('employee_id',$employee->id)->where('attendance_date',$this->transformDate($row['date']))->first();
+               $attendanceDate =strtotime($row['date']);
+               $attendanceDate =Date::excelToDateTimeObject($row['date'])->format('Y-m-d');
+        //    dd(Date::excelToDateTimeObject($row['date'])->format('Y-m-d'));
+               $attendance = EmployeeAttendance::where('employee_id', $employee->id)
+                    ->where('attendance_date', $attendanceDate)
+                    ->first();
 
                 if($attendance){
+
                     $attendance->delete();
                 }
 
@@ -50,11 +56,12 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
                 if (is_float($row['clock_out']) || is_double($row['clock_out'])) {
                     $row['clock_out'] =  Date::excelToDateTimeObject($row['clock_out'])->format('H:i:s');
                 }
+
                  // make request to send  to calculate Deductions And Overtime
                 $request = new \Illuminate\Http\Request();
                 $request->replace([
                 'employee_id'=>$employee->id,
-                'attendance_date'=>$this->transformDate($row['date']),
+                'attendance_date'=>$attendanceDate,
                 'clock_in'=>$row['clock_in'],
                 'clock_out'=>$row['clock_out']
             ]);
@@ -65,7 +72,7 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
             //create new EmployeeAttendance
             return new EmployeeAttendance([
                 'employee_id'=> $employee->id,
-                'attendance_date'=>$this->transformDate($row['date']),
+                'attendance_date'=>$attendanceDate,
                 'clock_in'=>$row['clock_in'],
                 'clock_out'=>$row['clock_out'],
             ]);

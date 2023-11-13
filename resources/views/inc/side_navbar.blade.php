@@ -172,14 +172,14 @@
 
 
               <!-- employeeSalaries  -->
-        <li class="menu-item {{ IsActiveOnlyIf(['admin.employeeSalaries.index']) }}">
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.employeeSalaries.index','admin.employeeSalaries.show']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class='menu-icon tf-icons bx bxs-package'></i>
                 <div data-i18n="Layouts">مرتبات الموظفين</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ IsActiveOnlyIf(['admin.employeeSalaries.index']) }}">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.employeeSalaries.index','admin.employeeSalaries.show']) }}">
                     <a href="{{ route('admin.employeeSalaries.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">عرض</div>
                     </a>

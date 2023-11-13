@@ -14,7 +14,13 @@ class CalculateHourSalaryService
         }
 
         $hourlyWage = $monthlySalary / ($workDays * $hours);
-        return round($hourlyWage);
+        return round($hourlyWage,2);
+    }
+
+    public function calculateDayWage($monthlySalary,$days,$hours =8,$workDays = 26)
+    {
+
+        return $this->calculateHourlyWage($monthlySalary) * (($days - $workDays) * 8);
     }
 
 
