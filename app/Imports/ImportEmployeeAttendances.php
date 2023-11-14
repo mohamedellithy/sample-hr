@@ -37,14 +37,14 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
 
          /* if (isset($row['employee'], $row['date'],$row['clock_in'],$row['clock_out'])){
  */
-            $employee = $this->employees->where('name',$row['employee'])->first();
+            $employee = $this->employees->where('name',trim($row['employee']))->first();
             if($employee){
 
 
-                if (is_string($row['date'])) {
+                if (is_string(trim($row['date']))) {
                     $attendanceDate = Carbon::parse($row['date'])->format('Y-m-d');
                 }else {
-                    $attendanceDate =Date::excelToDateTimeObject($row['date'])->format('Y-m-d');
+                    $attendanceDate =Date::excelToDateTimeObject(trim($row['date']))->format('Y-m-d');
                 }
 
              
@@ -59,20 +59,20 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
                     $attendance->delete();
                 }
 
-                if (is_float($row['clock_in']) || is_double($row['clock_in'])) {
+                if (is_float(trim($row['clock_in'])) || is_double(trim($row['clock_in']))) {
                     $row['clock_in'] =  Date::excelToDateTimeObject($row['clock_in'])->format('H:i:s');
                 }
-                if (is_float($row['clock_out']) || is_double($row['clock_out'])) {
+                if (is_float(trim($row['clock_out'])) || is_double(trim($row['clock_out']))) {
                     $row['clock_out'] =  Date::excelToDateTimeObject($row['clock_out'])->format('H:i:s');
                 }
 
                  // make request to send  to calculate Deductions And Overtime
                 $request = new \Illuminate\Http\Request();
                 $request->replace([
-                'employee_id'=>$employee->id,
-                'attendance_date'=>$attendanceDate,
-                'clock_in'=>$row['clock_in'],
-                'clock_out'=>$row['clock_out']
+                'employee_id'    => $employee->id,
+                'attendance_date'=> $attendanceDate,
+                'clock_in'       => trim($row['clock_in']),
+                'clock_out'      => trim($row['clock_out'])
             ]);
 
 
@@ -80,10 +80,10 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
 
             //create new EmployeeAttendance
             return new EmployeeAttendance([
-                'employee_id'=> $employee->id,
-                'attendance_date'=>$attendanceDate,
-                'clock_in'=>$row['clock_in'],
-                'clock_out'=>$row['clock_out'],
+                'employee_id'    => $employee->id,
+                'attendance_date'=> $attendanceDate,
+                'clock_in'       => trim($row['clock_in']),
+                'clock_out'      => trim($row['clock_out']),
             ]);
 
             }

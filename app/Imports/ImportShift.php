@@ -23,12 +23,12 @@ class ImportShift implements ToCollection
 
 
     public function collection(Collection $rows)
-    {
-
+    {        
+        $ros = [];
         foreach($rows as $row){
-
+            $ros[] = trim($row[1]);
            if(isset($row[1])){
-            $employee = $this->employees->where('name',$row[1])->first();
+            $employee = $this->employees->where('name',trim($row[1]))->first();
             if($employee){
                 for ($x = 2; $x <= 8; $x++) {
                         if(isset($row[$x])){
