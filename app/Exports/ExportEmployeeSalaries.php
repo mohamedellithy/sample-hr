@@ -5,8 +5,12 @@ namespace App\Exports;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Employee;
+use App\Models\EmployeeSale;
 use Illuminate\Http\Request;
+use App\Models\EmployeeAdvance;
 use App\Models\EmployeeSalarie;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -32,36 +36,79 @@ class ExportEmployeeSalaries implements FromCollection ,WithMapping ,WithHeading
         $this->startDate = $startDate->toDateString();
         $this->endDate = $endDate->toDateString();
 
-        $employeeSalarie = EmployeeSalarie::with('employee')->where('employee_id',$this->request->employee_id)->whereBetween('date',[$this->startDate,$this->endDate])->get();
 
-        $employeeSalarie->push([
+        $employeeCollection = new Collection();
+
+        for ($currentDate = $this->startDate; $currentDate <=  $this->endDate; $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'))) {
+
+
+            $employee = Employee::find($this->request->employee_id);
+            if($employee){
+
+                $Sales = EmployeeSale::where('employee_id',$this->request->employee_id)->where('sale_date', $currentDate)->sum('remained');
+
+                $Advance = EmployeeAdvance::where('employee_id',$this->request->employee_id)->where('advance_date', $currentDate)->sum('amount');
+
+                $Deduction = EmployeeSalarie::where('employee_id',$this->request->employee_id)->where('date', $currentDate)->sum('deduction');
+
+                $Over_time = EmployeeSalarie::where('employee_id',$this->request->employee_id)->where('date', $currentDate)->sum('over_time');
+
+                 if($Sales > 0 || $Advance >0 || $Deduction > 0 || $Over_time >0 )
+                $employeeCollection->push([
+                    'name' => $employee->name,
+                    'Date' => $currentDate,
+                    'Sales' =>  $Sales,
+                    'Advance' => $Advance,
+                    'Deduction' => $Deduction,
+                    'Over_time' => $Over_time,
+            ]);
+            }
+
+        }
+
+
+        $employeeSalarie = EmployeeSalarie::with('employee')
+        ->where('employee_id',$this->request->employee_id)
+        ->whereBetween('date',[$this->startDate,$this->endDate])->get();
+
+
+        $sumSales = EmployeeSale::where('employee_id',$this->request->employee_id)
+        ->whereBetween('sale_date',[$this->startDate,$this->endDate])->sum('remained');
+
+        $sumAdvance = EmployeeAdvance::where('employee_id',$this->request->employee_id)
+        ->whereBetween('advance_date',[$this->startDate,$this->endDate])->sum('amount');
+
+
+        $employeeCollection->push([
             'Total',
             '',
-            $employeeSalarie->sum('advances'),
-            $employeeSalarie->sum('sales'),
+            $sumAdvance,
+            $sumSales,
             $employeeSalarie->sum('deduction'),
             $employeeSalarie->sum('over_time'),
-            $employeeSalarie->sum('advances')+$employeeSalarie->sum('sales')+$employeeSalarie->sum('deduction')-$employeeSalarie->sum('over_time'),
+            $sumAdvance + $sumSales + $employeeSalarie->sum('deduction') - $employeeSalarie->sum('over_time'),
 
         ]);
 
-
-       return $employeeSalarie;
+       // dd($employeeCollection);
+       return $employeeCollection;
 
 
     }
 
     public function map($row): array
     {
-        if(isset($row['employee'])){
+
+        if(isset($row['name'])){
+
             return [
-                $row['employee']['name'],
-                $row['date'],
-                $row['advances'],
-                $row['sales'],
-                $row['deduction'],
-                $row['over_time'],
-                $row['advances'] + $row['sales'] + $row['deduction'] - $row['over_time']
+                $row['name'],
+                $row['Date'],
+                $row['Advance'],
+                $row['Sales'],
+                $row['Deduction'],
+                $row['Over_time'],
+                $row['Advance'] +  $row['Sales'] + $row['Deduction'] - $row['Over_time']
 
             ];
         }else{

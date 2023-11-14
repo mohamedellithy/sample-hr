@@ -95,6 +95,8 @@ class EmployeesAdvancesController extends Controller
             'advance_date',
         ]));
 
+    
+
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
     }

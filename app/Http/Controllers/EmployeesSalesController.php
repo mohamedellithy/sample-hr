@@ -99,6 +99,7 @@ class EmployeesSalesController extends Controller
             'sale_date',
         ]));
 
+
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
     }
@@ -151,8 +152,7 @@ class EmployeesSalesController extends Controller
             'date' => 'يجب ادخال تاريخ',
         ]);
 
-
-
+        
         EmployeeSale::where('id', $id)->update($request->only([
             'employee_id',
             'amount',
