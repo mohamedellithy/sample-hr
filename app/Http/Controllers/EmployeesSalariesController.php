@@ -45,7 +45,7 @@ class EmployeesSalariesController extends Controller
             )
             ->when(
                 $request->datefilter,
-                fn($query) => $query->whereBetween('date',[$from,$to])
+                fn($query) => $query->whereBetween('employee_attendances.attendance_date',[$from,$to])
             )
             ->when(
                 $request->filter,
