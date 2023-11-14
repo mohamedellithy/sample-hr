@@ -53,7 +53,7 @@ class EmployeesSalariesController extends Controller
             )
 
             ->groupBy('attendances_date','month_path','year_path')
-            ->groupBy('employees.id');
+            ->groupBy('employees.id','employees.name','employees.salary');
 
 
             if ($request->has('rows')):
@@ -112,7 +112,7 @@ class EmployeesSalariesController extends Controller
         $employee->countAttends   =   EmployeeAttendance::where([
             'employee_id' => $id
         ])->whereMonth('employee_attendances.attendance_date',$month)
-        ->whereYear('employee_attendances.attendance_date',$year)->count();
+        ->whereYear('employee_attendances.attendance_date',$year)->count() ?: 0;
 
 
         $employee->sumAdvances = EmployeeAdvance::where([
