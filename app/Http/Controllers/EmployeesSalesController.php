@@ -23,7 +23,7 @@ class EmployeesSalesController extends Controller
         $per_page = 10;
 
 
-    
+
 
         if ($request->has('datefilter') and $request->get('datefilter') != "") {
             $result = explode('-',$request->get('datefilter'));
@@ -99,17 +99,6 @@ class EmployeesSalesController extends Controller
             'sale_date',
         ]));
 
-        $salary= EmployeeSalarie::where('employee_id',$request->employee_id)->where('date',$request->sale_date)->first();
-        if($salary){
-            $salary->sales += $request->remained;
-            $salary->save();
-        }else{
-            EmployeeSalarie::create([
-                'employee_id'=>$request->employee_id,
-                'date'=>$request->sale_date,
-                'sales'=>$request->remained,
-            ]);
-        }
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
     }
@@ -162,14 +151,7 @@ class EmployeesSalesController extends Controller
             'date' => 'يجب ادخال تاريخ',
         ]);
 
-        $EmployeeSale= EmployeeSale::find($id);
 
-        $salary= EmployeeSalarie::where('employee_id',$EmployeeSale->employee_id)->where('date',$EmployeeSale->sale_date)->first();
-
-        if($salary){
-            $salary->sales -= $EmployeeSale->remained;
-            $salary->save();
-        }
 
         EmployeeSale::where('id', $id)->update($request->only([
             'employee_id',
@@ -177,20 +159,6 @@ class EmployeesSalesController extends Controller
             'remained',
             'sale_date',
         ]));
-
-
-        $salary= EmployeeSalarie::where('employee_id',$request->employee_id)->where('date',$request->sale_date)->first();
-        if($salary){
-            $salary->sales += $request->remained;
-            $salary->save();
-        }else{
-            EmployeeSalarie::create([
-                'employee_id'=>$request->employee_id,
-                'date'=>$request->sale_date,
-                'sales'=>$request->remained,
-            ]);
-        }
-
 
         flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();

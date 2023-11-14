@@ -13,7 +13,7 @@
                         <div class="card-header" style="text-align: center">
                             <p style="text-align: center">
                                 <h4 style="color:black;font-size: 18px;font-weight: bolder">OPERA CAFEE</h4>
-                                <h6 style="color:red;font-size: 18px;font-weight: bolder">SALARY SHEET FOR {{ $employeeSalary->attendances_date }}</h6>
+                                <h6 style="color:red;font-size: 18px;font-weight: bolder">SALARY SHEET FOR {{ $employee->attendances_date }}</h6>
                             </p>
                         </div>
                         <div class="card-body">
@@ -41,39 +41,39 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                            $calculateDayWage = (new App\Services\CalculateHourSalaryService())->calculateDayWage($employeeSalary->salary,$employeeSalary->countAttends);
+                                            $calculateDayWage = (new App\Services\CalculateHourSalaryService())->calculateDayWage($employee->salary,$employee->countAttends);
                                             $net_salary       = 0;
                                             $over_time        = 0;
                                             $net_deduction    = 0;
                                         @endphp
                                         <tr style="border:1px solid gray;" height="25">
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{  $employeeSalary->name }}
+                                                {{  $employee->name }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{  $employeeSalary->salary }}
-                                                @php $net_salary += $employeeSalary->salary @endphp
+                                                {{  $employee->salary }}
+                                                @php $net_salary += $employee->salary @endphp
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{ $employeeSalary->countAttends }}
+                                                {{ $employee->countAttends }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{   $over_time   = $employeeSalary->sumOver_time + abs($calculateDayWage > 0 ? $calculateDayWage : 0) }}
+                                                {{   $over_time   = $employee->sumOver_time + abs($calculateDayWage > 0 ? $calculateDayWage : 0) }}
                                                 @php $net_salary += $over_time @endphp
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
                                                 {{  $net_salary }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{   $deduction_delay = $employeeSalary->sumDeduction + abs($calculateDayWage < 0 ? $calculateDayWage : 0) }}
+                                                {{   $deduction_delay = $employee->sumDeduction + abs($calculateDayWage < 0 ? $calculateDayWage : 0) }}
                                                 @php $net_deduction  += $deduction_delay  @endphp
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{  $deduction_advances = $employeeSalary->sumAdvances ?: 0 }}
+                                                {{  $deduction_advances = $employee->sumAdvances ?: 0 }}
                                                 @php $net_deduction     += $deduction_advances  @endphp
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{  $deduction_sales   = $employeeSalary->sumSales ?: 0 }}
+                                                {{  $deduction_sales   = $employee->sumSales ?: 0 }}
                                                 @php $net_deduction    += $deduction_sales  @endphp
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
@@ -83,29 +83,29 @@
                                                 {{ $net_salary = $net_salary - $net_deduction }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{ $employeeSalary->sumPaid ?: 0 }}
+                                                {{ $employee->sumPaid ?: 0 }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px;">
-                                                {{ $net_salary - $employeeSalary->sumPaid }}
+                                                {{ $net_salary - $employee->sumPaid }}
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            @if(!isset($employeeSalary->sumPaid))
+                            @if(!isset($employee->sumPaid))
                                 <form method="post" action="{{ route('admin.employee.add-salary',[
-                                    'employee_id' => $employeeSalary->id
+                                    'employee_id' => $employee->id
                                 ]) }}">
                                     @csrf
-                                    <input name="monthes" type="hidden" value="{{ $employeeSalary->year_path.'-'.$employeeSalary->month_path.'-01' }}" />
-                                    <input name="value" type="hidden" value="{{ $net_salary - $employeeSalary->sumPaid }}" />
+                                    <input name="monthes" type="hidden" value="{{ $employee->year_path.'-'.$employee->month_path.'-01' }}" />
+                                    <input name="value" type="hidden" value="{{ $net_salary - $employee->sumPaid }}" />
                                     <button type="submit" class="btn btn-danger btn-sm">
                                         تسديد المرتب
                                     </button>
                                 </form>
                             @endif
                         </div>
-                        @if($employeeSalary->sumPaid)
+                        @if($employee->sumPaid)
                             <div class="card-footer">
                                 <table style="display: flex;flex-wrap: nowrap;justify-content: space-between;">
                                     <tr>
@@ -150,10 +150,10 @@
                                                 <tbody>
                                                     <tr style="color:black !important;">
                                                         <td style="color:black !important;border:2px solid black">
-                                                            {{ $employeeSalary->sumPaid  - intval($employeeSalary->sumPaid)}}
+                                                            {{ $employee->sumPaid  - intval($employee->sumPaid)}}
                                                         </td>
                                                         <td style="color:black !important;border:2px solid black">
-                                                            {{ intval($employeeSalary->sumPaid) }}
+                                                            {{ intval($employee->sumPaid) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -167,7 +167,7 @@
                                             مدفوع الى السيد الفاضل   
                                         </td>
                                         <td style="padding-right:10%;color:black;">
-                                            {{ $employeeSalary->name }}
+                                            {{ $employee->name }}
                                         </td>
                                         <td>
                                             <label style="float:left">
@@ -180,7 +180,7 @@
                                             مبلغ و قدرة ريال عمانى
                                         </td>
                                         <td style="padding-right:10%;color:black;">
-                                            {{ $employeeSalary->name }}
+                                            {{ $employee->name }}
                                         </td>
                                         <td>
                                             <label style="float:left">
@@ -193,7 +193,7 @@
                                             و ذالك عن 
                                         </td>
                                         <td style="padding-right:10%;color:black;">
-                                            salary of {{ $employeeSalary->attendances_date }}
+                                            salary of {{ $employee->attendances_date }}
                                         </td>
                                         <td>
                                             <label style="float:left">

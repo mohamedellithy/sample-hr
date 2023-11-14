@@ -18,8 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->date('date');
-            $table->double('advances',8, 2)->default(0);
-            $table->double('sales',8, 2)->default(0);
             $table->double('deduction',8, 2)->default(0);
             $table->double('over_time',8, 2)->default(0);
 

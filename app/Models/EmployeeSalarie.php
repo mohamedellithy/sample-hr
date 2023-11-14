@@ -10,7 +10,7 @@ class EmployeeSalarie extends Model
     use HasFactory;
 
     protected $fillable = [
-        'employee_id','date','advances','sales','deduction','over_time',
+        'employee_id','date','deduction','over_time',
     ];
 
     public function employee()
