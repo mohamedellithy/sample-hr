@@ -59,6 +59,7 @@ class EmployeesSalariesController extends Controller
             if ($request->has('rows')):
                 $per_page = $request->query('rows');
             endif;
+            
         $employeeSalaries = $employeeSalaries->paginate($per_page);
 
         //dd($employeeSalaries->get());
