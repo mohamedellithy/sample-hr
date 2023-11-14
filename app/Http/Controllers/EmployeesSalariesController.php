@@ -53,7 +53,7 @@ class EmployeesSalariesController extends Controller
             )
 
             ->groupBy('attendances_date','month_path','year_path')
-            ->groupBy('employees.id');
+            ->groupBy('employees.id','employees.name');
 
 
             if ($request->has('rows')):
