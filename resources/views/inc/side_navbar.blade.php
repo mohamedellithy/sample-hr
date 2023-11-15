@@ -29,7 +29,7 @@
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ IsActiveOnlyIf(['admin.employees.index','admin.employees.edit']) }}">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.employees.index','admin.employees.edit','admin.employees.create']) }}">
                     <a href="{{ route('admin.employees.index') }}" class="menu-link">
                         <div data-i18n="Without navbar"> عرض</div>
                     </a>
@@ -38,14 +38,14 @@
         </li>
 
         <!-- expenses  -->
-        <li class="menu-item {{ IsActiveOnlyIf(['admin.expenses.index']) }}">
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.expenses.index','admin.expenses.create','admin.expenses.edit','admin.expenses.show']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class='menu-icon tf-icons bx bxs-package'></i>
                 <div data-i18n="Layouts">المصروفات</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ IsActiveOnlyIf(['admin.expenses.index']) }}">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.expenses.index','admin.expenses.create','admin.expenses.edit','admin.expenses.show']) }}">
                     <a href="{{ route('admin.expenses.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">عرض</div>
                     </a>

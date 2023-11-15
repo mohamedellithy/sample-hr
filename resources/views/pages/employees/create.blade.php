@@ -28,7 +28,7 @@
                         <div class="row mt-3">
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">المرتب</label>
-                                <input type="number" min="0" value="{{ old('salary') }}" class="form-control" placeholder="ادخل مرتب الموظف"name="salary" required/>
+                                <input type="number" min="0" value="{{ old('salary') }}" class="form-control" placeholder="ادخل مرتب الموظف" name="salary" step=".001" required/>
                                 @error('salary')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
@@ -46,7 +46,7 @@
                         <div class="row mt-3">
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">رقم الباسبور</label>
-                                <input type="number" min="0" value="{{ old('passport_no') }}" class="form-control" placeholder="ادخل  رقم الباسبور"name="passport_no" required/>
+                                <input type="text" value="{{ old('passport_no') }}" class="form-control" placeholder="ادخل  رقم الباسبور"name="passport_no" required/>
                                 @error('passport_no')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror

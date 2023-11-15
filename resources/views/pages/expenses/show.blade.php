@@ -13,32 +13,46 @@
 
                         <div class="row mt-3">
                             <div class="col">
-                            <label class="form-label" for="basic-default-company">نوع المصروف </label>
-                              <input type="text" value="{{$expense->service }}" class="form-control" readOnly/>
-
+                                <label class="form-label" for="basic-default-company">نوع المصروف </label>
+                                <input type="text" value="{{$expense->section }}" class="form-control" readOnly/>
                             </div>
-
 
                             <div class="col">
-                                <label class="form-label" for="basic-default-company">المبلغ</label>
-                                <input type="text" value="{{$expense->amount }}" class="form-control"  readOnly/>
-
+                                <label class="form-label" for="basic-default-company">البند</label>
+                                <input type="text" value="{{$expense->sub_service }}" class="form-control" readOnly/>
                             </div>
+                            
                         </div>
-                    <div class="row mt-3">
+                        <div class="row mt-3">
                             <div class="col">
-                                <label class="form-label" for="basic-default-company">الاجل</label>
-                                <input type="number" value="{{$expense->pending_amount }}" class="form-control" placeholder="ادخل  مبلغ الاجل"  name="pending_amount" readOnly/>
-
+                                <label class="form-label" for="basic-default-company">رقم الفاتورة</label>
+                                <input type="text" value="{{$expense->bill_no }}" class="form-control"  readOnly/>
                             </div>
                             <div class="col">
-                                <label class="form-label" for="basic-default-company">المصروف تابع ل</label>
-                                <input type="text" value="{{$expense->supplier }}" class="form-control" placeholder="الاسم التابع له المصروف" name="supplier" readOnly/>
-
+                                <label class="form-label" for="basic-default-company">قيمة الفاتورة</label>
+                                <input type="text" value="{{$expense->amount }}" class="form-control"  readOnly/>
                             </div>
                         </div>
                         <div class="row mt-3">
-
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">المدفوع</label>
+                                <input type="number" value="{{$expense->paid_amount }}" class="form-control" placeholder="ادخل  مبلغ الاجل"  name="pending_amount" readOnly/>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">المتبقي</label>
+                                <input type="number" value="{{$expense->pending_amount }}" class="form-control" placeholder="ادخل  مبلغ الاجل"  name="pending_amount" readOnly/>
+                            </div>
+                            
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">المصروف تابع ل</label>
+                                <input type="text" value="{{$expense->supplier }}" class="form-control" placeholder="الاسم التابع له المصروف" name="supplier" readOnly/>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">البيان</label>
+                                <input type="text" value="{{$expense->expense_description }}" class="form-control" placeholder="البيان" name="supplier" readOnly/>
+                            </div>
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">تاريخ الصرف</label>
                                 <input type="date" value="{{ $expense->expense_date }}" class="form-control"  readOnly/>

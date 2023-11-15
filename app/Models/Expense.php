@@ -9,8 +9,14 @@ class Expense extends Model
 {
     use HasFactory;
     protected $fillable = [
-
-        'service','amount','expense_date','pending_amount','supplier'
-
+        'section',
+        'sub_service',
+        'bill_no',
+        'supplier',
+        'amount',
+        'paid_amount',
+        'pending_amount',
+        'expense_description',
+        'expense_date'
     ];
 }

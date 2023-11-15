@@ -59,7 +59,6 @@ class ExportEmployeeSales implements FromCollection ,WithMapping ,WithHeadings
     {
         return [
             $employeeSales->employee->name,
-            $employeeSales->amount,
             $employeeSales->remained,
             $employeeSales->sale_date,
 
@@ -69,6 +68,6 @@ class ExportEmployeeSales implements FromCollection ,WithMapping ,WithHeadings
 
     public function headings(): array
     {
-        return ["الاسم","المبلغ","آجل","التاريخ"];
+        return ["الاسم","قيمة الفاتورة","التاريخ"];
     }
 }

@@ -31,7 +31,7 @@ if(!function_exists('TrimLongText')){
 if(!function_exists('formate_price')) {
     function formate_price($price)
     {
-        return round($price,3).' '.' ريال عماني';
+        return round($price,3).' '.' ريال';
     }
 }
 

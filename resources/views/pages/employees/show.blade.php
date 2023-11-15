@@ -23,7 +23,7 @@
                         <div class="row mt-3">
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">المرتب</label>
-                                <input type="number" min="0" value="{{ $employee->salary }}" class="form-control" placeholder="ادخل مرتب الموظف"name="salary" readOnly/>
+                                <input type="number" min="0" step=".001" value="{{ $employee->salary }}" class="form-control" placeholder="ادخل مرتب الموظف"name="salary" readOnly/>
 
                             </div>
 
@@ -39,7 +39,7 @@
                         <div class="row mt-3">
                             <div class="col">
                                 <label class="form-label" for="basic-default-company">رقم الباسبور</label>
-                                <input type="number" min="0" value="{{ $employee->passport_no }}" class="form-control" placeholder="ادخل  رقم الباسبور"name="passport_no" readOnly/>
+                                <input type="text" min="0" value="{{ $employee->passport_no }}" class="form-control" placeholder="ادخل  رقم الباسبور"name="passport_no" readOnly/>
 
                             </div>
 

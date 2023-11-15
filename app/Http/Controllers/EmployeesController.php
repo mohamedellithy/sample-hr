@@ -26,8 +26,8 @@ class EmployeesController extends Controller
 
         $employees->when(request('search') != null, function ($q) {
             return $q->where('nationality', 'like', '%' . request('search') . '%')
-            ->orWhere('name', 'like', '%' . request('search'))
-            ->orWhere('passport_no', 'like', '%' . request('search'));
+            ->orWhere('name', 'like', '%' . request('search').'%')
+            ->orWhere('passport_no', 'like', '%' . request('search').'%');
 
         });
 
@@ -73,6 +73,10 @@ class EmployeesController extends Controller
      */
     public function store(EmployeeRequest $request)
     {
+        $request->validate([
+            'name' => 'required|unique:employees,name'
+        ]);
+
         Employee::create($request->only([
             'name',
             'nationality',

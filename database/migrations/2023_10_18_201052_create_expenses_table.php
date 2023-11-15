@@ -15,12 +15,16 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-             $table->string('service');
-             $table->double('amount',8, 2);
-             $table->date('expense_date');
-             $table->double('pending_amount',8, 2)->nullable();
-             $table->text('supplier')->nullable();
-             $table->timestamps();
+            $table->string('section');
+            $table->string('sub_service');
+            $table->text('supplier')->nullable();
+            $table->text('bill_no');
+            $table->date('expense_date');
+            $table->text('expense_description')->nullable();
+            $table->double('amount',8, 3)->default(0);
+            $table->double('paid_amount',8, 3)->default(0);
+            $table->double('pending_amount',8, 3)->default(0);
+            $table->timestamps();
         });
     }
 

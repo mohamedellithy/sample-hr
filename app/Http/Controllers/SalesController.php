@@ -76,7 +76,6 @@ class SalesController extends Controller
         Sale::create($request->only([
             'cash',
             'bank',
-            'discount',
             'credit_sales',
             'sale_date',
 
@@ -123,7 +122,6 @@ class SalesController extends Controller
         $sale = Sale::where('id', $id)->update($request->only([
             'cash',
             'bank',
-            'discount',
             'credit_sales',
             'sale_date',
         ]));

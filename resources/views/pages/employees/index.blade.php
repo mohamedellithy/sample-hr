@@ -24,7 +24,7 @@ $export =null;
                 </div>
                 <div class="d-flex" style="flex-direction: row-reverse;">
                     <div class="nav-item d-flex align-items-center m-2">
-                        <a href="{{ route('admin.employees.create') }}" class="btn btn-success btn-md" style="color:white">اضافة موظف جديد</a>
+                        <a href="{{ route('admin.employees.create') }}" class="btn btn-success btn-sm" style="color:white">اضافة موظف جديد</a>
                     </div>
                 </div>
                <form id="filter-data" method="get" class=" justify-content-between">
@@ -55,7 +55,7 @@ $export =null;
                             <div class="nav-item d-flex align-items-center m-2">
                              <input type="hidden" name="search" value="{{ $search }}">
                             <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">تصدير</button>
+                            <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
                             </div>
                     </form>
                 </div>

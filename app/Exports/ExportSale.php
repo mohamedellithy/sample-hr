@@ -41,13 +41,13 @@ class ExportSale implements FromCollection,WithHeadings
             return $q->orderBy('sale_date', 'desc');
         });
 
-       return $sales->select('cash','bank','discount','credit_sales','sale_date')->get();
+       return $sales->select('cash','credit_sales','bank','sale_date')->get();
 
 
     }
 
     public function headings(): array
     {
-        return ['كاش','كريدت','خصم','آجل','التاريخ'];
+        return ['كاش','كريدت','بنك','التاريخ'];
     }
 }

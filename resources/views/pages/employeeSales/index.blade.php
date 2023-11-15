@@ -20,7 +20,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                     <h5 class="card-header">اضافة مبايعه موظف جديده</h5>
                     <div class="card-body">
                         <div class="row">
-                            <div class="mb-3 col-md-5">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label" for="basic-default-fullname">الموظف</label>
                                     <select type="text" name="employee_id" class="form-control form-select2 selectProduct" required>
                                     <option value="">اختر الموظف</option>
@@ -32,29 +32,17 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> المبلغ الكلي</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="amount" min="0" value="{{ old('amount') }}" required />
-                                @error('amount')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                        </div>
-
-
-                        </div>
-
-                        <div class="row mt-2">
-                             <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> آجل</label>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="basic-default-company"> قيمة الفاتورة</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
                                     name="remained" min="0" value="{{ old('remained') }}" required />
                                 @error('remained')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                          <div class="mb-3 col-md-5">
+                        </div>
+                        <div class="row mt-2">
+                          <div class="mb-3">
                                 <label class="form-label" for="basic-default-company"> التاريخ</label>
                                 <input type="date" class="form-control" id="basic-default-fullname"
                                     name="sale_date" value="{{ old('sale_date') ?: date('Y-m-d') }}" required />
@@ -62,10 +50,8 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-
                         </div>
-
-                        <button type="submit" class="btn btn-primary">اضافة</button>
+                        <button type="submit" class="btn btn-primary btn-sm">اضافة</button>
                     </div>
                 </div>
             </div>
@@ -96,7 +82,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
 
                         <div class="nav-item d-flex align-items-center m-2">
 
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control"  @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
+                            <input type="text" placeholder="التاريخ" onchange="document.getElementById('filter-data').submit()" class=" form-control"  @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
 
                         </div>
 
@@ -123,7 +109,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                             <input type="hidden" name="datefilter" value="{{ $datefilter }}">
 
                             <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">تصدير</button>
+                            <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
                             </div>
                 </form>
                     </div>
@@ -133,10 +119,10 @@ $employee_filter = request()->query('employee_filter') ?: null;
                <table class="table">
                    <thead class="table-light">
                         <tr class="table-dark">
-                           <th>#</th>
+                            <th>#</th>
                             <th>الموظف</th>
-                            <th>المبلغ</th>
-                            <th>آجل</th>
+                            <th>قيمة الفاتورة</th>
+                            <th>حالة الفاتورة</th>
                             <th>التاريخ</th>
                             <th></th>
                         </tr>
@@ -151,11 +137,13 @@ $employee_filter = request()->query('employee_filter') ?: null;
                                 <td>
                                 {{  $employeeSale->employee->name }}
                                 </td>
+                               
                                 <td>
-                                    {{  formate_price($employeeSale->amount )}}
-                                </td>
-                                    <td>
                                     {{  formate_price($employeeSale->remained )}}
+                                </td>
+
+                                <td>
+                                    {{  $employeeSale->status == 'paid' ? 'مسدد' : 'غير مسدد' }}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">

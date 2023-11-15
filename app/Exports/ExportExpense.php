@@ -9,13 +9,13 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 class ExportExpense implements FromCollection ,WithHeadings
 {
-    private $service_filter;
+    private $search;
     private $datefilter;
     private $filter;
 
-    public function __construct($service_filter,$datefilter,$filter)
+    public function __construct($search,$datefilter,$filter)
     {
-        $this->service_filter = $service_filter;
+        $this->search = $search;
         $this->datefilter = $datefilter;
         $this->filter = $filter;
     }
@@ -28,8 +28,11 @@ class ExportExpense implements FromCollection ,WithHeadings
     {
         $expenses = Expense::query();
 
-        $expenses->when($this->service_filter != null, function ($q) {
-            return $q->where('service',$this->service_filter);
+        $expenses->when($this->search != null, function ($q){
+            return $q->where('section','like','%'.$this->search.'%')
+            ->orWhere('sub_service','like','%'.$this->search.'%')
+            ->orWhere('bill_no','like','%'.$this->search.'%')
+            ->orWhere('supplier','like','%'.$this->search.'%');
         });
 
 
@@ -47,11 +50,31 @@ class ExportExpense implements FromCollection ,WithHeadings
             $expenses->whereBetween('expense_date',[$from,$to]);
         }
 
-        return $expenses->select('service','amount','pending_amount','supplier','expense_date')->get();
+        return $expenses->select(
+            'section',
+            'sub_service',
+            'bill_no',
+            'supplier',
+            'amount',
+            'paid_amount',
+            'pending_amount',
+            'expense_description',
+            'expense_date'
+        )->get();
     }
 
     public function headings(): array
     {
-        return ["service","amount",'pending_amount','supplier',"date"];
+        return [
+            'section',
+            'sub_service',
+            'bill_no',
+            'supplier',
+            'amount',
+            'paid_amount',
+            'pending_amount',
+            'expense_description',
+            'expense_date'
+        ];
     }
 }

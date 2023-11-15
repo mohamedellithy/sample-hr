@@ -23,12 +23,17 @@ class ExpensesRequest extends FormRequest
      */
     public function rules()
     {
+        
         return [
-            'service'        => 'required',
-            'amount' => 'required|numeric',
-            'expense_date'      => 'required|date',
-            'attachment'        => 'mimes:jpeg,png,jpg,gif',
-
+            'section'     => 'required',
+            'sub_service' => 'required',
+            'bill_no'     => 'required',
+            'supplier'    => 'required',
+            'amount'      => 'required|numeric',
+            'paid_amount' => 'required|numeric',
+            'pending_amount' => 'required|numeric',
+            'expense_description' => 'required',
+            'expense_date' => 'required|date'
         ];
     }
 

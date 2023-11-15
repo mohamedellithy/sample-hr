@@ -20,21 +20,13 @@
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                             <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> المبلغ</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="amount" min="0" value="{{  $employeeSale->amount }}" required />
-                                @error('amount')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
                         </div>
 
                         <div class="row mt-2">
                              <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> آجل</label>
+                                <label class="form-label" for="basic-default-company">قيمة الفاتورة</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="remained" min="0" value="{{  $employeeSale->remained }}" required />
+                                    name="remained" min="0" step=".001" value="{{  $employeeSale->remained }}" required />
                                 @error('remained')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror

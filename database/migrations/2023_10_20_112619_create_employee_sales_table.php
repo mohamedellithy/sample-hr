@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->double('amount',8, 2);
-            $table->double('remained',8, 2);
+            $table->double('remained',8, 3);
             $table->date('sale_date');
+            $table->enum('status',['paid','unpaid'])->default('unpaid');
             $table->timestamps();
         });
     }

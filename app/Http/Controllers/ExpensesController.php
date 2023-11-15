@@ -26,8 +26,11 @@ class ExpensesController extends Controller
         $per_page = 10;
 
 
-        $expenses->when(request('service_filter') != null, function ($q) {
-            return $q->where('service',request('service_filter'));
+        $expenses->when(request('search') != null, function ($q) {
+            return $q->where('section','like','%'.request('search').'%')
+            ->orWhere('sub_service','like','%'.request('search').'%')
+            ->orWhere('bill_no','like','%'.request('search').'%')
+            ->orWhere('supplier','like','%'.request('search').'%');
         });
 
 
@@ -55,7 +58,7 @@ class ExpensesController extends Controller
     public function exportExpenses(Request $request){
 
 
-        return Excel::download(new ExportExpense( $request->service_filter,$request->datefilter,$request->filter),'expenses.xlsx');
+        return Excel::download(new ExportExpense($request->search,$request->datefilter,$request->filter),'expenses.xlsx');
 
         return redirect()->back();
 
@@ -79,11 +82,16 @@ class ExpensesController extends Controller
      */
     public function store(ExpensesRequest $request)
     {
+        
             $data = $request->only([
-                'pending_amount',
+                'section',
+                'sub_service',
+                'bill_no',
                 'supplier',
-                'service',
                 'amount',
+                'paid_amount',
+                'pending_amount',
+                'expense_description',
                 'expense_date'
             ]);
 
@@ -139,10 +147,14 @@ class ExpensesController extends Controller
     {
             $expense = Expense::find($id);
             $data = $request->only([
-                'pending_amount',
+                'section',
+                'sub_service',
+                'bill_no',
                 'supplier',
-                'service',
                 'amount',
+                'paid_amount',
+                'pending_amount',
+                'expense_description',
                 'expense_date'
             ]);
             DB::beginTransaction();

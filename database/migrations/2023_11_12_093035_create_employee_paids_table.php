@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->date('month');
-            $table->double('paid',8, 2);
+            $table->double('paid',8, 3);
             $table->timestamps();
         });
     }

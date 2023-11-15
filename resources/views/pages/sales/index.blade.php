@@ -18,7 +18,7 @@ $datefilter = request()->query('datefilter') ?: null;
                     <h5 class="card-header">اضافة مبايعه جديده</h5>
                     <div class="card-body">
                         <div class="row">
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label" for="basic-default-fullname">كاش</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
                                     name="cash" min="0" value="{{ old('cash') }}" required />
@@ -26,45 +26,33 @@ $datefilter = request()->query('datefilter') ?: null;
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                          <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label class="form-label" for="basic-default-company"> كريدت</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="bank" min="0" value="{{ old('bank') }}" required />
-                                @error('bank')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                                <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-company"> خصم</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="discount" min="0" value="{{ old('discount') }}" required />
-                                @error('discount')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mt-2">
-                             <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> آجل</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="credit_sales" min="0" value="{{ old('credit_sales') }}" required />
+                                    name="credit_sales" min="0" step=".001" value="{{ old('credit_sales') }}" required />
                                 @error('credit_sales')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                          <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> التاريخ</label>
-                                <input type="date" class="form-control" id="basic-default-fullname"
-                                    name="sale_date" value="{{ old('sale_date') }}" required />
-                                @error('sale_date')
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="basic-default-company"> بنك</label>
+                                <input type="number" class="form-control" id="basic-default-fullname"
+                                    name="bank" min="0" step=".001" value="{{ old('bank') }}" required />
+                                @error('bank')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-
+                            
+                           <div class="mb-3 col-md-6">
+                               <label class="form-label" for="basic-default-company"> التاريخ</label>
+                               <input type="date" class="form-control" id="basic-default-fullname"
+                                   name="sale_date" value="{{ old('sale_date') }}" required />
+                               @error('sale_date')
+                                   <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                               @enderror
+                           </div>
                         </div>
-
-                        <button type="submit" class="btn btn-primary">اضافة مبايعه</button>
+                        <button type="submit" class="btn btn-primary btn-sm">اضافة مبايعه</button>
                     </div>
                 </div>
             </div>
@@ -83,12 +71,12 @@ $datefilter = request()->query('datefilter') ?: null;
                     <div class="d-flex justify-content-between" style="background-color: #eee;">
 
                         <div class="nav-item d-flex align-items-center m-2">
-                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control"  @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
+                            <input type="text" placeholder="التاريخ" onchange="document.getElementById('filter-data').submit()" class=" form-control"  @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
                             <select name="filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
-                                <option value="">فلتر المصروفات</option>
+                                <option value="">فلتر المبيعات</option>
                                 <option value="sort_asc" @isset($filter) @if ($filter=='sort_asc' ) selected @endif @endisset>الاقدم</option>
                                 <option value="sort_desc" @isset($filter) @if ($filter=='sort_desc' ) selected @endif @endisset>الاحدث </option>
                             </select>
@@ -107,7 +95,7 @@ $datefilter = request()->query('datefilter') ?: null;
                             <div class="nav-item d-flex align-items-center m-2">
                              <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                             <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">تصدير</button>
+                            <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
                             </div>
                 </form>
                     </div>
@@ -119,13 +107,11 @@ $datefilter = request()->query('datefilter') ?: null;
                <table class="table">
                    <thead class="table-light">
                         <tr class="table-dark">
-                           <th>#</th>
+                            <th>التاريخ</th>
                             <th>كاش</th>
                             <th>كريدت</th>
-                            <th>خصم</th>
-                            <th>آجل</th>
+                            <th>بنك</th>
                             <th>المجموع</th>
-                            <th>التاريخ</th>
                             <th></th>
                         </tr>
                    </thead>
@@ -133,30 +119,22 @@ $datefilter = request()->query('datefilter') ?: null;
                         @foreach ($sales as $sale)
                             <tr>
                                 <td>
-                                   {{$loop->index + 1 }}
+                                    <span class="badge bg-label-primary me-1">
+                                   {{ $sale->sale_date }}
+                                    </span>
                                 </td>
-
                                 <td>
                                 {{  formate_price($sale->cash) }}
-                                </td>
-                                <td>
-                                    {{  formate_price($sale->bank )}}
-                                </td>
-                                <td>
-                                    {{  formate_price($sale->discount) }}
                                 </td>
                                 <td>
                                     {{  formate_price($sale->credit_sales) }}
                                 </td>
                                 <td>
-                                    {{  formate_price($sale->cash + $sale->bank + $sale->discount + $sale->credit_sales)}}
+                                    {{  formate_price($sale->bank )}}
                                 </td>
                                 <td>
-                                     <span class="badge bg-label-primary me-1">
-                                    {{ $sale->sale_date }}
-                                     </span>
+                                    {{  formate_price($sale->cash + $sale->bank + $sale->discount + $sale->credit_sales)}}
                                 </td>
-
                                 <td>
                                     <div class="d-flex">
 

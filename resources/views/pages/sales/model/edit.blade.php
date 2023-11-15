@@ -17,18 +17,10 @@
                                 @enderror
                             </div>
                           <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-company"> كريدت</label>
+                                <label class="form-label" for="basic-default-company"> بنك</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="bank" min="0" value="{{  $sale->bank }}" required />
+                                    name="bank" min="0" step=".001" value="{{  $sale->bank }}" required />
                                 @error('bank')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                                <div class="mb-3 col-md-4">
-                                <label class="form-label" for="basic-default-company"> خصم</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="discount" min="0" value="{{  $sale->discount }}" required />
-                                @error('discount')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -36,9 +28,9 @@
 
                         <div class="row mt-2">
                              <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> آجل</label>
+                                <label class="form-label" for="basic-default-company"> كريدت</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="credit_sales" min="0" value="{{  $sale->credit_sales }}" required />
+                                    name="credit_sales" min="0" step=".001" value="{{  $sale->credit_sales }}" required />
                                 @error('credit_sales')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror

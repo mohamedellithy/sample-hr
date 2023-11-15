@@ -26,7 +26,6 @@ class SaleRequest extends FormRequest
         return [
             'cash'        => 'required|numeric',
             'bank' => 'required|numeric',
-            'discount'      => 'required|numeric',
             'credit_sales'        => 'required|numeric',
             'sale_date' => 'required|date',
 

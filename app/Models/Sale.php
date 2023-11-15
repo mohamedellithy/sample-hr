@@ -9,6 +9,6 @@ class Sale extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'cash','bank','discount','credit_sales','sale_date',
+        'cash','bank','credit_sales','sale_date',
     ];
 }

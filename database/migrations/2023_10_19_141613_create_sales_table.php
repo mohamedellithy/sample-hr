@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->double('cash',8, 2);
-            $table->double('bank',8, 2);
-            $table->double('discount',8, 2);
-            $table->double('credit_sales',8, 2);
+            $table->double('cash',8, 3);
+            $table->double('bank',8, 3);
+            $table->double('credit_sales',8, 3);
             $table->date('sale_date');
             $table->timestamps();
         });
