@@ -8,7 +8,8 @@ use App\Models\ClientSale;
 use Illuminate\Http\Request;
 use App\Exports\ExportClientSales;
 use Maatwebsite\Excel\Facades\Excel;
-
+use Illuminate\Support\Facades\DB;
+use App\Models\ClientPayment;
 
 class ClientsSalesController extends Controller
 {
@@ -19,35 +20,27 @@ class ClientsSalesController extends Controller
      */
     public function index(Request $request)
     {
-        $clientSales = ClientSale::query();
+        $clients = Client::get();
+        $clientSales = Client::query();
         $per_page = 10;
 
 
-        if ($request->has('datefilter') and $request->get('datefilter') != "") {
-            $result = explode('-',$request->get('datefilter'));
-            $from = Carbon::parse($result[0])->format('Y-m-d');
-            $to= Carbon::parse($result[1])->format('Y-m-d');
-            $clientSales->whereBetween('sale_date',[$from,$to]);
-        }
-
         if ($request->has('client_filter') and $request->get('client_filter') != "") {
-
-            $clientSales->where('client_id',$request->get('client_filter'));
+            $clientSales->where('id',$request->get('client_filter'));
         }
-
-
-        $clientSales->when(request('filter') == 'sort_asc', function ($q) {
-            return $q->orderBy('sale_date', 'asc');
-        },function ($q) {
-            return $q->orderBy('sale_date', 'desc');
-        });
 
         if ($request->has('rows')):
             $per_page = $request->query('rows');
         endif;
 
-        $clientSales = $clientSales->paginate($per_page);
-        $clients = Client::get();
+        $clientSales = $clientSales->leftJoin('client_sales','clients.id','=','client_sales.client_id')
+        ->select(
+            DB::raw('sum(amount)   as total_amount'),
+            DB::raw('sum(paid)     as total_paid'),
+            DB::raw('sum(remained) as total_remained'),
+            'clients.name','clients.id'
+        )->groupBy('clients.name','clients.id')->paginate($per_page);
+        
         return view('pages.clientSales.index', compact('clientSales','clients'));
     }
 
@@ -81,6 +74,7 @@ class ClientsSalesController extends Controller
         $request->validate([
             'client_id' => 'required',
             'amount' => ['required','numeric'],
+            'paid'     => ['required','numeric'],
             'remained' => ['required','numeric'],
             'sale_date' => ['required','date']
         ],[
@@ -92,6 +86,7 @@ class ClientsSalesController extends Controller
         ClientSale::create($request->only([
             'client_id',
             'amount',
+            'paid',
             'remained',
             'sale_date',
         ]));
@@ -105,9 +100,40 @@ class ClientsSalesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         //
+        $clientSales = ClientSale::query();
+        $per_page = 10;
+
+
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
+            $clientSales->whereBetween('sale_date',[$from,$to]);
+        }
+
+        if ($request->has('client_filter') and $request->get('client_filter') != "") {
+
+            $clientSales->where('client_id',$request->get('client_filter'));
+        }
+
+
+        $clientSales->when(request('filter') == 'sort_asc', function ($q) {
+            return $q->orderBy('sale_date', 'asc');
+        },function ($q) {
+            return $q->orderBy('sale_date', 'desc');
+        });
+
+        if ($request->has('rows')):
+            $per_page = $request->query('rows');
+        endif;
+
+        $clientSales   = $clientSales->paginate($per_page);
+        $client        = Client::find($id);
+        $ClientSale    = ClientSale::where('client_id',$id)->get();
+        return view('pages.clientSales.show', compact('clientSales','client','ClientSale'));
     }
 
     /**
@@ -138,23 +164,44 @@ class ClientsSalesController extends Controller
     {
         $request->validate([
             'client_id' => 'required',
-            'amount' => ['required','numeric'],
-            'remained' => ['required','numeric'],
+            'amount'    => ['required','numeric'],
+            'paid'      => ['required','numeric'],
+            'remained'  => ['required','numeric'],
             'sale_date' => ['required','date']
         ],[
             'required' => 'هذا الحقل مطلوب',
-            'numeric' => 'يرجى ادخال رقم',
-            'date' => 'يجب ادخال تاريخ',
+            'numeric'  => 'يرجى ادخال رقم',
+            'date'     => 'يجب ادخال تاريخ',
         ]);
 
         ClientSale::where('id', $id)->update($request->only([
             'client_id',
             'amount',
+            'paid',
             'remained',
             'sale_date',
         ]));
         flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
+    }
+
+    public function client_payemnts(Request $request){
+        $request->validate([
+            'client_id' => 'required',
+            'amount'    => ['required','numeric'],
+        ],[
+            'required' => 'هذا الحقل مطلوب',
+            'numeric'  => 'يرجى ادخال رقم',
+            'date'     => 'يجب ادخال تاريخ',
+        ]);
+
+        $client_id = $request->input('client_id');
+        ClientPayment::create([
+            'client_id' => $client_id,
+            'amount'    => $request->input('amount')
+        ]);
+
+        return back();
     }
 
     /**

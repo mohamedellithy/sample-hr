@@ -6,6 +6,10 @@ $filter = request()->query('filter') ?: null;
 $datefilter = request()->query('datefilter') ?: null;
 $client_filter = request()->query('client_filter') ?: null;
 
+$total_bill = $ClientSale->sum('amount');
+$total_paid = $ClientSale->sum('paid');
+$total_payment = $client->payments()->sum('amount');
+
 @endphp
 @section('content')
 
@@ -13,66 +17,25 @@ $client_filter = request()->query('client_filter') ?: null;
     <br/>
 
     <!-- Basic Layout -->
-    <form action="{{ route('admin.clientSales.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.client-payemnts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="col-lg-12">
                 <div class="card mb-4">
-                    <h5 class="card-header">اضافة مبايعه عميل جديده</h5>
+                    <h5 class="card-header">تنزيل دفع من حساب العميل</h5>
                     <div class="card-body">
                         <div class="row">
                             <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-fullname">العميل</label>
-                                    <select type="text" name="client_id" class="form-control form-select2 selectProduct" required>
-                                    <option value="">اختر عميل</option>
-                                    @foreach ($clients as $client)
-                                    <option value={{ $client->id }}>{{ $client->name }}</option>
-                                    @endforeach
-                                    </select>
-                                @error('client_id')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                          <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company">قيمة الفاتورة</label>
+                                <label class="form-label" for="basic-default-company">قيمة الدفعة</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="amount" min="0" step=".001" value="{{ old('amount') }}" required />
+                                    name="amount" max="{{ $total_bill - ( $total_paid + $total_payment ) }}" step=".001" value="{{ old('amount') }}" required />
                                 @error('amount')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
+                                <input type="hidden" name="client_id" value="{{ $client->id }}" />
                             </div>
-
                         </div>
-
-                        <div class="row mt-2">
-                            <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> المدفوع</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="paid" min="0" step=".001" value="{{ old('paid') }}" required />
-                                @error('paid')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> الغير مدفوع</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="remained" min="0" step=".001" value="{{ old('remained') }}" required />
-                                @error('remained')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-                          <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> التاريخ</label>
-                                <input type="date" class="form-control" id="basic-default-fullname"
-                                    name="sale_date" value="{{ old('sale_date') ?: date('Y-m-d') }}" required />
-                                @error('sale_date')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-sm">اضافة</button>
+                        <button type="submit" class="btn btn-primary btn-sm">تنزيل</button>
                     </div>
                 </div>
             </div>
@@ -84,20 +47,39 @@ $client_filter = request()->query('client_filter') ?: null;
    <!-- DataTales Example -->
    <div class="card mb-4">
        <div class="card">
-           <h5 class="card-header">عرض مبيعات العملاء</h5>
+            <h5 class="card-header">كشف حساب العميل ( {{ $client->name }} ) </h5>
+           <div class="card-header">
+                <ul style="display: flex;flex-wrap: wrap;justify-content: flex-start;;align-items: center;">
+                    <li style="list-style: none;background-color: #eee;padding: 17px;margin-left: 14px;">
+                        <p>اجمالى الفواتير</p>
+                        <strong>{{ formate_price($total_bill) }}</strong>
+                    </li>
+                    <li style="list-style: none;background-color: #eee;padding: 17px;margin-left: 14px">
+                        <p>اجمالى المدفوعات</p>
+                        <strong>{{ formate_price($total_paid + $total_payment) }}</strong>
+                    </li>
+                    <li style="list-style: none;background-color: #eee;padding: 17px;margin-left: 14px">
+                        <p>اجمالى الغير مدفوع</p>
+                        <strong>{{ formate_price($total_bill - ( $total_paid +  $total_payment ) ) }}</strong>
+                    </li>
+                </ul>
+           </div>
+           <h5 class="card-header">عرض مبيعات ( {{ $client->name }} ) </h5>
            <div class="card-header py-3 ">
+               <form id="filter-data" method="get" class=" justify-content-between">
+                    <div class="d-flex justify-content-between" style="background-color: #eee;">
 
-               <div class="d-flex justify-content-between" style="background-color: #eee;">
-                    <form id="filter-data" method="get" class=" justify-content-between">
                         <div class="nav-item d-flex align-items-center m-2">
-                            <select name="client_filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control form-select2">
-                                <option value="">فلتر العميل</option>
-                                @foreach (  $clients as  $client)
-                                    <option value="{{ $client->id }}" @isset($client_filter) @if ($client_filter == $client->id ) selected @endif @endisset>{{  $client->name }}</option>
-                                @endforeach
+                            <input type="text" onchange="document.getElementById('filter-data').submit()" class=" form-control" placeholder=" من - الي" @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
+                        </div>
+
+                        <div class="nav-item d-flex align-items-center m-2">
+                            <select name="filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
+                                <option value="">فلتر المبيعات</option>
+                                <option value="sort_asc" @isset($filter) @if ($filter=='sort_asc' ) selected @endif @endisset>الاقدم</option>
+                                <option value="sort_desc" @isset($filter) @if ($filter=='sort_desc' ) selected @endif @endisset>الاحدث </option>
                             </select>
                         </div>
-                        
                         <div class="nav-item d-flex align-items-center m-2">
                             <label style="padding: 0px 5px;color: #636481;">المعروض</label>
                             <select name="rows" onchange="document.getElementById('filter-data').submit()" id="largeSelect" class="form-select form-select-sm">
@@ -106,18 +88,19 @@ $client_filter = request()->query('client_filter') ?: null;
                                     <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
                             </select>
                         </div>
-                    </form>
+                                </form>
                     <form  method="post" action="{{ route('admin.clientSales.export') }}">
-                        @csrf
-                        <div class="nav-item d-flex align-items-center m-2">
+                            @csrf
+                            <div class="nav-item d-flex align-items-center m-2">
                             <input type="hidden" name="client_filter" value="{{ $client_filter }}">
                             <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                             <input type="hidden" name="filter" value="{{ $filter }}">
                             <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
-                        </div>
+                            </div>
                     </form>
-                </div>
-            </div>
+                    </div>
+
+           </div>
            <div class="table-responsive text-nowrap">
                <table class="table">
                    <thead class="table-light">
@@ -127,6 +110,7 @@ $client_filter = request()->query('client_filter') ?: null;
                             <th>قيمة الفواتير</th>
                             <th>المدفوع</th>
                             <th>الغير مدفوع</th>
+                            <th>التاريخ</th>
                             <th></th>
                         </tr>
                    </thead>
@@ -137,23 +121,38 @@ $client_filter = request()->query('client_filter') ?: null;
                                    {{$loop->index + 1 }}
                                 </td>
                                 <td>
-                                    {{  $clientSale->name }}
+                                    @if ($clientSale->client)
+                                    {{  $clientSale->client->name }}
+                                    @endif
                                 </td>
                                 <td>
-                                    
-                                    {{  formate_price($clientSale->total_amount)}}
+
+                                    {{  formate_price($clientSale->amount )}}
                                 </td>
                                 <td>
-                                    {{  formate_price($clientSale->total_paid + $clientSale->payments()->sum('amount') )}}
+                                    {{  formate_price($clientSale->paid )}}
                                 </td>
                                 <td>
-                                    {{  formate_price($clientSale->total_amount - ( $clientSale->total_paid + $clientSale->payments()->sum('amount') ) )}}
+                                    {{  formate_price($clientSale->remained )}}
+                                </td>
+                                <td>
+                                     <span class="badge bg-label-primary me-1">
+                                    {{ $clientSale->sale_date }}
+                                     </span>
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <a  class="crud" href="{{ route('admin.clientSales.show',$clientSale->id) }}">
-                                            <i class="fas fa-eye text-primary"></i>
+
+                                        <a  class="crud edit-clientSale" data-clientSale-id="{{ $clientSale->id }}">
+                                            <i class="fas fa-edit text-primary"></i>
                                         </a>
+                                        <form  method="post" action="{{ route('admin.clientSales.destroy', $clientSale->id) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <a class="delete-item crud">
+                                                <i class="fas fa-trash-alt  text-danger"></i>
+                                            </a>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

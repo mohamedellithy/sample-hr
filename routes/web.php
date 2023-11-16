@@ -50,6 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('employeeSales', EmployeesSalesController::class);
         Route::resource('clients', ClientsController::class);
         Route::resource('clientSales', ClientsSalesController::class);
+        Route::post('client-payemnts',[ClientsSalesController::class,'client_payemnts'])->name('client-payemnts.store');
         Route::resource('employeeAdvances', EmployeesAdvancesController::class);
         Route::resource('employeeSalaries', EmployeesSalariesController::class);
         Route::resource('employeeAttendances', EmployeeAttendanceController::class);

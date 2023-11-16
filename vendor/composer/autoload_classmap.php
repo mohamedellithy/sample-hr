@@ -56,6 +56,7 @@ return array(
     'App\\Imports\\ImportEmployeeAttendances' => $baseDir . '/app/Imports/ImportEmployeeAttendances.php',
     'App\\Imports\\ImportShift' => $baseDir . '/app/Imports/ImportShift.php',
     'App\\Models\\Client' => $baseDir . '/app/Models/Client.php',
+    'App\\Models\\ClientPayment' => $baseDir . '/app/Models/ClientPayment.php',
     'App\\Models\\ClientSale' => $baseDir . '/app/Models/ClientSale.php',
     'App\\Models\\Employee' => $baseDir . '/app/Models/Employee.php',
     'App\\Models\\EmployeeAdvance' => $baseDir . '/app/Models/EmployeeAdvance.php',

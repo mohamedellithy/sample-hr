@@ -697,6 +697,7 @@ class ComposerStaticInitfa8e1d19c38803c74d25c257f805120c
         'App\\Imports\\ImportEmployeeAttendances' => __DIR__ . '/../..' . '/app/Imports/ImportEmployeeAttendances.php',
         'App\\Imports\\ImportShift' => __DIR__ . '/../..' . '/app/Imports/ImportShift.php',
         'App\\Models\\Client' => __DIR__ . '/../..' . '/app/Models/Client.php',
+        'App\\Models\\ClientPayment' => __DIR__ . '/../..' . '/app/Models/ClientPayment.php',
         'App\\Models\\ClientSale' => __DIR__ . '/../..' . '/app/Models/ClientSale.php',
         'App\\Models\\Employee' => __DIR__ . '/../..' . '/app/Models/Employee.php',
         'App\\Models\\EmployeeAdvance' => __DIR__ . '/../..' . '/app/Models/EmployeeAdvance.php',

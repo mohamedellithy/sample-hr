@@ -102,14 +102,14 @@
         </li>
 
               <!-- clientSales  -->
-        <li class="menu-item {{ IsActiveOnlyIf(['admin.clientSales.index']) }}">
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.clientSales.index','admin.clientSales.show']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class='menu-icon tf-icons bx bxs-package'></i>
                 <div data-i18n="Layouts">مبيعات العملاء</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ IsActiveOnlyIf(['admin.clientSales.index']) }}">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.clientSales.index','admin.clientSales.show']) }}">
                     <a href="{{ route('admin.clientSales.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">عرض</div>
                     </a>
