@@ -14,6 +14,7 @@ use App\Http\Controllers\EmployeesSalesController;
 use App\Http\Controllers\EmployeesAdvancesController;
 use App\Http\Controllers\EmployeesSalariesController;
 use App\Http\Controllers\EmployeeAttendanceController;
+use App\Http\Controllers\DepartmentsExpensesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +46,13 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('employees', EmployeesController::class);
 
+        Route::resource('departments-expenses',DepartmentsExpensesController::class);
+        Route::get('sub-departments/{parent_id}',[DepartmentsExpensesController::class,'get_sub_departments'])->name('sub-departments');
         Route::resource('expenses', ExpensesController::class);
+        Route::get('expenses-payments/{expense_id}',[ExpensesController::class,'expenses_payments'])->name('expenses.payments');
+        Route::post('expense-payments/add/{expense_id}',[ExpensesController::class,'expense_add_payments'])->name('expense-payments.add');
+        Route::get('expense-payments/edit/{payment_id}',[ExpensesController::class,'expense_payments_edit'])->name('expense-payments.edit');
+        Route::put('expense-payments/update/{payment_id}',[ExpensesController::class,'expense_payments_update'])->name('expense-payments.update');
         Route::resource('sales', SalesController::class);
         Route::resource('employeeSales', EmployeesSalesController::class);
         Route::resource('clients', ClientsController::class);
@@ -64,6 +71,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('exportExpenses',[ ExpensesController::class,'exportExpenses'])->name('expenses.export');
         Route::post('exportEmployeeSales',[ EmployeesSalesController::class,'exportEmployeeSales'])->name('employeeSales.export');
         Route::post('exportClients',[ ClientsController::class,'exportClients'])->name('clients.export');
+        Route::post('ExpensePayments',[ExpensesController::class,'exportExpensePayments'])->name('ExpensePayments.export');
+        Route::post('ExportDepartments',[DepartmentsExpensesController::class,'departments_export'])->name('departments.export');
+
         Route::post('exportClientSales',[ ClientsSalesController::class,'exportClientSales'])->name('clientSales.export');
         Route::post('exportEmployeeSalaries',[ EmployeesSalariesController::class,'exportEmployeeSalaries'])->name('employeeSalaries.export');
         Route::post('exportEmployeeAdvances',[ EmployeesAdvancesController::class,'exportEmployeeAdvances'])->name('employeeAdvances.export');

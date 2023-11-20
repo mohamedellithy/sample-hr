@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Expense;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Support\Facades\DB;
 
 class ExportExpense implements FromCollection ,WithHeadings
 {
@@ -28,18 +29,23 @@ class ExportExpense implements FromCollection ,WithHeadings
     {
         $expenses = Expense::query();
 
+        $expenses->with('department_sub:department_name','department_main:department_name');
         $expenses->when($this->search != null, function ($q){
-            return $q->where('section','like','%'.$this->search.'%')
-            ->orWhere('sub_service','like','%'.$this->search.'%')
+            return $q->whereHas('department_main',function($query){
+                $query->where('department_expenses.department_name','like','%'.$this->search.'%');
+            })
+            ->orWhereHas('department_sub',function($query){
+                $query->where('department_expenses.department_name','like','%'.$this->search.'%');
+            })
             ->orWhere('bill_no','like','%'.$this->search.'%')
             ->orWhere('supplier','like','%'.$this->search.'%');
         });
 
 
         $expenses->when($this->filter  == 'sort_asc', function ($q) {
-            return $q->orderBy('created_at', 'asc');
+            return $q->orderBy('expenses.created_at', 'asc');
         },function ($q) {
-            return $q->orderBy('created_at', 'desc');
+            return $q->orderBy('expenses.created_at', 'desc');
         });
 
 
@@ -50,17 +56,21 @@ class ExportExpense implements FromCollection ,WithHeadings
             $expenses->whereBetween('expense_date',[$from,$to]);
         }
 
+        $expenses->Join('expenses_payments','expenses_payments.expense_id','=','expenses.id');
+        $expenses->LeftJoin('department_expenses as sections','sections.id','=','expenses.section');
+        $expenses->LeftJoin('department_expenses as sub_services','sub_services.id','=','expenses.sub_service');
+
         return $expenses->select(
-            'section',
-            'sub_service',
+            'sections.department_name as section',
+            'sub_services.department_name as sub_service',
             'bill_no',
             'supplier',
             'amount',
-            'paid_amount',
-            'pending_amount',
+            DB::raw('sum(expenses_payments.value) as paid_amount'),
+            DB::raw('sum(expenses.amount - expenses_payments.value) as pending_amount'),
             'expense_description',
             'expense_date'
-        )->get();
+        )->groupby('expenses.id')->get();
     }
 
     public function headings(): array

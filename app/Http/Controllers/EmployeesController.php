@@ -83,9 +83,13 @@ class EmployeesController extends Controller
             'salary',
             'passport_no',
             'birthday',
+            'citizen_expiry',
+            'citizen_no',
             'passport_expiry',
             'join_date'
         ]));
+
+        
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
     }
@@ -131,7 +135,9 @@ class EmployeesController extends Controller
             'passport_no' => 'required',
             'birthday'    => 'required|date',
             'passport_expiry' => 'required|date',
-            'join_date' => 'required|date',
+            'citizen_expiry'  => 'required|date',
+            'citizen_no'      => 'required',
+            'join_date'       => 'required|date',
         ],[
             'required' => 'هذا الحقل مطلوب',
             'unique'=>'هذا الاسم موجود سابقا',
@@ -145,6 +151,8 @@ class EmployeesController extends Controller
             'passport_no',
             'birthday',
             'passport_expiry',
+            'citizen_expiry',
+            'citizen_no',
             'join_date'
         ]));
         flash('تم التعديل بنجاح', 'warning');

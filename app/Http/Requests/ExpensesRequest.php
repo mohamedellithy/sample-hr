@@ -30,8 +30,6 @@ class ExpensesRequest extends FormRequest
             'bill_no'     => 'required',
             'supplier'    => 'required',
             'amount'      => 'required|numeric',
-            'paid_amount' => 'required|numeric',
-            'pending_amount' => 'required|numeric',
             'expense_description' => 'required',
             'expense_date' => 'required|date'
         ];

@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('nationality');
             $table->double('salary',8, 3);
-            $table->string('passport_no');
             $table->date('birthday');
-            $table->date('passport_expiry');
+            $table->string('passport_no')->nullable();
+            $table->date('passport_expiry')->nullable();
+            $table->string('citizen_no')->nullable();
+            $table->date('citizen_expiry')->nullable();
             $table->date('join_date');
             $table->timestamps();
         });

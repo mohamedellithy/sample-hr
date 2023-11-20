@@ -41,13 +41,13 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
             if($employee){
 
 
-                if (is_string(trim($row['date']))) {
+                if (is_string($row['date'])) {
                     $attendanceDate = Carbon::parse($row['date'])->format('Y-m-d');
                 }else {
-                    $attendanceDate =Date::excelToDateTimeObject(trim($row['date']))->format('Y-m-d');
+                    $attendanceDate =Date::excelToDateTimeObject($row['date'])->format('Y-m-d');
                 }
 
-             
+
 
                   // delete EmployeeAttendance if exist
                $attendance = EmployeeAttendance::where('employee_id', $employee->id)
@@ -59,10 +59,10 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
                     $attendance->delete();
                 }
 
-                if (is_float(trim($row['clock_in'])) || is_double(trim($row['clock_in']))) {
+                if (is_float($row['clock_in']) || is_double($row['clock_in'])) {
                     $row['clock_in'] =  Date::excelToDateTimeObject($row['clock_in'])->format('H:i:s');
                 }
-                if (is_float(trim($row['clock_out'])) || is_double(trim($row['clock_out']))) {
+                if (is_float($row['clock_out']) || is_double($row['clock_out'])) {
                     $row['clock_out'] =  Date::excelToDateTimeObject($row['clock_out'])->format('H:i:s');
                 }
 
@@ -71,8 +71,8 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
                 $request->replace([
                 'employee_id'    => $employee->id,
                 'attendance_date'=> $attendanceDate,
-                'clock_in'       => trim($row['clock_in']),
-                'clock_out'      => trim($row['clock_out'])
+                'clock_in'       => $row['clock_in'],
+                'clock_out'      => $row['clock_out']
             ]);
 
 
@@ -82,8 +82,8 @@ class ImportEmployeeAttendances implements ToModel ,WithHeadingRow
             return new EmployeeAttendance([
                 'employee_id'    => $employee->id,
                 'attendance_date'=> $attendanceDate,
-                'clock_in'       => trim($row['clock_in']),
-                'clock_out'      => trim($row['clock_out']),
+                'clock_in'       => $row['clock_in'],
+                'clock_out'      => $row['clock_out'],
             ]);
 
             }

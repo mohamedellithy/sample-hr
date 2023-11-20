@@ -94,23 +94,22 @@ $service_filter = request()->query('service_filter') ?: null;
                                 <td>
                                    {{  $expense->bill_no }}
                                 </td>
-
                                 <td class="width-16">
-                                        {{ $expense->section }}
+                                        {{ $expense->department_main ? $expense->department_main->department_name : '' }}
                                 </td>
 
                                 <td class="width-16">
-                                    {{ $expense->sub_service }}
+                                    {{ $expense->department_sub ? $expense->department_sub->department_name : '' }}
                             </td>
                              
                                 <td>
                                     {{ formate_price($expense->amount) }}
                                 </td>
                                 <td>
-                                    {{ formate_price($expense->paid_amount) }}
+                                    {{ formate_price($expense->payments_sum_value) }}
                                 </td>
                                 <td>
-                                    {{ formate_price($expense->pending_amount) }}
+                                    {{ formate_price($expense->amount - $expense->payments_sum_value) }}
                                 </td>
                                 <td>
                                     {{ $expense->supplier }}
@@ -122,16 +121,19 @@ $service_filter = request()->query('service_filter') ?: null;
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <a class="crud" href="{{ route('admin.expenses.show',$expense->id) }}">
+                                        <a class="crud" title="تنزيل دفعات" href="{{ route('admin.expenses.payments',$expense->id) }}">
+                                            <i class="fas fa-plus text-primary"></i>
+                                        </a>
+                                        <a class="crud" title="تفاصيل" href="{{ route('admin.expenses.show',$expense->id) }}">
                                             <i class="fas fa-eye text-info"></i>
                                         </a>
-                                        <a href="{{ route('admin.expenses.edit',$expense->id) }}" class="crud edit-product" data-product-id="{{ $expense->id }}">
+                                        <a href="{{ route('admin.expenses.edit',$expense->id) }}" title="تعديل " class="crud edit-product" data-product-id="{{ $expense->id }}">
                                             <i class="fas fa-edit text-primary"></i>
                                         </a>
                                         <form  method="post" action="{{ route('admin.expenses.destroy', $expense->id) }}">
                                             @csrf
                                             @method('DELETE')
-                                            <a class="delete-item crud" data-expense-service="{{ $expense->service }}">
+                                            <a class="delete-item crud" title="حذف" data-expense-service="{{ $expense->service }}">
                                                 <i class="fas fa-trash-alt  text-danger"></i>
                                             </a>
                                         </form>

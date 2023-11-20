@@ -14,9 +14,19 @@ class Expense extends Model
         'bill_no',
         'supplier',
         'amount',
-        'paid_amount',
-        'pending_amount',
         'expense_description',
         'expense_date'
     ];
+
+    public function payments(){
+        return $this->hasMany(ExpensesPayment::class,'expense_id','id');
+    }
+
+    public function department_main(){
+        return $this->belongsTo(DepartmentExpenses::class,'section','id');
+    }
+
+    public function department_sub(){
+        return $this->belongsTo(DepartmentExpenses::class,'sub_service','id');
+    }
 }

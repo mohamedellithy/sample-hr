@@ -67,6 +67,24 @@
 
                         <div class="row mt-3">
                             <div class="col">
+                                <label class="form-label" for="basic-default-company">رقم المدني</label>
+                                <input type="text" value="{{ $employee->citizen_no ?: old('citizen_no') }}" class="form-control" placeholder="ادخل  رقم الباسبور"name="citizen_no" required/>
+                                @error('citizen_no')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="col">
+                                <label class="form-label" for="basic-default-company">تاريخ انتهاء الرقم المدنى</label>
+                                <input type="date" value="{{ $employee->citizen_expiry ?: old('citizen_expiry') }}" class="form-control" placeholder="ادخل  تاريخ الميلاد" name="citizen_expiry" required/>
+                                @error('citizen_expiry')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col">
                                 <label class="form-label" for="basic-default-company">تاريخ انتهاء الباسبور</label>
                                 <input type="date" value="{{ $employee->passport_expiry }}" class="form-control" placeholder="ادخل  رقم الباسبور"name="passport_expiry" required/>
                                 @error('passport_expiry')

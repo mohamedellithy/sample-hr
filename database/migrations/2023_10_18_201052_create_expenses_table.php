@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->string('section');
-            $table->string('sub_service');
+            $table->unsignedBigInteger('section')->nullable();
+            $table->foreign('section')->references('id')->on('department_expenses')->onDelete('set null');
+            $table->unsignedBigInteger('sub_service')->nullable();
+            $table->foreign('sub_service')->references('id')->on('department_expenses')->onDelete('set null');
             $table->text('supplier')->nullable();
             $table->text('bill_no');
             $table->date('expense_date');
             $table->text('expense_description')->nullable();
             $table->double('amount',8, 3)->default(0);
-            $table->double('paid_amount',8, 3)->default(0);
-            $table->double('pending_amount',8, 3)->default(0);
             $table->timestamps();
         });
     }

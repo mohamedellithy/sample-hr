@@ -9,7 +9,15 @@ class Employee extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name','nationality','salary','passport_no','birthday','passport_expiry','join_date',
+        'name',
+        'nationality',
+        'salary',
+        'passport_no',
+        'birthday',
+        'passport_expiry',
+        'join_date',
+        'citizen_no',
+        'citizen_expiry'
     ];
 
     public function advances()
