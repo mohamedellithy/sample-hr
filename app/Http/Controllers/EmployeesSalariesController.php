@@ -186,10 +186,18 @@ class EmployeesSalariesController extends Controller
     }
 
     public function employee_add_salary(Request $request,$employee_id){
+        list($year,$month) = explode('-',request()->input('monthes'));
         EmployeePaid::create([
             'employee_id' => $employee_id,
             'month'       => $request->input('monthes'),
             'paid'        => $request->input('value')
+        ]);
+
+        EmployeeSale::where([
+            'employee_id' => $employee_id,
+        ])->whereMonth('sale_date',$month)
+        ->whereYear('sale_date',$year)->update([
+            'status' => 'paid'
         ]);
 
         return back();
