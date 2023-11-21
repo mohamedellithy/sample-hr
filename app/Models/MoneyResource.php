@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ClientSale extends Model
+class MoneyResource extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'client_id','amount','sale_date',
+        'value',
+        'type',
+        'resource_date',
+        'reference_id'
     ];
 
-    public function client()
-    {
-        return $this->belongsTo(Client::class);
-    }
+
 }

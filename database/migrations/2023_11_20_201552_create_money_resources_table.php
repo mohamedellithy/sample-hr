@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('client_sales', function (Blueprint $table) {
+        Schema::create('money_resources', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('client_id')->nullable();
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-            $table->double('amount',8, 3)->default(0);
-            $table->date('sale_date');
+            $table->double('value',8,3);
+            $table->enum('type',['balance','bank_withdraw','outgoing_resource','sales','advances'])->default('balance');
+            $table->date('resource_date');
+            $table->integer('reference_id')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('client_sales');
+        Schema::dropIfExists('money_resources');
     }
 };

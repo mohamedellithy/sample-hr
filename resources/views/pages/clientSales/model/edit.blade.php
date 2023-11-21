@@ -23,8 +23,8 @@
 
                              <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> المبلغ</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="amount" min="0" value="{{  $clientSale->amount }}" required />
+                                <input type="number" class="form-control" id="amount"
+                                    name="amount" min="0" step=".001" value="{{  $clientSale->amount }}" required />
                                 @error('amount')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
@@ -33,14 +33,6 @@
                         </div>
 
                         <div class="row mt-2">
-                            <div class="mb-3 col-md-5">
-                                <label class="form-label" for="basic-default-company"> آجل</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="remained" min="0" value="{{  $clientSale->remained }}" required />
-                                @error('remained')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
                           <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> التاريخ</label>
                                 <input type="date" class="form-control" id="basic-default-fullname"
@@ -62,3 +54,10 @@
         <button type="submit" class="btn btn-danger btn-sm">تحديث </button>
     </div>
 </form>
+<script>
+    jQuery('#amount,#paid').keyup(function(){
+        let amount = jQuery('#amount').val();
+        let paid_amount = jQuery('#paid').val();
+        jQuery('#remained').val(Number(amount) - Number(paid_amount)); 
+    });
+</script>

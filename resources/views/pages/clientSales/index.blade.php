@@ -35,7 +35,7 @@ $client_filter = request()->query('client_filter') ?: null;
                             </div>
                           <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company">قيمة الفاتورة</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
+                                <input type="number" class="form-control" id="amount"
                                     name="amount" min="0" step=".001" value="{{ old('amount') }}" required />
                                 @error('amount')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
@@ -47,7 +47,7 @@ $client_filter = request()->query('client_filter') ?: null;
                         <div class="row mt-2">
                             <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> المدفوع</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
+                                <input type="number" class="form-control" id="paid"
                                     name="paid" min="0" step=".001" value="{{ old('paid') }}" required />
                                 @error('paid')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
@@ -55,8 +55,8 @@ $client_filter = request()->query('client_filter') ?: null;
                             </div>
                             <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> الغير مدفوع</label>
-                                <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="remained" min="0" step=".001" value="{{ old('remained') }}" required />
+                                <input type="number" class="form-control" id="remained"
+                                    name="remained" min="0" step=".001" value="{{ old('remained') }}" readonly/>
                                 @error('remained')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
@@ -89,22 +89,23 @@ $client_filter = request()->query('client_filter') ?: null;
 
                <div class="d-flex justify-content-between" style="background-color: #eee;">
                     <form id="filter-data" method="get" class=" justify-content-between">
-                        <div class="nav-item d-flex align-items-center m-2">
-                            <select name="client_filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control form-select2">
-                                <option value="">فلتر العميل</option>
-                                @foreach (  $clients as  $client)
-                                    <option value="{{ $client->id }}" @isset($client_filter) @if ($client_filter == $client->id ) selected @endif @endisset>{{  $client->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                        <div class="nav-item d-flex align-items-center m-2">
-                            <label style="padding: 0px 5px;color: #636481;">المعروض</label>
-                            <select name="rows" onchange="document.getElementById('filter-data').submit()" id="largeSelect" class="form-select form-select-sm">
-                                    <option >10</option>
-                                    <option value="50" @isset($rows) @if ($rows=='50' ) selected @endif @endisset>50</option>
-                                    <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
-                            </select>
+                        <div class="d-flex justify-content-between" style="background-color: #eee;">
+                            <div class="nav-item d-flex align-items-center m-2">
+                                <select name="client_filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control form-select2">
+                                    <option value="">فلتر العميل</option>
+                                    @foreach (  $clients as  $client)
+                                        <option value="{{ $client->id }}" @isset($client_filter) @if ($client_filter == $client->id ) selected @endif @endisset>{{  $client->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="nav-item d-flex align-items-center m-2">
+                                <label style="padding: 0px 5px;color: #636481;">المعروض</label>
+                                <select name="rows" onchange="document.getElementById('filter-data').submit()" id="largeSelect" class="form-select form-select-sm">
+                                        <option >10</option>
+                                        <option value="50" @isset($rows) @if ($rows=='50' ) selected @endif @endisset>50</option>
+                                        <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                     <form  method="post" action="{{ route('admin.clientSales.export') }}">
@@ -193,11 +194,17 @@ jQuery('.edit-clientSale').click(function(){
     });
 
 
-   jQuery('.delete-item').click(function(){
-
-       if(confirm('هل متأكد من اتمام حذف')){
+    jQuery('.delete-item').click(function(){
+        if(confirm('هل متأكد من اتمام حذف')){
            jQuery(this).parents('form').submit();
-       }
-   });
+        }
+    });
+
+    jQuery('#amount,#paid').keyup(function(){
+        let amount = jQuery('#amount').val();
+        let paid_amount = jQuery('#paid').val();
+        jQuery('#remained').val(Number(amount) - Number(paid_amount)); 
+    });
+
 </script>
 @endpush

@@ -15,6 +15,7 @@ use App\Http\Controllers\EmployeesAdvancesController;
 use App\Http\Controllers\EmployeesSalariesController;
 use App\Http\Controllers\EmployeeAttendanceController;
 use App\Http\Controllers\DepartmentsExpensesController;
+use App\Http\Controllers\MoneyResourceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,12 +59,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('clients', ClientsController::class);
         Route::resource('clientSales', ClientsSalesController::class);
         Route::post('client-payemnts',[ClientsSalesController::class,'client_payemnts'])->name('client-payemnts.store');
+        Route::get('client-payments/{client_id}',[ClientsSalesController::class,'get_client_payments'])->name('client-payments.get');
+        
+        Route::get('edit-client-payments/{payment_id}',[ClientsSalesController::class,'edit_client_payments'])->name('clientPayment.edit');
+        Route::put('update-client-payments/{payment_id}',[ClientsSalesController::class,'update_client_payments'])->name('clientPayment.update');
+        Route::delete('destroy-client-payments/{payment_id}',[ClientsSalesController::class,'destroy_client_payments'])->name('clientPayment.destroy');
+
         Route::resource('employeeAdvances', EmployeesAdvancesController::class);
         Route::resource('employeeSalaries', EmployeesSalariesController::class);
         Route::resource('employeeAttendances', EmployeeAttendanceController::class);
         Route::post('add-salary/{employee_id}',[EmployeesSalariesController::class,'employee_add_salary'])->name('employee.add-salary');
         Route::post('print-salary-invoice/{id}',[InvoicesPdfController::class,'download_pdf_salary'])->name('print-salary-invoice');
         Route::resource('shifts', ShiftController::class);
+        Route::resource('money-resources',MoneyResourceController::class);
 
 
         Route::post('exportEployee',[ EmployeesController::class,'exportEployee'])->name('employees.export');
@@ -73,7 +81,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('exportClients',[ ClientsController::class,'exportClients'])->name('clients.export');
         Route::post('ExpensePayments',[ExpensesController::class,'exportExpensePayments'])->name('ExpensePayments.export');
         Route::post('ExportDepartments',[DepartmentsExpensesController::class,'departments_export'])->name('departments.export');
+        Route::post('moneyResources',[MoneyResourceController::class,'money_resources_export'])->name('money-resources.export');
 
+        Route::post('exportClientPayments',[ClientsSalesController::class,'exportClientPayments'])->name('clientPayments.export');
+        
         Route::post('exportClientSales',[ ClientsSalesController::class,'exportClientSales'])->name('clientSales.export');
         Route::post('exportEmployeeSalaries',[ EmployeesSalariesController::class,'exportEmployeeSalaries'])->name('employeeSalaries.export');
         Route::post('exportEmployeeAdvances',[ EmployeesAdvancesController::class,'exportEmployeeAdvances'])->name('employeeAdvances.export');

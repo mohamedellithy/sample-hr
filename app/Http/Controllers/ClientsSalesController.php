@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\ClientSale;
 use Illuminate\Http\Request;
 use App\Exports\ExportClientSales;
+use App\Exports\ExportClientPayments;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use App\Models\ClientPayment;
@@ -33,14 +34,12 @@ class ClientsSalesController extends Controller
             $per_page = $request->query('rows');
         endif;
 
-        $clientSales = $clientSales->leftJoin('client_sales','clients.id','=','client_sales.client_id')
+        $clientSales = $clientSales->Join('client_sales','clients.id','=','client_sales.client_id')
         ->select(
             DB::raw('sum(amount)   as total_amount'),
-            DB::raw('sum(paid)     as total_paid'),
-            DB::raw('sum(remained) as total_remained'),
             'clients.name','clients.id'
         )->groupBy('clients.name','clients.id')->paginate($per_page);
-        
+
         return view('pages.clientSales.index', compact('clientSales','clients'));
     }
 
@@ -54,16 +53,6 @@ class ClientsSalesController extends Controller
      }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -74,8 +63,6 @@ class ClientsSalesController extends Controller
         $request->validate([
             'client_id' => 'required',
             'amount' => ['required','numeric'],
-            'paid'     => ['required','numeric'],
-            'remained' => ['required','numeric'],
             'sale_date' => ['required','date']
         ],[
             'required' => 'هذا الحقل مطلوب',
@@ -86,10 +73,14 @@ class ClientsSalesController extends Controller
         ClientSale::create($request->only([
             'client_id',
             'amount',
-            'paid',
-            'remained',
             'sale_date',
         ]));
+
+        ClientPayment::create([
+            'client_id' => $request->input('client_id'),
+            'amount'    => $request->input('paid')
+        ]);
+
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
        }
@@ -104,6 +95,7 @@ class ClientsSalesController extends Controller
     {
         //
         $clientSales = ClientSale::query();
+        $clientSales = ClientSale::where('client_id',$id);
         $per_page = 10;
 
 
@@ -137,6 +129,47 @@ class ClientsSalesController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function get_client_payments(Request $request,$client_id)
+    {
+        //
+        $clientPayments = ClientPayment::query();
+        $clientPayments = ClientPayment::where('client_id',$client_id);
+        $per_page = 10;
+        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+            $result = explode('-',$request->get('datefilter'));
+            $from = Carbon::parse($result[0])->format('Y-m-d');
+            $to= Carbon::parse($result[1])->format('Y-m-d');
+            $clientPayments->whereBetween('created_at',[$from,$to]);
+        }
+
+        if ($request->has('client_filter') and $request->get('client_filter') != "") {
+
+            $clientPayments->where('client_id',$request->get('client_filter'));
+        }
+
+
+        $clientPayments->when(request('filter') == 'sort_asc', function ($q) {
+            return $q->orderBy('created_at', 'asc');
+        },function ($q) {
+            return $q->orderBy('created_at', 'desc');
+        });
+
+        if ($request->has('rows')):
+            $per_page = $request->query('rows');
+        endif;
+
+        $clientPayments   = $clientPayments->paginate($per_page);
+        $client        = Client::find($client_id);
+        $ClientSale    = ClientSale::where('client_id',$client_id)->get();
+        return view('pages.clientSales.payments', compact('clientPayments','client','ClientSale'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -153,6 +186,30 @@ class ClientsSalesController extends Controller
         ]);
     }
 
+    public function edit_client_payments($payment_id){
+        $clientPayment   = ClientPayment::where('id',$payment_id)->first();
+        return response()->json([
+            'status' => true,
+            'view'   => view('pages.clientSales.model.payment', compact('clientPayment'))->render()
+        ]);
+    }
+
+    public function update_client_payments(Request $request,$payment_id){
+        ClientPayment::where('id',$payment_id)->update([
+            'amount' => $request->input('amount')
+        ]);
+
+        flash('تم تحديث بنجاح', 'success');
+        return back();
+    }
+
+    public function destroy_client_payments($payment_id){
+        ClientPayment::where('id',$payment_id)->delete();
+        flash('تم الحذف بنجاح', 'success');
+        return back();
+    }
+//update_client_payments
+
     /**
      * Update the specified resource in storage.
      *
@@ -165,8 +222,6 @@ class ClientsSalesController extends Controller
         $request->validate([
             'client_id' => 'required',
             'amount'    => ['required','numeric'],
-            'paid'      => ['required','numeric'],
-            'remained'  => ['required','numeric'],
             'sale_date' => ['required','date']
         ],[
             'required' => 'هذا الحقل مطلوب',
@@ -177,10 +232,9 @@ class ClientsSalesController extends Controller
         ClientSale::where('id', $id)->update($request->only([
             'client_id',
             'amount',
-            'paid',
-            'remained',
             'sale_date',
         ]));
+
         flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
@@ -202,6 +256,12 @@ class ClientsSalesController extends Controller
         ]);
 
         return back();
+    }
+
+    public function exportClientPayments(Request $request){
+        return Excel::download(new ExportClientPayments($request->search,$request->datefilter,$request->filter),'clients-payments.xlsx');
+
+        return redirect()->back();
     }
 
     /**

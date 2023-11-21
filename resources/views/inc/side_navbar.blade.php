@@ -69,6 +69,22 @@
             </ul>
         </li>
 
+        <!-- expenses  -->
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.money-resources.index']) }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class='menu-icon tf-icons bx bxs-package'></i>
+                <div data-i18n="Layouts">الموارد</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.money-resources.index']) }}">
+                    <a href="{{ route('admin.money-resources.index') }}" class="menu-link">
+                        <div data-i18n="Without navbar">عرض</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
              <!-- sales  -->
         <li class="menu-item {{ IsActiveOnlyIf(['admin.sales.index']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -118,14 +134,14 @@
         </li>
 
               <!-- clientSales  -->
-        <li class="menu-item {{ IsActiveOnlyIf(['admin.clientSales.index','admin.clientSales.show']) }}">
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.clientSales.index','admin.clientSales.show','admin.client-payments.get']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class='menu-icon tf-icons bx bxs-package'></i>
                 <div data-i18n="Layouts">مبيعات العملاء</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ IsActiveOnlyIf(['admin.clientSales.index','admin.clientSales.show']) }}">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.clientSales.index','admin.clientSales.show','admin.client-payments.get']) }}">
                     <a href="{{ route('admin.clientSales.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">عرض</div>
                     </a>

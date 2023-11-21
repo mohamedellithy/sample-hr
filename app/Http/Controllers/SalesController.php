@@ -8,7 +8,7 @@ use App\Exports\ExportSale;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaleRequest;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\MoneyResource;
 class SalesController extends Controller
 {
     /**
@@ -73,13 +73,20 @@ class SalesController extends Controller
      */
     public function store(SaleRequest $request)
     {
-        Sale::create($request->only([
+        $sale = Sale::create($request->only([
             'cash',
             'bank',
             'credit_sales',
-            'sale_date',
-
+            'sale_date'
         ]));
+
+        MoneyResource::create([
+            'value'         => $request->input('cash'),
+            'type'          => 'sales',
+            'resource_date' => $request->input('sale_date'),
+            'reference_id'  => $sale->id
+        ]);
+
         flash('تم الاضافه بنجاح', 'success');
         return redirect()->back();
     }
@@ -123,8 +130,18 @@ class SalesController extends Controller
             'cash',
             'bank',
             'credit_sales',
-            'sale_date',
+            'sale_date'
         ]));
+
+        MoneyResource::where([
+            'reference_id'  => $id,
+            'type'          => 'sales'
+        ])->update([
+            'value'         => $request->input('cash'),
+            'resource_date' => $request->input('sale_date')
+        ]);
+
+
         flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
     }
@@ -139,6 +156,12 @@ class SalesController extends Controller
     {
         Sale::find($id);
         Sale::destroy($id);
+        
+        MoneyResource::where([
+            'reference_id'  => $id,
+            'type'          => 'sales'
+        ])->delete();
+
         flash('تم الحذف بنجاح', 'error');
         return redirect()->back();
     }

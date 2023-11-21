@@ -68,12 +68,12 @@ $total_payment = $client->payments()->sum('amount');
                     </li>
                 </ul>
            </div>
-           <h5 class="card-header">
+            <h5 class="card-header">
                 عرض مبيعات ( {{ $client->name }} ) 
                 <br/>
                 <br/>
-                <a href="{{ route('admin.client-payments.get',['client_id' => $client->id]) }}" class="btn btn-danger btn-sm">
-                    عرض المدفوعات
+                <a href="{{ route('admin.clientSales.show',$client->id) }}" class="btn btn-danger btn-sm">
+                    عرض الفواتير
                 </a>
             </h5>
             <div class="card-header py-3 ">
@@ -100,7 +100,7 @@ $total_payment = $client->payments()->sum('amount');
                             </select>
                         </div>
                                 </form>
-                    <form  method="post" action="{{ route('admin.clientSales.export') }}">
+                    <form  method="post" action="{{ route('admin.clientPayments.export') }}">
                             @csrf
                             <div class="nav-item d-flex align-items-center m-2">
                             <input type="hidden" name="client_filter" value="{{ $client_filter }}">
@@ -118,37 +118,37 @@ $total_payment = $client->payments()->sum('amount');
                         <tr class="table-dark">
                            <th>#</th>
                             <th>العميل</th>
-                            <th>قيمة الفواتير</th>
+                            <th>قيمة المدفوع</th>
                             <th>التاريخ</th>
                             <th></th>
                         </tr>
                    </thead>
                    <tbody class="table-border-bottom-0">
-                        @foreach ($clientSales as $clientSale)
+                        @foreach ($clientPayments as $clientPayment)
                             <tr>
                                 <td>
                                    {{$loop->index + 1 }}
                                 </td>
                                 <td>
-                                    @if ($clientSale->client)
-                                    {{  $clientSale->client->name }}
+                                    @if ($clientPayment->client)
+                                    {{  $clientPayment->client->name }}
                                     @endif
                                 </td>
                                 <td>
-                                    {{  formate_price($clientSale->amount )}}
+                                    {{  formate_price($clientPayment->amount )}}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">
-                                    {{ $clientSale->sale_date }}
+                                    {{ $clientPayment->created_at }}
                                      </span>
                                 </td>
                                 <td>
                                     <div class="d-flex">
 
-                                        <a  class="crud edit-clientSale" data-clientSale-id="{{ $clientSale->id }}">
+                                        <a  class="crud edit-clientPayment" data-clientPayment-id="{{ $clientPayment->id }}">
                                             <i class="fas fa-edit text-primary"></i>
                                         </a>
-                                        <form  method="post" action="{{ route('admin.clientSales.destroy', $clientSale->id) }}">
+                                        <form  method="post" action="{{ route('admin.clientPayment.destroy', ['payment_id' => $clientPayment->id]) }}">
                                             @csrf
                                             @method('DELETE')
                                             <a class="delete-item crud">
@@ -164,7 +164,7 @@ $total_payment = $client->payments()->sum('amount');
            </div>
            <br/><br/>
            <div class="d-flex flex-row justify-content-center">
-               {{ $clientSales->links() }}
+               {{ $clientPayments->links() }}
            </div>
        </div>
    </div>
@@ -175,11 +175,11 @@ $total_payment = $client->payments()->sum('amount');
 
 <script>
 
-jQuery('.edit-clientSale').click(function(){
-        let data_edit = jQuery(this).attr('data-clientSale-id');
+jQuery('.edit-clientPayment').click(function(){
+        let data_edit = jQuery(this).attr('data-clientPayment-id');
         let Popup = jQuery('#modalCenter').modal('show');
-        let url = "{{ route('admin.clientSales.edit',':id') }}";
-        url = url.replace(':id',data_edit);
+        let url = "{{ route('admin.clientPayment.edit',':payment_id') }}";
+        url = url.replace(':payment_id',data_edit);
         $.ajax({
             url:url,
             type:"GET",
