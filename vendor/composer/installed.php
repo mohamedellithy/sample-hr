@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'b91944c0967a1b364750d14c73953aa47e89da15',
+        'reference' => '99693f13558c6f2d36b67e79e0cc263135f5b646',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -412,6 +412,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'khaled.alshamaa/ar-php' => array(
+            'pretty_version' => 'v6.3.4',
+            'version' => '6.3.4.0',
+            'reference' => '36550a0d805dc50fcede0132cd8b83c80fe1fd6c',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../khaled.alshamaa/ar-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
             'replaced' => array(
@@ -430,7 +439,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'b91944c0967a1b364750d14c73953aa47e89da15',
+            'reference' => '99693f13558c6f2d36b67e79e0cc263135f5b646',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

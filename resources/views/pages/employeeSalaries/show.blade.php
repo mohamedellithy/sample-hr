@@ -58,20 +58,20 @@
                                     </td>
                                     <td>
                                         {{  $employee->salary }}
-                                        @php $net_salary += $employee->salary @endphp
+                                        @php $net_salary = $employee->salary @endphp
                                     </td>
                                     <td>
                                         {{ $employee->countAttends }}
                                     </td>
                                     <td>
-                                        {{   $over_time   = $employee->sumOver_time + abs($calculateDayWage > 0 ? $calculateDayWage : 0) }}
-                                        @php $net_salary += $over_time @endphp
+                                        {{   $over_time   = $employee->sumOver_time }}
                                     </td>
                                     <td>
-                                        {{  $net_salary }}
+                                        {{  abs($calculateDayWage) + $over_time }}
+                                        @php $net_salary = abs($calculateDayWage) + $over_time @endphp
                                     </td>
                                     <td>
-                                        {{   $deduction_delay = $employee->sumDeduction + abs($calculateDayWage < 0 ? $calculateDayWage : 0) }}
+                                        {{   $deduction_delay = $employee->sumDeduction }}
                                         @php $net_deduction  += $deduction_delay  @endphp
                                     </td>
                                     <td>
@@ -89,24 +89,30 @@
                                         {{ $net_salary = $net_salary - $net_deduction }}
                                     </td>
                                     <td>
-                                        {{ $employee->sumPaid ?: 0 }}
+                                        {{ $employee->sumPaid ? round($employee->sumPaid,3): 0 }}
                                     </td>
                                     <td>
-                                        {{ $net_salary - $employee->sumPaid }}
+                                        {{ round($net_salary - $employee->sumPaid,3) }}
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    @if($employee->sumPaid == 0)
+                    @if(($net_salary -$employee->sumPaid) != 0)
                         <form method="post" action="{{ route('admin.employee.add-salary',[
                             'employee_id' => $employee->id
                         ]) }}">
                             @csrf
                             <input name="monthes" type="hidden" value="{{ $employee->year_path.'-'.$employee->month_path.'-01' }}" />
-                            <input name="value" type="hidden" value="{{ $net_salary - $employee->sumPaid }}" />
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="basic-default-company"> المبلغ المطلوب للدفع</label>
+                                <input type="number" name="value" max="" step=".001" value="{{ round($net_salary - $employee->sumPaid,3) }}" class="form-control" placeholder="المبلغ" required>
+                                @error('year')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
                             <button type="submit" class="btn btn-danger btn-sm">
-                                تسديد المرتب
+                                تسديد المبلغ المطلوب
                             </button>
                         </form>
                     @endif
@@ -156,7 +162,7 @@
                                 <tbody>
                                     <tr>
                                         <td style="color:black !important;border:2px solid black">
-                                            {{ $employee->sumPaid  - intval($employee->sumPaid)}}
+                                            {{ str_replace('0.','',($employee->sumPaid  - intval($employee->sumPaid))) }}
                                         </td>
                                         <td style="color:black !important;border:2px solid black">
                                             {{ intval($employee->sumPaid) }}
@@ -180,7 +186,13 @@
                             <li style="list-style: none;font-weight: bold;color:black;">
                                 مبلغ و قدرة ريال عمانى
                                 <strong style="padding-right:10%;color:rgb(104 104 104);">
-                                    {{ $employee->name }}
+                                    @php
+                                        $Arabic = new \ArPHP\I18N\Arabic();
+                                        $Arabic->setNumberFeminine(10);
+                                        $Arabic->setNumberFormat(10);
+                                        $salaray = $Arabic->int2str($employee->sumPaid);
+                                    @endphp
+                                    {{ $salaray }}
                                 </strong>
                                 <label style="float:left">
                                     :The Sum of Riyals Omani
@@ -198,6 +210,23 @@
                                 <hr style="margin-top: 2px;height: 2px;color: #706f6f;"/>
                             </li>
                         </ul>
+                        <p>تواريخ الدفعات</p>
+                        <table cellpadding="6" width="100%">
+                            <thead>
+                                <tr style="border:2px solid #eee">
+                                    <th style="border:2px solid #eee">المبلغ المدفوع</th>
+                                    <th style="border:2px solid #eee">تاريخ الدفعة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($employee_payments as $employee_payment)
+                                    <tr style="border:2px solid #eee">
+                                        <td style="border:2px solid #eee">{{ formate_price($employee_payment->paid) }}</td>
+                                        <td style="border:2px solid #eee">{{ $employee_payment->created_at }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                         <br/>
                         <ul style="display: flex;flex-wrap: nowrap;justify-content: space-between;">
                             <li style="list-style: none;font-weight: bold;">

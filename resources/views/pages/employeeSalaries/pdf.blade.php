@@ -150,7 +150,7 @@
                                                 <tbody>
                                                     <tr style="color:black !important;">
                                                         <td style="color:black !important;border:2px solid black">
-                                                            {{ $employee->sumPaid  - intval($employee->sumPaid)}}
+                                                            {{ str_replace('0.','',($employee->sumPaid  - intval($employee->sumPaid))) }}
                                                         </td>
                                                         <td style="color:black !important;border:2px solid black">
                                                             {{ intval($employee->sumPaid) }}
@@ -180,7 +180,13 @@
                                             مبلغ و قدرة ريال عمانى
                                         </td>
                                         <td style="padding-right:10%;color:black;">
-                                            {{ $employee->name }}
+                                            @php
+                                                $Arabic = new \ArPHP\I18N\Arabic();
+                                                $Arabic->setNumberFeminine(10);
+                                                $Arabic->setNumberFormat(10);
+                                                $salaray = $Arabic->int2str($employee->sumPaid);
+                                            @endphp
+                                            {{ $salaray }}
                                         </td>
                                         <td>
                                             <label style="float:left">

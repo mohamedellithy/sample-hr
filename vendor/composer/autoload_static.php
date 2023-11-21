@@ -199,6 +199,7 @@ class ComposerStaticInitfa8e1d19c38803c74d25c257f805120c
         ),
         'A' => 
         array (
+            'ArPHP\\I18N\\' => 11,
             'App\\' => 4,
         ),
     );
@@ -629,6 +630,10 @@ class ComposerStaticInitfa8e1d19c38803c74d25c257f805120c
         array (
             0 => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src',
         ),
+        'ArPHP\\I18N\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/khaled.alshamaa/ar-php/src',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -649,6 +654,7 @@ class ComposerStaticInitfa8e1d19c38803c74d25c257f805120c
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Exports\\ExportClientPayments' => __DIR__ . '/../..' . '/app/Exports/ExportClientPayments.php',
         'App\\Exports\\ExportClientSales' => __DIR__ . '/../..' . '/app/Exports/ExportClientSales.php',
         'App\\Exports\\ExportClients' => __DIR__ . '/../..' . '/app/Exports/ExportClients.php',
         'App\\Exports\\ExportEmployee' => __DIR__ . '/../..' . '/app/Exports/ExportEmployee.php',
@@ -658,6 +664,7 @@ class ComposerStaticInitfa8e1d19c38803c74d25c257f805120c
         'App\\Exports\\ExportEmployeeSales' => __DIR__ . '/../..' . '/app/Exports/ExportEmployeeSales.php',
         'App\\Exports\\ExportExpense' => __DIR__ . '/../..' . '/app/Exports/ExportExpense.php',
         'App\\Exports\\ExportExpensePayments' => __DIR__ . '/../..' . '/app/Exports/ExportExpensePayments.php',
+        'App\\Exports\\ExportMoneyResources' => __DIR__ . '/../..' . '/app/Exports/ExportMoneyResources.php',
         'App\\Exports\\ExportSale' => __DIR__ . '/../..' . '/app/Exports/ExportSale.php',
         'App\\Exports\\ExportShift' => __DIR__ . '/../..' . '/app/Exports/ExportShift.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
@@ -678,7 +685,7 @@ class ComposerStaticInitfa8e1d19c38803c74d25c257f805120c
         'App\\Http\\Controllers\\ExpensesController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExpensesController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\InvoicesPdfController' => __DIR__ . '/../..' . '/app/Http/Controllers/InvoicesPdfController.php',
-        'App\\Http\\Controllers\\MoneyResourcedController' => __DIR__ . '/../..' . '/app/Http/Controllers/MoneyResourcedController.php',
+        'App\\Http\\Controllers\\MoneyResourceController' => __DIR__ . '/../..' . '/app/Http/Controllers/MoneyResourceController.php',
         'App\\Http\\Controllers\\SalesController' => __DIR__ . '/../..' . '/app/Http/Controllers/SalesController.php',
         'App\\Http\\Controllers\\ShiftController' => __DIR__ . '/../..' . '/app/Http/Controllers/ShiftController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
@@ -722,6 +729,8 @@ class ComposerStaticInitfa8e1d19c38803c74d25c257f805120c
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Services\\CalculateHourSalaryService' => __DIR__ . '/../..' . '/app/Services/CalculateHourSalaryService.php',
         'App\\Services\\DeductionsAndOvertimeService' => __DIR__ . '/../..' . '/app/Services/DeductionsAndOvertimeService.php',
+        'App\\Services\\HandleSomeNumberService' => __DIR__ . '/../..' . '/app/Services/HandleSomeNumberService.php',
+        'ArPHP\\I18N\\Arabic' => __DIR__ . '/..' . '/khaled.alshamaa/ar-php/src/Arabic.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Barryvdh\\DomPDF\\Facade\\Pdf' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/Facade/Pdf.php',
         'Barryvdh\\DomPDF\\PDF' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/PDF.php',

@@ -141,9 +141,14 @@ class EmployeesSalariesController extends Controller
         ])->whereMonth('employee_paids.month',$month)
         ->whereYear('employee_paids.month',$year)->sum('paid');
 
+        $employee_payments = EmployeePaid::where([
+            'employee_id' => $id
+        ])->whereMonth('employee_paids.month',$month)
+        ->whereYear('employee_paids.month',$year)->get();
+
         $employee->month_path =  $month;
         $employee->year_path  =  $year;
-        return view('pages.employeeSalaries.show', compact('employee'));
+        return view('pages.employeeSalaries.show', compact('employee','employee_payments'));
     }
 
     /**

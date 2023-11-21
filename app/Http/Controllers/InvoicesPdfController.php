@@ -60,6 +60,6 @@ class InvoicesPdfController extends Controller
         $pdf::setPrintHeader(false);
         $pdf::SetMargins(0,0,0);
         $pdf::setHeaderData('',0,'','',array(0,0,0), array(255,255,255) ); 
-        $pdf::Output('مرتب-'.$id.'.pdf','D');
+        $pdf::Output('مرتب-'.$employee->name.'-'.$month.'-'.$year.'.pdf','D');
     }
 }
