@@ -37,3 +37,15 @@
         <button type="submit" class="btn btn-danger btn-sm">تحديث </button>
     </div>
 </form>
+
+<script>
+jQuery('#modalCenter').on('submit','form[method=post]',function(e){
+    e.preventDefault();
+    let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
+    if (password == "Opera@94") {
+        jQuery(this).unbind('submit').submit();
+    } else {
+        alert('كلمة المرور خاطئة ');
+    }
+});
+</script>
