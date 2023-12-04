@@ -38,7 +38,7 @@
                           <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> التاريخ</label>
                                 <input type="date" class="form-control" id="basic-default-fullname"
-                                    name="sale_date" value="{{  $sale->sale_date }}" required />
+                                    name="sale_date" value="{{  $sale->sale_date }}" max="{{ date('Y-m-d') }}" required />
                                 @error('sale_date')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror

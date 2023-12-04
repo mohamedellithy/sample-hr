@@ -46,7 +46,7 @@ $datefilter = request()->query('datefilter') ?: null;
                            <div class="mb-3 col-md-6">
                                <label class="form-label" for="basic-default-company"> التاريخ</label>
                                <input type="date" class="form-control" id="basic-default-fullname"
-                                   name="sale_date" value="{{ old('sale_date') }}" required />
+                                   name="sale_date" value="{{ old('sale_date') }}" max="{{ date('Y-m-d') }}" required />
                                @error('sale_date')
                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                @enderror
@@ -64,7 +64,7 @@ $datefilter = request()->query('datefilter') ?: null;
    <!-- DataTales Example -->
    <div class="card mb-4">
        <div class="card">
-           <h5 class="card-header">عرض المصروفات</h5>
+           <h5 class="card-header">عرض المبيعات</h5>
            <div class="card-header py-3 ">
 
                <form id="filter-data" method="get" class=" justify-content-between">
