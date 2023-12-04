@@ -26,7 +26,7 @@
 
                                 <div class="col">
                                     <label class="form-label" for="basic-default-company"> البند </label>
-                                    <select name="sub_service" id="Selectsub" class="form-control" required>
+                                    <select name="sub_service" id="Selectsub" class="form-control">
                                         
                                     </select>
                                     @error('sub_service')

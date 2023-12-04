@@ -30,7 +30,7 @@
 
                                 <div class="col">
                                     <label class="form-label" for="basic-default-company"> البند </label>
-                                    <select name="sub_service" id="Selectsub" class="form-control" required>
+                                    <select name="sub_service" id="Selectsub" class="form-control">
                                         @php 
                                             $section_childs = \App\Models\DepartmentExpenses::where('parent_id',$expense->section)->get();
                                         @endphp
