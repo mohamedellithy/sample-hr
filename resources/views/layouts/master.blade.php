@@ -205,6 +205,16 @@ jQuery('form[method=post]').submit(function(e){
     }
 });
 
+jQuery('.modal').on('submit','form[method=post]',function(e){
+    e.preventDefault();
+    let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
+    if (password == "Opera@94") {
+        jQuery(this).unbind('submit').submit();
+    } else {
+        alert('كلمة المرور خاطئة ');
+    }
+});
+
 // jQuery('.private-section').click(function(e){
 //     let tempo_redirect = jQuery(this).attr('tempo');
 //     let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
