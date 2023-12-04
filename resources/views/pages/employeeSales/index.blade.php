@@ -45,7 +45,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                           <div class="mb-3">
                                 <label class="form-label" for="basic-default-company"> التاريخ</label>
                                 <input type="date" class="form-control" id="basic-default-fullname"
-                                    name="sale_date" value="{{ old('sale_date') ?: date('Y-m-d') }}" required />
+                                    name="sale_date" value="{{ old('sale_date') ?: date('Y-m-d') }}" max="{{ date('Y-m-d') }}" required />
                                 @error('sale_date')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror

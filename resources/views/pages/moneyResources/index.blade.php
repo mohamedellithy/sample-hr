@@ -65,7 +65,7 @@ endif;
                             <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-fullname">تاريخ المصدر</label>
                                 <input type="date" class="form-control" id="basic-default-fullname"
-                                    name="resource_date" value="{{ old('resource_date') }}" required />
+                                    name="resource_date" value="{{ old('resource_date') }}" max="{{ date('Y-m-d') }}" required />
                                 @error('resource_date')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror

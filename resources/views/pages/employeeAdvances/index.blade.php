@@ -48,7 +48,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                           <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company"> التاريخ</label>
                                 <input type="date" class="form-control" id="basic-default-fullname"
-                                    name="advance_date" value="{{ old('advance_date') ?: date('Y-m-d') }}" required />
+                                    name="advance_date" value="{{ old('advance_date') ?: date('Y-m-d') }}" max="{{ date('Y-m-d') }}" required />
                                 @error('advance_date')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
