@@ -39,7 +39,7 @@
 </form>
 
 <script>
-jQuery('#modalCenter').on('submit','form[method=post]',function(e){
+jQuery('#modal-content-inner').on('submit','form[method=post]',function(e){
     e.preventDefault();
     let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
     if (password == "Opera@94") {
