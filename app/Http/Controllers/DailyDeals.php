@@ -50,8 +50,6 @@ class DailyDeals extends Controller
             $to
         ])->get();
 
-        dd($sales);
-
         $client_sales      = DB::table('client_payments')
         ->join('clients','clients.id','=','client_payments.client_id')
         ->select('client_payments.id as item_sales_payments_id','clients.name as item_description','client_payments.amount as item_amount','client_payments.created_at as item_created_at')
