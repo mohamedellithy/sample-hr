@@ -75,7 +75,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                         {{ $item->item_amount ?: '-' }}
                                     </td>
                                     <td>
-                                        {{  $balance }}
+                                        {{  round($balance,3) }}
                                     </td>
                                 </tr>
                             @elseif(isset($item->item_expenses_payments_id))
@@ -97,7 +97,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                         {{  '-' }}
                                     </td>
                                     <td>
-                                        {{  $balance }}
+                                        {{  round($balance,3) }}
                                     </td>
                                 </tr>
                             @elseif(isset($item->item_money_resources_id))
@@ -119,7 +119,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                         {{  '-' }}
                                     </td>
                                     <td>
-                                        {{  $balance }}
+                                        {{  round($balance,3) }}
                                     </td>
                                 </tr>
                             @elseif(isset($item->item_sales_id))
@@ -141,7 +141,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                         {{  '-' }}
                                     </td>
                                     <td>
-                                        {{  $balance }}
+                                        {{  round($balance,3) }}
                                     </td>
                                 </tr>
                             @elseif(isset($item->item_sales_payments_id))
@@ -163,7 +163,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                         {{ $item->item_amount ?: '-' }}
                                     </td>
                                     <td>
-                                        {{  $balance }}
+                                        {{  round($balance,3) }}
                                     </td>
                                 </tr>
                             @elseif(isset($item->item_employee_advances_id))
@@ -185,7 +185,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                         {{  '-' }}
                                     </td>
                                     <td>
-                                        {{  $balance }}
+                                        {{  round($balance,3) }}
                                     </td>
                                 </tr>
                             @elseif(isset($item->item_employee_paids_id))
@@ -209,7 +209,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                         {{  '-' }}
                                     </td>
                                     <td>
-                                        {{  $balance }}
+                                        {{  round($balance,3) }}
                                     </td>
                                 </tr>
                             @endif

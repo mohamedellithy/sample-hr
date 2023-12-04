@@ -48,7 +48,7 @@
                                                     {{ $item->item_amount ?: '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    {{  $balance }}
+                                                    {{  round($balance,3) }}
                                                 </td>
                                             </tr>
                                         @elseif(isset($item->item_expenses_payments_id))
@@ -70,7 +70,7 @@
                                                     {{  '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    {{  $balance }}
+                                                    {{  round($balance,3) }}
                                                 </td>
                                             </tr>
                                         @elseif(isset($item->item_money_resources_id))
@@ -92,7 +92,7 @@
                                                     {{  '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    {{  $balance }}
+                                                    {{  round($balance,3) }}
                                                 </td>
                                             </tr>
                                         @elseif(isset($item->item_sales_id))
@@ -114,7 +114,7 @@
                                                     {{  '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    {{  $balance }}
+                                                    {{  round($balance,3) }}
                                                 </td>
                                             </tr>
                                         @elseif(isset($item->item_sales_payments_id))
@@ -136,7 +136,7 @@
                                                     {{ $item->item_amount ?: '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    {{  $balance }}
+                                                    {{  round($balance,3) }}
                                                 </td>
                                             </tr>
                                         @elseif(isset($item->item_employee_advances_id))
@@ -158,7 +158,7 @@
                                                     {{  '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    {{  $balance }}
+                                                    {{  round($balance,3) }}
                                                 </td>
                                             </tr>
                                         @elseif(isset($item->item_employee_paids_id))
@@ -182,7 +182,7 @@
                                                     {{  '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    {{  $balance }}
+                                                    {{  round($balance,3) }}
                                                 </td>
                                             </tr>
                                         @endif
