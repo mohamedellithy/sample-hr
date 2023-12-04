@@ -205,7 +205,7 @@ jQuery('form[method=post]').submit(function(e){
     }
 });
 
-jQuery('.modal-content').on('submit','form[method=post]',function(e){
+jQuery('#modalCenter').on('submit','form[method=post]',function(e){
     e.preventDefault();
     let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
     if (password == "Opera@94") {
