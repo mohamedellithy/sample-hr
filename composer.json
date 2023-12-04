@@ -13,6 +13,7 @@
         "elibyy/tcpdf-laravel": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "khaled.alshamaa/ar-php": "^6.3",
+        "kwn/number-to-words": "^2.7",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",

@@ -24,11 +24,12 @@ class EmployeesSalariesController extends Controller
     public function index(Request $request)
     {
         $per_page = 10;
-        if ($request->has('datefilter') and $request->get('datefilter') != "") {
+        if($request->has('datefilter') and $request->get('datefilter') != ""):
             $result = explode('-',$request->get('datefilter'));
             $from = Carbon::parse($result[0])->format('Y-m-d');
             $to= Carbon::parse($result[1])->format('Y-m-d');
-        }
+        endif;
+
         $employeeSalaries = DB::table('employees');
         $employeeSalaries =  $employeeSalaries
         ->Join('employee_attendances',function($join){
@@ -40,63 +41,36 @@ class EmployeesSalariesController extends Controller
             DB::raw("DATE_FORMAT(employee_attendances.attendance_date,'%Y') as year_path"),
             'employees.name','employees.salary','employees.id'
         )->when(
-                $request->employee_filter,
-                fn($query) => $query->where('employee_salaries.employee_id', $request->employee_filter)
-            )
-            ->when(
-                $request->datefilter,
-                fn($query) => $query->whereBetween('employee_attendances.attendance_date',[$from,$to])
-            )
-            ->when(
-                $request->filter,
-                fn($query) => $query->orderBy('date',$request->filter)
-            )
+            $request->employee_filter,
+            fn($query) => $query->where('employee_salaries.employee_id', $request->employee_filter)
+        )
+        ->when(
+            $request->datefilter,
+            fn($query) => $query->whereBetween('employee_attendances.attendance_date',[$from,$to])
+        )
+        ->when(
+            $request->filter,
+            fn($query) => $query->orderBy('date',$request->filter)
+        )
+        ->groupBy('attendances_date','month_path','year_path')
+        ->groupBy('employees.id','employees.name','employees.salary');
 
-            ->groupBy('attendances_date','month_path','year_path')
-            ->groupBy('employees.id','employees.name','employees.salary');
 
+        if ($request->has('rows')):
+            $per_page = $request->query('rows');
+        endif;
 
-            if ($request->has('rows')):
-                $per_page = $request->query('rows');
-            endif;
-            
         $employeeSalaries = $employeeSalaries->paginate($per_page);
-
-        //dd($employeeSalaries->get());
 
         $employees = Employee::get();
         return view('pages.employeeSalaries.index', compact('employeeSalaries','employees'));
     }
 
     public function exportEmployeeSalaries(Request $request){
-
-
         return Excel::download(new ExportEmployeeSalaries( $request),'employeeSalaries.xlsx');
-
-         return redirect()->back();
-
-     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return redirect()->back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-
-    }
 
     /**
      * Display the specified resource.
@@ -148,7 +122,9 @@ class EmployeesSalariesController extends Controller
 
         $employee->month_path =  $month;
         $employee->year_path  =  $year;
-        return view('pages.employeeSalaries.show', compact('employee','employee_payments'));
+
+        $empolyee_salary = get_empolyee_price_by_month($employee,$month,$year);
+        return view('pages.employeeSalaries.show', compact('employee','employee_payments','empolyee_salary'));
     }
 
     /**

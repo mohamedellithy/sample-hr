@@ -56,7 +56,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
 
                         </div>
 
-                        <button type="submit" class="btn btn-primary">اضافة</button>
+                        <button type="submit" class="btn btn-primary btn-sm">اضافة</button>
                     </div>
                 </div>
             </div>
@@ -113,7 +113,7 @@ $employee_filter = request()->query('employee_filter') ?: null;
                         <input type="hidden" name="employee_filter" value="{{ $employee_filter }}">
                         <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                         <input type="hidden" name="filter" value="{{ $filter }}">
-                        <button type="submit" class="btn btn-primary">تصدير</button>
+                        <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
                     </div>
                 </form>
                     </div>

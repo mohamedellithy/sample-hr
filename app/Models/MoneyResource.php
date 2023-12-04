@@ -12,6 +12,7 @@ class MoneyResource extends Model
     protected $fillable = [
         'value',
         'type',
+        'description',
         'resource_date',
         'reference_id'
     ];

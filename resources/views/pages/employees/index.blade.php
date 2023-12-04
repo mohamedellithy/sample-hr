@@ -60,7 +60,7 @@ $export =null;
                     </form>
                 </div>
            </div>
-           <div class="table-responsive text-nowrap">
+            <div class="table-responsive text-nowrap">
                <table class="table">
                    <thead class="table-light">
                         <tr class="table-dark">
@@ -123,8 +123,8 @@ $export =null;
                         @endforeach
                    </tbody>
                </table>
-           </div>
-           <br/><br/>
+            </div>
+
            <div class="d-flex flex-row justify-content-center">
                {{ $employees->links() }}
            </div>

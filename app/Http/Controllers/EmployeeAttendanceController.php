@@ -91,7 +91,6 @@ class EmployeeAttendanceController extends Controller
         try{
             if ($request->hasFile('file')){
                 $updateFile = $request->file('file');
-
                 $path = $updateFile->getRealPath();
                 $fileExtension = $updateFile->getClientOriginalExtension();
                 $formats = ['xls', 'xlsx', 'ods', 'csv'];
@@ -103,10 +102,9 @@ class EmployeeAttendanceController extends Controller
                 $import= Excel::import(new ImportEmployeeAttendances($this->attendanceService),$request->file);
                 DB::commit();
 
-            flash(' تم اضافه الملف بنجاح', 'success');
-            return redirect()->back();
-
-           }
+                flash(' تم اضافه الملف بنجاح', 'success');
+                return redirect()->back();
+            }
         }
         catch (Throwable $e) {
             DB::rollBack();

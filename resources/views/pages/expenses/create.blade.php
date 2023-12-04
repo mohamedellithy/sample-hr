@@ -79,6 +79,13 @@
 
                             <div class="row mt-3">
                                 <div class="col">
+                                    <label class="form-label" for="basic-default-company">قيمة الضريبة</label>
+                                    <input type="number" step=".001" value="{{ old('taxs_amount') }}" class="form-control" placeholder="قيمة الضريبة"  name="taxs_amount"/>
+                                    @error('taxs_amount')
+                                        <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col">
                                     <label class="form-label" for="basic-default-company">البيان</label>
                                     <input type="text" value="{{ old('expense_description') }}" class="form-control" placeholder="ادخل  تاريخ الصرف" name="expense_description" required/>
                                     @error('expense_description')

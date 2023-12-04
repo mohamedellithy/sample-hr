@@ -14,6 +14,7 @@ class Expense extends Model
         'bill_no',
         'supplier',
         'amount',
+        'taxs_amount',
         'expense_description',
         'expense_date'
     ];

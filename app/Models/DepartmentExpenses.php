@@ -15,4 +15,8 @@ class DepartmentExpenses extends Model
         return $this->belongsTo(DepartmentExpenses::class,'parent_id','id');
     }
 
+    public function child_sections(){
+        return $this->hasMany(DepartmentExpenses::class,'parent_id','id');
+    }
+
 }

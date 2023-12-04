@@ -16,6 +16,7 @@ use App\Http\Controllers\EmployeesSalariesController;
 use App\Http\Controllers\EmployeeAttendanceController;
 use App\Http\Controllers\DepartmentsExpensesController;
 use App\Http\Controllers\MoneyResourceController;
+use App\Http\Controllers\DailyDeals;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +74,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('shifts', ShiftController::class);
         Route::resource('money-resources',MoneyResourceController::class);
 
+        Route::resource('daily-deals',DailyDeals::class);
+
 
         Route::post('exportEployee',[ EmployeesController::class,'exportEployee'])->name('employees.export');
         Route::post('exportSales',[ SalesController::class,'exportSales'])->name('sales.export');
@@ -94,6 +97,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('importEmployeeAttendances',[ EmployeeAttendanceController::class,'importEmployeeAttendances'])->name('employeeAttendances.import');
 
         Route::post('importShifts',[ ShiftController::class,'importShifts'])->name('shifts.import');
+
+        Route::post('download-empolyees-salaries',[InvoicesPdfController::class,'download_employee_salaries_pdf'])->name('download-empolyees-salaries');
+        Route::post('daily-deals-pdf',[InvoicesPdfController::class,'download_daily_deals_pdf'])->name('daily-deals.pdf');
     });
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

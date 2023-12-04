@@ -17,6 +17,7 @@ class DepartmentsExpensesController extends Controller
         //
         $main_departments  = DepartmentExpenses::where('parent_id',null)->get();
         $other_departments = DepartmentExpenses::query();
+        $other_departments = $other_departments->with('child_sections')->where('parent_id',null);
         $per_page = 10;
 
 
@@ -38,6 +39,7 @@ class DepartmentsExpensesController extends Controller
         endif;
 
         $other_departments = $other_departments->paginate($per_page);
+
         return view('pages.departmentsExpense.index',compact('main_departments','other_departments'));
     }
 

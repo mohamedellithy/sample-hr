@@ -17,6 +17,7 @@
                     <!-- /Logo -->
                     <form id="formAuthentication" class="mb-3" method="POST" action="{{ route('login') }}">
                         @csrf
+                        <h4 style="text-align:center">تسجيل الدخول</h4>
                         <div class="mb-3">
                             <input type="hidden" class="form-control @error('email') is-invalid @enderror" value="admin@admin.com" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus id="email"/>
                             @error('email')

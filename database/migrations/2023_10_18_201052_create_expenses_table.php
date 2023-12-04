@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('bill_no');
             $table->date('expense_date');
             $table->text('expense_description')->nullable();
+            $table->double('taxs_amount',8,3)->default(0);
             $table->double('amount',8, 3)->default(0);
             $table->timestamps();
         });

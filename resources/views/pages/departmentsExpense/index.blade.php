@@ -114,7 +114,7 @@ $search = request()->query('search') ?: null;
                                 </td>
 
                                 <td>
-                                    {{  $department->department_parent ? $department->department_parent->department_name : 'بدون ' }}
+                                    {{  $department->department_parent ? $department->department_parent->department_name : ' - ' }}
                                 </td>
                                 <td>
                                      <span class="badge bg-label-primary me-1">
@@ -137,6 +137,34 @@ $search = request()->query('search') ?: null;
                                     </div>
                                 </td>
                             </tr>
+                            @foreach($department->child_sections as $child_section)
+                                <tr style="background-color: #FCE4EC !important;">
+                                    <td>
+                                        -------
+                                     </td>     
+                                    <td> {{ $child_section->department_name }} </td>
+                                    <td> {{ $child_section->department_parent->department_name }} </td>
+                                    <td>
+                                        <span class="badge bg-label-primary me-1">
+                                       {{ $child_section->created_at}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <a  class="crud edit-client" data-department-id="{{ $child_section->id }}">
+                                                <i class="fas fa-edit text-primary"></i>
+                                            </a>
+                                            <form  method="post" action="{{ route('admin.departments-expenses.destroy', $child_section->id) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a class="delete-item crud">
+                                                    <i class="fas fa-trash-alt  text-danger"></i>
+                                                </a>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
                    </tbody>
                </table>

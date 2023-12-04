@@ -14,22 +14,22 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        {{-- <li class="menu-item {{ IsActiveOnlyIf(['admin.dashboard']) }}">
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.dashboard']) }}">
             <a href="{{ route('admin.dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">الرئيسية</div>
             </a>
-        </li> --}}
+        </li>
 
        <!-- employees -->
-        <li class="menu-item {{ IsActiveOnlyIf(['admin.employees.index','admin.employees.create','admin.products.edit']) }}">
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.employees.index','admin.employees.create','admin.employees.show','admin.employees.edit']) }}">
             <a href="{{ route('admin.employees.index') }}" class="menu-link menu-toggle">
                 <i class='menu-icon tf-icons bx bxs-package'></i>
                 <div data-i18n="Layouts">الموظفيين</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ IsActiveOnlyIf(['admin.employees.index','admin.employees.edit','admin.employees.create']) }}">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.employees.index','admin.employees.edit','admin.employees.show','admin.employees.create']) }}">
                     <a href="{{ route('admin.employees.index') }}" class="menu-link">
                         <div data-i18n="Without navbar"> عرض</div>
                     </a>
@@ -201,9 +201,7 @@
             </ul>
         </li>
 
-
-
-              <!-- employeeSalaries  -->
+        <!-- employeeSalaries  -->
         <li class="menu-item {{ IsActiveOnlyIf(['admin.employeeSalaries.index','admin.employeeSalaries.show']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class='menu-icon tf-icons bx bxs-package'></i>
@@ -219,10 +217,20 @@
             </ul>
         </li>
 
+        <!-- employeeSalaries  -->
+        <li class="menu-item {{ IsActiveOnlyIf(['admin.daily-deals.index','admin.daily-deals.show']) }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class='menu-icon tf-icons bx bxs-package'></i>
+                <div data-i18n="Layouts">القيود اليومية</div>
+            </a>
 
-
-
-
-
+            <ul class="menu-sub">
+                <li class="menu-item {{ IsActiveOnlyIf(['admin.daily-deals.index','admin.daily-deals.show']) }}">
+                    <a href="{{ route('admin.daily-deals.index') }}" class="menu-link">
+                        <div data-i18n="Without navbar">عرض</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </aside>

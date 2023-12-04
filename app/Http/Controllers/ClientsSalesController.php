@@ -11,6 +11,7 @@ use App\Exports\ExportClientPayments;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use App\Models\ClientPayment;
+use App\Models\MoneyResource;
 
 class ClientsSalesController extends Controller
 {
@@ -195,7 +196,18 @@ class ClientsSalesController extends Controller
     }
 
     public function update_client_payments(Request $request,$payment_id){
-        ClientPayment::where('id',$payment_id)->update([
+        $payment = ClientPayment::where('id',$payment_id)->first();
+        
+
+        MoneyResource::where([
+            'value'         => $payment->amount,
+            'type'          => 'client_payments_sales',
+            'reference_id'  => $payment->client_id
+        ])->update([
+            'value'         => $request->input('amount')
+        ]);
+
+        $payment->update([
             'amount' => $request->input('amount')
         ]);
 
@@ -253,6 +265,13 @@ class ClientsSalesController extends Controller
         ClientPayment::create([
             'client_id' => $client_id,
             'amount'    => $request->input('amount')
+        ]);
+
+        MoneyResource::create([
+            'value'         => $request->input('amount'),
+            'type'          => 'client_payments_sales',
+            'resource_date' => Date('Y-m-d'),
+            'reference_id'  => $request->input('client_id')
         ]);
 
         return back();

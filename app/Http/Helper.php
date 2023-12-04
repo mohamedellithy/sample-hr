@@ -1,6 +1,8 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\EmployeePricesChange;
+
 if (!function_exists('IsActiveOnlyIf')) {
     function IsActiveOnlyIf($routes = [])
     {
@@ -54,6 +56,41 @@ if(!function_exists('formate_time2')) {
         return $time12HourFormat;
 
     }
+}
+
+
+function get_empolyee_price_by_month($employee,$month,$year){
+    $employee_price = EmployeePricesChange::where([
+        'employee_id' => $employee->id
+    ])->whereMonth('change_date','=',$month)
+    ->whereYear('change_date','=',$year)->first();
+
+    if($employee_price == null):
+        $employee_price = EmployeePricesChange::where([
+            'employee_id' => $employee->id
+        ])->whereMonth('change_date','>',$month)
+        ->whereYear('change_date','=',$year)->orderBy('change_date','asc')->first();
+    endif;
+
+    if($employee_price):
+        $employee_price = $employee_price->amount;
+    else:
+        $employee_price =  $employee->salary;
+    endif;
+
+    return $employee_price;
+}
+
+function get_resource_name($key){
+    $types_resources = [
+        'balance'           => 'الرصيد السابق',
+        'bank_withdraw'     => 'سحب كاش من البنك',
+        'outgoing_resource' => 'مصدر خارجي',
+        'sales'             => 'مبيعات',
+        'client_payments_sales' => 'تحصيل مدفوعات مبيعات عميل'
+    ];
+
+    return isset($types_resources[$key]) ? $types_resources[$key] : '-';
 }
 
 

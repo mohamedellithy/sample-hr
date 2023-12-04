@@ -145,6 +145,7 @@ class ExpensesController extends Controller
                 'bill_no',
                 'supplier',
                 'amount',
+                'taxs_amount',
                 'expense_description',
                 'expense_date'
             ]);
@@ -223,6 +224,7 @@ class ExpensesController extends Controller
                 'bill_no',
                 'supplier',
                 'amount',
+                'taxs_amount',
                 'paid_amount',
                 'pending_amount',
                 'expense_description',

@@ -20,7 +20,7 @@
                                     <select name="section" id="SelectSection" class="form-control" required>
                                         <option value>تحديد القسم الرئيسي</option>
                                         @foreach($main_departments as $main_department)
-                                            <option value="{{ $main_department->id }}">{{ $main_department->department_name }}</option>
+                                            <option value="{{ $main_department->id }}" @if($main_department->id == $expense->section) selected @endif>{{ $main_department->department_name }}</option>
                                         @endforeach
                                     </select>
                                     @error('section')
@@ -31,6 +31,12 @@
                                 <div class="col">
                                     <label class="form-label" for="basic-default-company"> البند </label>
                                     <select name="sub_service" id="Selectsub" class="form-control" required>
+                                        @php 
+                                            $section_childs = \App\Models\DepartmentExpenses::where('parent_id',$expense->section)->get();
+                                        @endphp
+                                        @foreach($section_childs as $child)
+                                            <option value="{{ $child->id }}" @if($expense->sub_service == $child->id) selected @endif>{{ $child->department_name }}</option>
+                                        @endforeach
                                     </select>
                                     @error('sub_service')
                                         <span class="text-danger w-100 fs-6">{{ $message }}</span>
@@ -79,6 +85,13 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col">
+                                    <label class="form-label" for="basic-default-company">قيمة الضريبة</label>
+                                    <input type="number" step=".001" value="{{ $expense->taxs_amount ?: 0 }}" class="form-control" placeholder="قيمة الضريبة"  name="taxs_amount"/>
+                                    @error('taxs_amount')
+                                        <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col">
                                     <label class="form-label" for="basic-default-company">البيان</label>
                                     <input type="text" value="{{ $expense->expense_description ?: old('expense_description') }}" class="form-control" placeholder="ادخل  تاريخ الصرف" name="expense_description" required/>
                                     @error('expense_description')
@@ -107,9 +120,6 @@
 @endsection
 @push('script')
     <script type="text/javascript">
-        let sect = jQuery('#SelectSection').find('option:selected').attr('sect');
-        jQuery('#Selectsub').find(`option`).hide();
-        jQuery('#Selectsub').find(`option[sect="${sect}"]`).show();
 
         jQuery('#SelectSection').change(function(){
             let parent_id = jQuery(this).val();

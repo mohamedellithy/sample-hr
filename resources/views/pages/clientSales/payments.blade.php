@@ -75,6 +75,9 @@ $total_payment = $client->payments()->sum('amount');
                 <a href="{{ route('admin.clientSales.show',$client->id) }}" class="btn btn-danger btn-sm">
                     عرض الفواتير
                 </a>
+                <a href="{{ route('admin.client-payments.get',['client_id' => $client->id]) }}" class="btn btn-dark btn-sm">
+                    عرض المدفوعات
+                </a>
             </h5>
             <div class="card-header py-3 ">
                <form id="filter-data" method="get" class=" justify-content-between">

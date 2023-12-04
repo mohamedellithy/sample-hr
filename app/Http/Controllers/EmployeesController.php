@@ -8,6 +8,7 @@ use App\Exports\ExportEmployee;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\EmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Models\EmployeePricesChange;
 
 class EmployeesController extends Controller
 {
@@ -103,7 +104,8 @@ class EmployeesController extends Controller
     public function show($id)
     {
         $employee = Employee::find($id);
-        return view('pages.employees.show', compact('employee'));
+        $employee_prices = EmployeePricesChange::where('employee_id',$id)->get();
+        return view('pages.employees.show', compact('employee','employee_prices'));
     }
 
     /**
@@ -144,7 +146,18 @@ class EmployeesController extends Controller
             'numeric' => 'يرجى ادخال رقم',
             'date' => 'يجب ادخال تاريخ',
         ]);
-         Employee::find($id)->update($request->only([
+        $employee = Employee::find($id);
+        
+        if($request->input('salary') != $employee->salary):
+            EmployeePricesChange::updateOrCreate([
+                'amount'      => $request->input('salary'),
+                'employee_id' => $id
+            ],[
+                'change_date' => date('Y-m-d')
+            ]);
+        endif;
+
+        $employee->update($request->only([
             'name',
             'nationality',
             'salary',
@@ -155,6 +168,7 @@ class EmployeesController extends Controller
             'citizen_no',
             'join_date'
         ]));
+
         flash('تم التعديل بنجاح', 'warning');
         return redirect()->back();
         }

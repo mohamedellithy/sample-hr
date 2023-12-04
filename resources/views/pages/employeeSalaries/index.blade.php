@@ -13,40 +13,14 @@ $datefilter = request()->query('datefilter') ?: null;
 <div class="container-fluid">
     <br/>
     <!-- Basic Layout -->
-    <form action="{{ route('admin.employeeSalaries.export') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.download-empolyees-salaries') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="col-lg-12">
                 <div class="card mb-4">
-                    <h5 class="card-header">التصدير الاسبوعي</h5>
+                    <h5 class="card-header">التصدير </h5>
                     <div class="card-body">
                         <div class="row">
-                            <div class="mb-3 col-md-3">
-                                <label class="form-label" for="basic-default-fullname">الموظف</label>
-                                    <select type="text" name="employee_id" class="form-control form-select2 selectProduct" required>
-                                    <option value="">اختر الموظف</option>
-                                    @foreach ($employees as $employee)
-                                    <option value={{ $employee->id }}>{{ $employee->name }}</option>
-                                    @endforeach
-                                    </select>
-                                @error('employee_id')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                             <div class="mb-3 col-md-3">
-                                <label class="form-label" for="basic-default-company"> الاسبوع</label>
-                                  <select type="text" name="week" class="form-control selectProduct" required>
-                                    <option value="">اختر الاسبوع</option>
-                                    <option value="1">الاول</option>
-                                    <option value="2">الثاني</option>
-                                    <option value="3">الثالث</option>
-                                    <option value="4">الرابع</option>
-                                    </select>
-                                @error('week')
-                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
-                                @enderror
-                            </div>
                             <div class="mb-3 col-md-3">
                                 <label class="form-label" for="basic-default-company"> الشهر</label>
                                   <select type="text" name="month" class="form-control selectProduct form-select2 " required>
@@ -79,7 +53,7 @@ $datefilter = request()->query('datefilter') ?: null;
 
                         </div>
 
-                        <button type="submit" class="btn btn-primary">تصدير</button>
+                        <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
                     </div>
                 </div>
             </div>
@@ -167,7 +141,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                     <a href="{{ route('admin.employeeSalaries.show',[
                                         'employeeSalary' => $employeeSalarie->id,
                                         'month'          => $employeeSalarie->month_path.'-'.$employeeSalarie->year_path
-                                    ]) }}" class="">
+                                    ]) }}" class="private-section">
                                         <i class="far fa-eye text-dark"></i>
                                      </a>
                                 </td>

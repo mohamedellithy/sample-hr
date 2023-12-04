@@ -1,3 +1,7 @@
+@php 
+use NumberToWords\NumberToWords; 
+$monthName = date('F', mktime(0, 0, 0, $employee->month_path, 10));
+@endphp
 <html>
     <head>
         <meta name="google-site-verification" content="40aCnX7tt4Ig1xeLHMATAESAkTL2pn15srB14sB-EOs" />
@@ -13,7 +17,7 @@
                         <div class="card-header" style="text-align: center">
                             <p style="text-align: center">
                                 <h4 style="color:black;font-size: 18px;font-weight: bolder">OPERA CAFEE</h4>
-                                <h6 style="color:red;font-size: 18px;font-weight: bolder">SALARY SHEET FOR {{ $employee->attendances_date }}</h6>
+                                <h6 style="color:red;font-size: 18px;font-weight: bolder">SALARY SHEET FOR {{ $monthName }} {{ $employee->year_path }}</h6>
                             </p>
                         </div>
                         <div class="card-body">
@@ -41,7 +45,7 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                            $calculateDayWage = (new App\Services\CalculateHourSalaryService())->calculateDayWage($employee->salary,$employee->countAttends);
+                                            $calculateDayWage = (new App\Services\CalculateHourSalaryService())->calculateDayWage($empolyee_salary,$employee->countAttends);
                                             $net_salary       = 0;
                                             $over_time        = 0;
                                             $net_deduction    = 0;
@@ -51,21 +55,21 @@
                                                 {{  $employee->name }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{  $employee->salary }}
-                                                @php $net_salary += $employee->salary @endphp
+                                                {{  $empolyee_salary }}
+                                                @php $net_salary = $empolyee_salary @endphp
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
                                                 {{ $employee->countAttends }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{   $over_time   = $employee->sumOver_time + abs($calculateDayWage > 0 ? $calculateDayWage : 0) }}
-                                                @php $net_salary += $over_time @endphp
+                                                {{   $over_time   = $employee->sumOver_time }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{  $net_salary }}
+                                                {{  abs($calculateDayWage) + $over_time }}
+                                                @php $net_salary = abs($calculateDayWage) + $over_time @endphp
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{   $deduction_delay = $employee->sumDeduction + abs($calculateDayWage < 0 ? $calculateDayWage : 0) }}
+                                                {{   $deduction_delay = $employee->sumDeduction }}
                                                 @php $net_deduction  += $deduction_delay  @endphp
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
@@ -83,10 +87,10 @@
                                                 {{ $net_salary = $net_salary - $net_deduction }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                {{ $employee->sumPaid ?: 0 }}
+                                                {{ $employee->sumPaid ? round($employee->sumPaid,3): 0 }}
                                             </td>
                                             <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px;">
-                                                {{ $net_salary - $employee->sumPaid }}
+                                                {{ round($net_salary - $employee->sumPaid,3) }}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -144,7 +148,7 @@
                                                 <thead>
                                                     <tr style="color:black !important;">
                                                         <th style="color:black !important;border:2px solid black">بيسة </th>
-                                                        <th style="color:black !important;border:2px solid black">عمانى</th>
+                                                        <th style="color:black !important;border:2px solid black">ريال</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -181,12 +185,10 @@
                                         </td>
                                         <td style="padding-right:10%;color:black;">
                                             @php
-                                                $Arabic = new \ArPHP\I18N\Arabic();
-                                                $Arabic->setNumberFeminine(10);
-                                                $Arabic->setNumberFormat(10);
-                                                $salaray = $Arabic->int2str($employee->sumPaid);
+                                                $numberToWords = new NumberToWords();
+                                                $numberTransformer = $numberToWords->getNumberTransformer('en');
+                                                echo $numberTransformer->toWords($employee->sumPaid);
                                             @endphp
-                                            {{ $salaray }}
                                         </td>
                                         <td>
                                             <label style="float:left">

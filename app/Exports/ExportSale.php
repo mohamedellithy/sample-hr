@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\Sale;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
-
+use Illuminate\Support\Facades\DB;
 class ExportSale implements FromCollection,WithHeadings
 {
 
@@ -41,13 +41,16 @@ class ExportSale implements FromCollection,WithHeadings
             return $q->orderBy('sale_date', 'desc');
         });
 
-       return $sales->select('cash','credit_sales','bank','sale_date')->get();
+       return $sales
+       ->select('sale_date','cash','bank','credit_sales',DB::raw('SUM(cash + bank + credit_sales) as total'))
+       ->groupby('sale_date','cash','bank','credit_sales')
+       ->get();
 
 
     }
 
     public function headings(): array
     {
-        return ['كاش','كريدت','بنك','التاريخ'];
+        return ['Date','Cashe','Bank','Credit Sales','total'];
     }
 }

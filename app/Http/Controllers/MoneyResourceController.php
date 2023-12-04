@@ -40,7 +40,7 @@ class MoneyResourceController extends Controller
             $per_page = $request->query('rows');
         endif;
 
-        $resources = $resources->select('id','value','type','resource_date')->paginate($per_page);
+        $resources = $resources->select('id','value','description','reference_id','type','resource_date')->paginate($per_page);
         return view('pages.moneyResources.index',compact('resources'));
     }
 
@@ -62,6 +62,7 @@ class MoneyResourceController extends Controller
         MoneyResource::create([
             'value' => $request->input('value'),
             'type' => $request->input('type'),
+            'description' => $request->input('description'),
             'resource_date' => $request->input('resource_date')
         ]);
 
@@ -111,6 +112,7 @@ class MoneyResourceController extends Controller
         ])->update([
             'value'         => $request->input('value'),
             'type'          => $request->input('type'),
+            'description'   => $request->input('description'),
             'resource_date' => $request->input('resource_date')
         ]);
 

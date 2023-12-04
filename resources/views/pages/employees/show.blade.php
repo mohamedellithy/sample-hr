@@ -4,12 +4,10 @@
     <div class="container-fluid mt-4">
         <h4 class="fw-bold py-3  mb-3" style="padding-bottom: 0rem !important;">عرض موظف</h4>
         <!-- Basic Layout -->
-
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card mb-4">
-                        <div class="card-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-body">
 
                         <div class="row mt-3">
                             <div class="col">
@@ -63,17 +61,33 @@
 
                             </div>
                         </div>
-
-
-
-
-
-                        </div>
                     </div>
                 </div>
-
             </div>
-
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h6>أرشيف رواتب الموظفين</h6>
+                        <table class="table table-light">
+                            <thead>
+                                <tr class="table-dark">
+                                    <th>الراتب </th>
+                                    <th>تاريخ تغير الراتب </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($employee_prices as $employee_price)
+                                    <tr>
+                                        <td>{{ formate_price($employee_price->amount) }}</td>
+                                        <td>{{ $employee_price->change_date }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 @push('script')

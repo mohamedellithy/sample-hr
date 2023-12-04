@@ -19,7 +19,7 @@ $out = request()->query('out') ?: null;
            <div class="card-header py-3 ">
                  <div class="d-flex" style="flex-direction: row-reverse;">
                     <div class="nav-item d-flex align-items-center m-2">
-                        <a href="{{ route('admin.shifts.create') }}" class="btn btn-success btn-md" style="color:white">اضافة  شفت </a>
+                        <a href="{{ route('admin.shifts.create') }}" class="btn btn-success btn-sm" style="color:white">اضافة  شفت </a>
                     </div>
                 </div>
 
@@ -84,8 +84,8 @@ $out = request()->query('out') ?: null;
                         <input type="hidden" name="filter" value="{{ $filter }}">
                         <input type="hidden" name="in" value="{{ $in }}">
                         <input type="hidden" name="out" value="{{ $out }}">
-                        <a href="{{ route('admin.shifts.index') }}"class="btn btn-danger">reset</a>   &ensp;&ensp;
-                        <button type="submit" class="btn btn-primary">تصدير</button>
+                        <a href="{{ route('admin.shifts.index') }}"class="btn btn-danger btn-sm">reset</a>   &ensp;&ensp;
+                        <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
                     </div>
                 </form>
                 </div>

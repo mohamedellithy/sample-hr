@@ -67,9 +67,11 @@ class ShiftController extends Controller
 
     public function importShifts(Request $request){
 
-        Excel::import(new ImportShift,$request->file);
-
+        $shift = new ImportShift();
+        $data  = Excel::import($shift,$request->file);
+        $new_shifts = Shift::whereIn('id',$shift->collects_shifts)->paginate(10);
         flash('تم الاضافه بنجاح', 'success');
+        session(['new_shifts' => $new_shifts]);
         return redirect()->back();
      }
 

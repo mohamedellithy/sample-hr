@@ -33,7 +33,7 @@ $client_filter = request()->query('client_filter') ?: null;
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                          <div class="mb-3 col-md-5">
+                            <div class="mb-3 col-md-5">
                                 <label class="form-label" for="basic-default-company">قيمة الفاتورة</label>
                                 <input type="number" class="form-control" id="amount"
                                     name="amount" min="0" step=".001" value="{{ old('amount') }}" required />

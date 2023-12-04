@@ -16,6 +16,8 @@ class ImportShift implements ToCollection
 
     private $employees;
 
+    public  $collects_shifts = [];
+
     public function __construct()
     {
         $this->employees = Employee::select('id','name')->get();
@@ -25,31 +27,32 @@ class ImportShift implements ToCollection
     public function collection(Collection $rows)
     {        
         $ros = [];
-        foreach($rows as $row){
+        foreach($rows as $row):
             $ros[] = trim($row[1]);
-           if(isset($row[1])){
-            $employee = $this->employees->where('name',trim($row[1]))->first();
-            if($employee){
-                for ($x = 2; $x <= 8; $x++) {
-                        if(isset($row[$x])){
-
+            if(isset($row[1])):
+                $employee = $this->employees->where('name',trim($row[1]))->first();
+                if($employee):
+                    for($x = 2; $x <= 8; $x++):
+                        if(isset($row[$x])):
                             // delete old Shift if exist
                             $Shift= Shift::where('employee_id',$employee->id)->where('date',$this->transformDate($rows[2][$x]))->first();
                             if($Shift){
                                 $Shift->delete();
                             }
 
-                            Shift::create([
+                            $new_shift = Shift::create([
                                 'employee_id'=>$employee->id,
                                 'date'=>$this->transformDate($rows[2][$x]),
                                 'clock_in'=>formate_time($row[$x],0),
                                 'clock_out'=>formate_time($row[$x],1),
                             ]);
-                        }
-                    }
-                }
-            }
-        }
+
+                            $this->collects_shifts[] = $new_shift->id;
+                        endif;
+                    endfor;
+                endif;
+            endif;
+        endforeach;
     }
 
 

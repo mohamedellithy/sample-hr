@@ -8,7 +8,8 @@ $types_resources = [
     'balance'           => 'الرصيد السابق',
     'bank_withdraw'     => 'سحب كاش من البنك',
     'outgoing_resource' => 'مصدر خارجي',
-    'sales'             => 'مبيعات'
+    'sales'             => 'مبيعات',
+    'client_payments_sales' => 'تحصيل مدفوعات مبيعات عميل'
 ];
 
 $total_resource = \App\Models\MoneyResource::sum('value');
@@ -66,6 +67,14 @@ endif;
                                 <input type="date" class="form-control" id="basic-default-fullname"
                                     name="resource_date" value="{{ old('resource_date') }}" required />
                                 @error('resource_date')
+                                    <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="basic-default-fullname">البيان</label>
+                                <input type="text" class="form-control" id="basic-default-fullname"
+                                    name="description"   value="{{ old('description') }}" />
+                                @error('description')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -153,6 +162,7 @@ endif;
                             <th>التاريخ</th>
                             <th>المبلغ الوارد</th>
                             <th>المصدر</th>
+                            <th>البيان</th>
                             <th></th>
                         </tr>
                    </thead>
@@ -173,6 +183,15 @@ endif;
                                 
                                 <td>
                                     {{  isset($types_resources[$resource->type]) ? $types_resources[$resource->type] : '-' }}
+                                    @if($resource->type == 'client_payments_sales')
+                                        <a href="{{ route('admin.client-payments.get',['client_id' => $resource->reference_id]) }}">
+                                            {{ \App\Models\Client::find($resource->reference_id)->name }}
+                                        </a>
+                                    @endif
+                                </td>
+
+                                <td>
+                                    {{ $resource->description  }}
                                 </td>
                                 <td>
                                     <div class="d-flex">

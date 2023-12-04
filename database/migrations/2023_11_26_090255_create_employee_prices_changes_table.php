@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('money_resources', function (Blueprint $table) {
+        Schema::create('employee_prices_changes', function (Blueprint $table) {
             $table->id();
-            $table->double('value',8,3);
-            $table->enum('type',['balance','bank_withdraw','outgoing_resource','sales','advances'])->default('balance');
-            $table->date('resource_date');
-            $table->integer('reference_id')->nullable();
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->double('amount',8, 3);
+            $table->date('change_date');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('money_resources');
+        Schema::dropIfExists('employee_prices_changes');
     }
 };

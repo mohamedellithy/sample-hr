@@ -37,6 +37,14 @@
                                 <span class="text-danger w-100 fs-6">{{ $message }}</span>
                             @enderror
                         </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="basic-default-fullname">البيان</label>
+                            <input type="text" class="form-control" id="basic-default-fullname"
+                                name="description" value="{{  $money_resource->description ?: old('description') }}" />
+                            @error('description')
+                                <span class="text-danger w-100 fs-6">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
                 </div>
             </div>

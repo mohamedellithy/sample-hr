@@ -194,6 +194,35 @@ $(function() {
   });
 
 });
+
+jQuery('form[method=post]').submit(function(e){
+    e.preventDefault();
+    let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
+    if (password == "Opera@94") {
+        jQuery(this).unbind('submit').submit();
+    } else {
+        alert('كلمة المرور خاطئة ');
+    }
+});
+
+// jQuery('.private-section').click(function(e){
+//     let tempo_redirect = jQuery(this).attr('tempo');
+//     let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
+//     if (password == "Opera@94") {
+//         if(tempo_redirect){
+//             window.location.href = tempo_redirect;
+//         }
+//     } else {
+//         jQuery(this).attr('tempo',);
+//         alert('كلمة المرور خاطئة ');
+//         jQuery(this).attr('href','javascript: void(0)');
+//     }
+// });
+
+
+setTimeout(() => {
+    jQuery('.show-notify').hide();
+}, 2000);
 </script>
 
 

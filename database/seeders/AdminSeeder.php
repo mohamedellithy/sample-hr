@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
         User::updateOrCreate([
             'name' => 'admin',
             'email' => 'admin@admin.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('Opera@21321'),
         ]);
 
     }

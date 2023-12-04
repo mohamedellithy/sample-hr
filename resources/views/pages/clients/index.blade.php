@@ -42,7 +42,7 @@ $search = request()->query('search') ?: null;
 
                         </div>
 
-                        <button type="submit" class="btn btn-primary">اضافة</button>
+                        <button type="submit" class="btn btn-primary btn-sm">اضافة</button>
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@ $search = request()->query('search') ?: null;
                             <input type="hidden" name="client_filter" value="{{ $client_filter }}">
                             <input type="hidden" name="datefilter" value="{{ $datefilter }}">
                             <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary">تصدير</button>
+                            <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
                             </div>
                     </form>
                     </div>

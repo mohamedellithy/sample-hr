@@ -20,8 +20,6 @@ class SalesController extends Controller
     {
         $sales = Sale::query();
         $per_page = 10;
-
-
         if ($request->has('datefilter') and $request->get('datefilter') != "") {
             $result = explode('-',$request->get('datefilter'));
             $from = Carbon::parse($result[0])->format('Y-m-d');
