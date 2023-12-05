@@ -63,10 +63,10 @@ $datefilter = request()->query('datefilter') ?: null;
                                         {{ $item->item_created_at }}
                                     </td>
                                     <td>
-                                        مصروفات
+                                        {{ isset($item->item_name) ? $item->item_name : '-' }}
                                     </td>
                                     <td>
-                                        {{ isset($item->item_name) ? $item->item_name : '-' }}
+                                        {{ isset($item->item_description) ? $item->item_description : '-' }}
                                     </td>
                                     <td>
                                         {{  '-' }}

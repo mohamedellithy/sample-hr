@@ -26,13 +26,17 @@ class DailyDeals extends Controller
         $date_range = $from.' / '.$to;
 
         //dd($from,$to);
-        $items    = DB::table('expenses')->select('id as item_expense_id','supplier as item_name','amount as item_amount','created_at as item_created_at')
+        $items    = DB::table('expenses')
+        ->Leftjoin('department_expenses as parent_department','department_expenses.id','=','expenses.section')
+        ->Leftjoin('department_expenses as child_department','department_expenses.id','=','expenses.sub_service')
+        ->select('expenses.id as item_expense_id','parent_department.name as item_name','child_department.name as item_description','expenses.amount as item_amount','expenses.created_at as item_created_at')
         ->whereBetween('created_at',[
             $from,
             $to
         ])->get();
 
-        $expanses_payments = DB::table('expenses_payments')->select('id as item_expenses_payments_id','value as item_amount','created_at as item_created_at')
+        $expanses_payments = DB::table('expenses_payments')
+        ->select('id as item_expenses_payments_id','value as item_amount','created_at as item_created_at')
         ->whereBetween('created_at',[
             $from,
             $to
