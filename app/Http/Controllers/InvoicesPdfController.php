@@ -167,7 +167,7 @@ class InvoicesPdfController extends Controller
 
         $data = $data->merge($employee_paids);
 
-        $data = $data->sortBy('created_at');
+        $data = $data->sortBy('item_created_at');
         //dd($data->sortBy('created_at'));
         $view = \View::make('pages.daily-deals.pdf',compact('data','date_range'));
         $html = $view->render();
