@@ -27,9 +27,9 @@ class DailyDeals extends Controller
 
         //dd($from,$to);
         $items    = DB::table('expenses')
-        ->Leftjoin('department_expenses as parent_department','parent_department.id','=','expenses.section')
-        ->Leftjoin('department_expenses as child_department','child_department.id','=','expenses.sub_service')
-        ->select('expenses.id as item_expense_id','parent_department.name as item_name','child_department.name as item_description','expenses.amount as item_amount','expenses.created_at as item_created_at')
+        ->Leftjoin('department_expenses As parent_department','parent_department.id','=','expenses.section')
+        ->Leftjoin('department_expenses As child_department','child_department.id','=','expenses.sub_service')
+        ->select('expenses.id as item_expense_id','parent_department.department_name as item_name','child_department.department_name as item_description','expenses.amount as item_amount','expenses.created_at as item_created_at')
         ->whereBetween('created_at',[
             $from,
             $to
