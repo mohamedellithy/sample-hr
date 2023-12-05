@@ -87,7 +87,7 @@ class DailyDeals extends Controller
 
         $data = $data->merge($employee_paids);
 
-        $data = $data->sortBy('created_at');
+        $data = $data->sortBy('created_at','desc');
         //dd($data->sortBy('created_at'));
         return view('pages.daily-deals.index',compact('data','date_range'));
     }
