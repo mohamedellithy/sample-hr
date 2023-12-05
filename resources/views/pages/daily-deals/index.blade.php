@@ -57,7 +57,7 @@ $datefilter = request()->query('datefilter') ?: null;
                         @php $balance = 0; @endphp
                         @foreach($data as $item)
                             @if(isset($item->item_expense_id))
-                                @php $balance -=$item->item_amount @endphp
+                                @php  @endphp
                                 <tr>
                                     <td>
                                         {{ $item->item_created_at }}
@@ -79,7 +79,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                     </td>
                                 </tr>
                             @elseif(isset($item->item_expenses_payments_id))
-                                @php $balance +=$item->item_amount @endphp
+                                @php $balance -=$item->item_amount @endphp
                                 <tr>
                                     <td>
                                         {{ $item->item_created_at }}
