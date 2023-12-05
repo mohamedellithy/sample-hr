@@ -124,7 +124,7 @@ class InvoicesPdfController extends Controller
             $to
         ])->get();
 
-        $sales             = DB::table('sales')->select('id as item_sales_id',DB::raw('ROUND(cash + bank + credit_sales,3) as item_amount'),'sale_date as item_created_at')
+        $sales             = DB::table('sales')->select('id as item_sales_id',DB::raw('cash as item_amount'),'sale_date as item_created_at')
         ->whereBetween('sale_date',[
             $from,
             $to
