@@ -13,7 +13,7 @@ class DailyDeals extends Controller
     //
 
     public function index(){
-        
+
         if(request('datefilter')):
             $filter_date    = explode('-',request('datefilter'));
             $from           = Carbon::parse(trim($filter_date[0]))->format('Y-m-d');
@@ -87,7 +87,7 @@ class DailyDeals extends Controller
 
         $data = $data->merge($employee_paids);
 
-        $data = $data->sortBy('created_at','desc');
+        $data = $data->sortBy('item_created_at');
         //dd($data->sortBy('created_at'));
         return view('pages.daily-deals.index',compact('data','date_range'));
     }
