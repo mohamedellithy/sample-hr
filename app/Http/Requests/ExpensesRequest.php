@@ -26,7 +26,6 @@ class ExpensesRequest extends FormRequest
         
         return [
             'section'     => 'required',
-            'sub_service' => 'required',
             'bill_no'     => 'required',
             'supplier'    => 'required',
             'amount'      => 'required|numeric',
