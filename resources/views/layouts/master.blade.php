@@ -133,6 +133,38 @@
         </div>
     </div>
 
+    <h4 class="fw-bold py-3" style="padding-bottom: 0rem !important;"> تعديل مبايعه موظف </h4>
+    <div class="modal fade" id="modalCenterPassword" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="modal-content-inner">
+                <!-- Basic Layout -->
+                <form id="ConfirmInnerPassword" action="" method="GET">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>من فضلك قم بادخال كلمة المرور:</label>
+                                            <input type="password"  class="form-control inner-password" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="padding: 0px 20px;">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+                                        الغاء
+                                    </button>
+                                    <button type="submit" class="btn btn-danger btn-sm">تأكيد</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Core JS -->
 
     <script src="{{ asset('/theme_2/assets/vendor/libs/popper/popper.js') }}"></script>
@@ -174,6 +206,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@stack('script')
 <script type="text/javascript">
 $(function() {
 
@@ -195,48 +228,35 @@ $(function() {
 
 });
 
-jQuery('form[method=post]').submit(function(e){
+let form = null;
+jQuery('form[method=post] , form[method=POST]').submit(function(e){
     e.preventDefault();
-    let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
+    jQuery('#modalCenterPassword').modal('show');
+    form = e;
+});
+
+jQuery('body').on('submit','form[method=post] , form[method=POST]',function(e){
+    e.preventDefault();
+    jQuery('#modalCenterPassword').modal('show');
+    form = e;
+});
+
+jQuery('body').on('submit','#ConfirmInnerPassword',function(e){
+    e.preventDefault();
+    let password = jQuery('.inner-password').val();
     if (password == "Opera@94") {
-        jQuery(this).unbind('submit').submit();
+        form.currentTarget.submit();
+        jQuery('#modalCenterPassword').modal('hide');
     } else {
         alert('كلمة المرور خاطئة ');
     }
 });
-
-jQuery('#modalCenter').on('submit','form[method=post]',function(e){
-    e.preventDefault();
-    let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
-    if (password == "Opera@94") {
-        jQuery(this).unbind('submit').submit();
-    } else {
-        alert('كلمة المرور خاطئة ');
-    }
-});
-
-// jQuery('.private-section').click(function(e){
-//     let tempo_redirect = jQuery(this).attr('tempo');
-//     let password = prompt("من فضلك قم بادخال كلمة المرور: ", "");
-//     if (password == "Opera@94") {
-//         if(tempo_redirect){
-//             window.location.href = tempo_redirect;
-//         }
-//     } else {
-//         jQuery(this).attr('tempo',);
-//         alert('كلمة المرور خاطئة ');
-//         jQuery(this).attr('href','javascript: void(0)');
-//     }
-// });
 
 
 setTimeout(() => {
     jQuery('.show-notify').hide();
 }, 2000);
 </script>
-
-
-    @stack('script')
 
 </body>
 

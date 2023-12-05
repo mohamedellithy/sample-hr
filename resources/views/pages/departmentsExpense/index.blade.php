@@ -53,8 +53,7 @@ $search = request()->query('search') ?: null;
        <div class="card">
            <h5 class="card-header">عرض العملاء</h5>
            <div class="card-header py-3 ">
-
-               <form id="filter-data" method="get" class=" justify-content-between">
+                <form id="filter-data" method="get" class=" justify-content-between">
                     <div class="d-flex justify-content-between" style="background-color: #eee;">
 
                         <div class="nav-item d-flex align-items-center m-2" style="background-color: #fff;padding: 2px;">
@@ -77,19 +76,8 @@ $search = request()->query('search') ?: null;
                                     <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
                             </select>
                         </div>
-                             </form>
-                    <form  method="post" action="{{ route('admin.departments.export') }}">
-                            @csrf
-                            <div class="nav-item d-flex align-items-center m-2">
-                            <input type="hidden" name="search" value="{{ $search }}">
-                            <input type="hidden" name="client_filter" value="{{ $client_filter }}">
-                            <input type="hidden" name="datefilter" value="{{ $datefilter }}">
-                            <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
-                            </div>
-                    </form>
                     </div>
-
+                </form>
            </div>
            <div class="table-responsive text-nowrap">
                <table class="table">
@@ -183,22 +171,22 @@ $search = request()->query('search') ?: null;
 <script>
 
 jQuery('.edit-client').click(function(){
-        let data_edit = jQuery(this).attr('data-department-id');
-        let Popup = jQuery('#modalCenter').modal('show');
-        let url = "{{ route('admin.departments-expenses.edit',':id') }}";
-        url = url.replace(':id',data_edit);
-        $.ajax({
-            url:url,
-            type:"GET",
-            success: function(data){
-                if(data.status == true){
-                    jQuery('#modal-content-inner').html(data.view);
-                }
-                console.log(data);
+    let data_edit = jQuery(this).attr('data-department-id');
+    let Popup = jQuery('#modalCenter').modal('show');
+    let url = "{{ route('admin.departments-expenses.edit',':id') }}";
+    url = url.replace(':id',data_edit);
+    $.ajax({
+        url:url,
+        type:"GET",
+        success: function(data){
+            if(data.status == true){
+                jQuery('#modal-content-inner').html(data.view);
             }
-        })
-        console.log(Popup);
-    });
+            console.log(data);
+        }
+    })
+    console.log(Popup);
+});
 
 
    jQuery('.delete-item').click(function(){
