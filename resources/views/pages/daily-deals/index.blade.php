@@ -123,7 +123,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                     </td>
                                 </tr>
                             @elseif(isset($item->item_sales_id))
-                                @php $balance -=$item->item_amount @endphp
+                                @php $balance +=$item->item_amount @endphp
                                 <tr>
                                     <td>
                                         {{ $item->item_created_at }}

@@ -96,7 +96,7 @@
                                                 </td>
                                             </tr>
                                         @elseif(isset($item->item_sales_id))
-                                            @php $balance -=$item->item_amount @endphp
+                                            @php $balance +=$item->item_amount @endphp
                                             <tr style="border:1px solid gray;">
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
                                                     {{ date('Y-m-d',strtotime($item->item_created_at)) }}
