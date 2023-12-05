@@ -30,16 +30,15 @@
                                     @php $balance = 0; @endphp
                                     @foreach($data as $item)
                                         @if(isset($item->item_expense_id))
-                                            @php $balance -=$item->item_amount @endphp
                                             <tr style="border:1px solid gray;" height="25">
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
                                                     {{ date('Y-m-d',strtotime($item->item_created_at)) }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    مصروفات
+                                                    {{ isset($item->item_name) ? $item->item_name : '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
-                                                    {{ isset($item->item_name) ? $item->item_name : '-' }}
+                                                    {{ isset($item->item_description) ? $item->item_description : '-' }}
                                                 </td>
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
                                                     {{  '-' }}
@@ -52,7 +51,7 @@
                                                 </td>
                                             </tr>
                                         @elseif(isset($item->item_expenses_payments_id))
-                                            @php $balance +=$item->item_amount @endphp
+                                            @php $balance -=$item->item_amount @endphp
                                             <tr style="border:1px solid gray;">
                                                 <td style="border-bottom:1px solid #171615;border:1px solid #171615;font-size:10px">
                                                     {{ date('Y-m-d',strtotime($item->item_created_at)) }}
