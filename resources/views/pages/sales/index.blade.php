@@ -42,7 +42,7 @@ $datefilter = request()->query('datefilter') ?: null;
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
                             </div>
-                            
+
                            <div class="mb-3 col-md-6">
                                <label class="form-label" for="basic-default-company"> التاريخ</label>
                                <input type="date" class="form-control" id="basic-default-fullname"
