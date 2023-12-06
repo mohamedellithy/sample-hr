@@ -21,7 +21,7 @@ $datefilter = request()->query('datefilter') ?: null;
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="basic-default-fullname">كاش</label>
                                 <input type="number" class="form-control" id="basic-default-fullname"
-                                    name="cash" min="0" value="{{ old('cash') }}" required />
+                                    name="cash" min="0" step=".001" value="{{ old('cash') }}" required />
                                 @error('cash')
                                     <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                 @enderror
