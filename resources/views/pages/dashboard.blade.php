@@ -144,7 +144,7 @@ endif;
                                 </div>
                             </div>
                             <span class="fw-semibold d-block mb-1">
-                                الموارد
+                                المتبقي من الموارد
                             </span>
                             <h3 class="card-title mb-2">
                                 @if($datefilter)
