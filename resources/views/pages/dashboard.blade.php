@@ -1,5 +1,5 @@
-@php 
-use Illuminate\Support\Facades\DB; 
+@php
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 $datefilter     = request()->query('datefilter') ?: null;
 
@@ -148,15 +148,22 @@ endif;
                             </span>
                             <h3 class="card-title mb-2">
                                 @if($datefilter)
-                                    {{ \App\Models\MoneyResource::whereBetween('resource_date',[
-                                        $from,
-                                        $to
-                                    ])->sum('value') }}
+                                    @php
+                                        $total_resource = \App\Models\MoneyResource::whereBetween('resource_date',[$from,$to])->sum('value');
+                                        $total_advances = \App\Models\EmployeeAdvance::whereBetween('advance_date',[$from,$to])->sum('amount');
+                                        $total_expenses = \App\Models\ExpensesPayment::whereBetween('created_at',[$from,$to])->sum('value');
+                                    @endphp
+                                    {{ formate_price($total_resource - $total_advances - $total_expenses) }}
                                 @else
-                                    {{ \App\Models\MoneyResource::sum('value') }}
+                                    @php
+                                        $total_resource = \App\Models\MoneyResource::sum('value');
+                                        $total_advances = \App\Models\EmployeeAdvance::sum('amount');
+                                        $total_expenses = \App\Models\ExpensesPayment::sum('value');
+                                    @endphp
+                                    {{ formate_price($total_resource - $total_advances - $total_expenses) }}
                                 @endif
                             </h3>
-                            
+
                             <small class="text-success fw-semibold"><i
                                     class="bx bx-up-arrow-alt"></i> ريال
                             </small>
@@ -183,7 +190,7 @@ endif;
                                 @else
                                     {{ \App\Models\EmployeeSale::sum('remained') }}
                                 @endif
-                                
+
                             </h3>
                             <small class="text-success fw-semibold"><i
                                     class="bx bx-up-arrow-alt"></i> ريال
