@@ -80,7 +80,7 @@
                             <div class="row mt-3">
                                 <div class="col">
                                     <label class="form-label" for="basic-default-company">قيمة الضريبة</label>
-                                    <input type="number" step=".001" value="{{ old('taxs_amount') }}" class="form-control" placeholder="قيمة الضريبة"  name="taxs_amount"/>
+                                    <input type="number" step=".001" value="{{ old('taxs_amount') ?: 0 }}" class="form-control" placeholder="قيمة الضريبة"  name="taxs_amount"/>
                                     @error('taxs_amount')
                                         <span class="text-danger w-100 fs-6">{{ $message }}</span>
                                     @enderror
