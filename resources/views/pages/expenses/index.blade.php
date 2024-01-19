@@ -40,6 +40,8 @@ $service_filter = request()->query('service_filter') ?: null;
                                     <option value="{{ $main_department->id }}">{{ $main_department->department_name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="nav-item d-flex align-items-center m-2">
                             <select name="sub_service" id="Selectsub"  class="form-control">
                                 <option value>تحديد البند</option>
                                 @foreach($sub_departments as $sub_department)
