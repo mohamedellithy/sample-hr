@@ -40,6 +40,18 @@ class ExpensesController extends Controller
             ->orWhere('supplier','like','%'.request('search').'%');
         });
 
+        $expenses->when(request('section') != null, function ($q) {
+            return $q->whereHas('department_main',function($query){
+                $query->where('department_expenses.department_name',request('section'));
+            });
+        });
+
+        $expenses->when(request('sub_service') != null, function ($q) {
+            return $q->whereHas('department_sub',function($query){
+                $query->where('department_expenses.department_name','like',request('sub_service'));
+            });
+        });
+
 
         $expenses->when(request('filter') == 'sort_asc', function ($q) {
             return $q->orderBy('created_at', 'asc');
@@ -62,7 +74,10 @@ class ExpensesController extends Controller
 
         $expenses = $expenses->paginate($per_page);
 
-        return view('pages.expenses.index', compact('expenses'));
+        $main_departments = DepartmentExpenses::where('parent_id',null)->get();
+        $sub_departments  = DepartmentExpenses::where('parent_id','!=',null)->get();
+
+        return view('pages.expenses.index', compact('expenses','main_departments','sub_departments'));
     }
 
     public function expenses_payments(Request $request,$expense_id){

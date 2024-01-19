@@ -27,24 +27,26 @@ $service_filter = request()->query('service_filter') ?: null;
                             <input type="text" class="search form-control border-0 shadow-none" onchange="document.getElementById('filter-data').submit()" placeholder="البحث ...." @isset($search) value="{{ $search }}" @endisset id="search" name="search" style="background-color:#fff;"/>
                         </div>
 
-
-                        {{-- <div class="nav-item d-flex align-items-center m-2">
-                            <select name="service_filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
-                                <option value="">فلتر الخدمه</option>
-                                <option value="بار" @isset($service_filter) @if ($service_filter=='بار' ) selected @endif @endisset>بار</option>
-                                <option value="شيشه" @isset($service_filter) @if ($service_filter=='شيشه' ) selected @endif @endisset>شيشه</option>
-                                <option value="صيانه" @isset($service_filter) @if ($service_filter=='صيانه' ) selected @endif @endisset>صيانه</option>
-                                <option value="مطبخ" @isset($service_filter) @if ($service_filter=='مطبخ' ) selected @endif @endisset>مطبخ</option>
-                                <option value="owner" @isset($service_filter) @if ($service_filter=='owner' ) selected @endif @endisset>owner</option>
-                            </select>
-                        </div> --}}
-
                         <div class="nav-item d-flex align-items-center m-2">
 
                             <input type="text" placeholder="تاريخ" onchange="document.getElementById('filter-data').submit()" class=" form-control"  @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
 
                         </div>
 
+                        <div class="nav-item d-flex align-items-center m-2">
+                            <select name="section" id="SelectSection" class="form-control">
+                                <option value>تحديد القسم</option>
+                                @foreach($main_departments as $main_department)
+                                    <option value="{{ $main_department->id }}">{{ $main_department->department_name }}</option>
+                                @endforeach
+                            </select>
+                            <select name="sub_service" id="Selectsub"  class="form-control">
+                                <option value>تحديد البند</option>
+                                @foreach($sub_departments as $sub_department)
+                                    <option value="{{ $sub_department->id }}">{{ $sub_department->department_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="nav-item d-flex align-items-center m-2">
                             <select name="filter" id="largeSelect" onchange="document.getElementById('filter-data').submit()" class="form-control">
                                 <option value="">فلتر المصروفات</option>
@@ -73,7 +75,7 @@ $service_filter = request()->query('service_filter') ?: null;
                     </div>
 
            </div>
-           <div class="table-responsive text-nowrap">
+           <div class="table-responsive">
                <table class="table">
                    <thead class="table-light">
                         <tr class="table-dark">
@@ -101,7 +103,7 @@ $service_filter = request()->query('service_filter') ?: null;
                                 <td class="width-16">
                                     {{ $expense->department_sub ? $expense->department_sub->department_name : '' }}
                             </td>
-                             
+
                                 <td>
                                     {{ formate_price($expense->amount) }}
                                 </td>
@@ -157,11 +159,29 @@ $service_filter = request()->query('service_filter') ?: null;
 
 <script>
 
-   jQuery('.delete-item').click(function(){
-       let expense_service = jQuery(this).attr('data-expense-service');
-       if(confirm('هل متأكد من اتمام حذف المصروف '+ expense_service)){
-           jQuery(this).parents('form').submit();
-       }
-   });
+    jQuery('.delete-item').click(function(){
+        let expense_service = jQuery(this).attr('data-expense-service');
+        if(confirm('هل متأكد من اتمام حذف المصروف '+ expense_service)){
+            jQuery(this).parents('form').submit();
+        }
+    });
+
+    jQuery('#SelectSection').change(function(){
+        let parent_id = jQuery(this).val();
+        let url = "{{ route('admin.sub-departments',':parent_id') }}";
+        url = url.replace(':parent_id',parent_id);
+        jQuery('#Selectsub').html("");
+        $.ajax({
+            url:url,
+            type:"GET",
+            success: function(data){
+                let option = "";
+                data.sub_departments.forEach(function(item){
+                    option +=`<option value="${item.id}">${item.department_name}</option>`;
+                });
+                jQuery('#Selectsub').html(option);
+            }
+        })
+    });
 </script>
 @endpush
