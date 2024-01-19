@@ -21,16 +21,14 @@ $service_filter = request()->query('service_filter') ?: null;
                     </div>
                 </div>
         <div style="background-color: #eee;">
-                    <form id="filter-data" method="get" class="d-flex justify-content-between">
-                        <div class="nav-item d-flex align-items-center m-2" style="background-color: #fff;padding: 2px;">
+                    <form id="filter-data" method="get" class="d-flex justify-content-between" style="flex-wrap: wrap;">
+                        <div class="nav-item d-flex align-items-center m-2" style="background-color: #fff;padding: 2px;flex-wrap: nowrap;">
                             <i class="bx bx-search fs-4 lh-0"></i>
                             <input type="text" class="search form-control border-0 shadow-none" onchange="document.getElementById('filter-data').submit()" placeholder="البحث ...." @isset($search) value="{{ $search }}" @endisset id="search" name="search" style="background-color:#fff;"/>
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
-
                             <input type="text" placeholder="تاريخ" onchange="document.getElementById('filter-data').submit()" class=" form-control"  @isset($datefilter) value="{{ $datefilter }}" @endisset id="datefilter" name="datefilter"/>
-
                         </div>
 
                         <div class="nav-item d-flex align-items-center m-2">
