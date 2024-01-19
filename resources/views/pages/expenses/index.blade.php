@@ -20,8 +20,8 @@ $service_filter = request()->query('service_filter') ?: null;
                         <a href="{{ route('admin.expenses.create') }}" class="btn btn-success btn-sm" style="color:white">اضافة مصروف جديد</a>
                     </div>
                 </div>
-               <form id="filter-data" method="get" class=" justify-content-between">
-                    <div class="d-flex justify-content-between" style="background-color: #eee;">
+                <div class="d-flex justify-content-between" style="background-color: #eee;">
+                    <form id="filter-data" method="get" class=" justify-content-between">
                         <div class="nav-item d-flex align-items-center m-2" style="background-color: #fff;padding: 2px;">
                             <i class="bx bx-search fs-4 lh-0"></i>
                             <input type="text" class="search form-control border-0 shadow-none" onchange="document.getElementById('filter-data').submit()" placeholder="البحث ...." @isset($search) value="{{ $search }}" @endisset id="search" name="search" style="background-color:#fff;"/>
@@ -67,10 +67,10 @@ $service_filter = request()->query('service_filter') ?: null;
                     <form  method="post" action="{{ route('admin.expenses.export') }}">
                             @csrf
                             <div class="nav-item d-flex align-items-center m-2">
-                            <input type="hidden" name="search" value="{{ $search }}">
-                            <input type="hidden" name="datefilter" value="{{ $datefilter }}">
-                            <input type="hidden" name="filter" value="{{ $filter }}">
-                            <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
+                                <input type="hidden" name="search" value="{{ $search }}">
+                                <input type="hidden" name="datefilter" value="{{ $datefilter }}">
+                                <input type="hidden" name="filter" value="{{ $filter }}">
+                                <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
                             </div>
                     </form>
                     </div>
