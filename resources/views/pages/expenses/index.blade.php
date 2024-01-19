@@ -62,7 +62,8 @@ $service_filter = request()->query('service_filter') ?: null;
                                     <option value="100" @isset($rows) @if ($rows=='100' ) selected @endif @endisset> 100</option>
                             </select>
                         </div>
-                         </form>
+                        <button type="submit" class="btn btn-primary btn-sm">بحث</button>
+                    </form>
                     <form  method="post" action="{{ route('admin.expenses.export') }}">
                             @csrf
                             <div class="nav-item d-flex align-items-center m-2">
