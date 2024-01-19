@@ -42,13 +42,13 @@ class ExpensesController extends Controller
 
         $expenses->when(request('section') != null, function ($q) {
             return $q->whereHas('department_main',function($query){
-                $query->where('department_expenses.department_name',request('section'));
+                $query->where('department_expenses.id',request('section'));
             });
         });
 
         $expenses->when(request('sub_service') != null, function ($q) {
             return $q->whereHas('department_sub',function($query){
-                $query->where('department_expenses.department_name','like',request('sub_service'));
+                $query->where('department_expenses.id',request('sub_service'));
             });
         });
 
