@@ -64,16 +64,18 @@ $service_filter = request()->query('service_filter') ?: null;
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm">بحث</button>
                     </form>
+                </div>
+                <div class="d-flex justify-content-between" style="background-color: #eee;">
                     <form  method="post" action="{{ route('admin.expenses.export') }}">
-                            @csrf
-                            <div class="nav-item d-flex align-items-center m-2">
-                                <input type="hidden" name="search" value="{{ $search }}">
-                                <input type="hidden" name="datefilter" value="{{ $datefilter }}">
-                                <input type="hidden" name="filter" value="{{ $filter }}">
-                                <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
-                            </div>
+                        @csrf
+                        <div class="nav-item d-flex align-items-center m-2">
+                            <input type="hidden" name="search" value="{{ $search }}">
+                            <input type="hidden" name="datefilter" value="{{ $datefilter }}">
+                            <input type="hidden" name="filter" value="{{ $filter }}">
+                            <button type="submit" class="btn btn-primary btn-sm">تصدير</button>
+                        </div>
                     </form>
-                    </div>
+                </div>
 
            </div>
            <div class="table-responsive">
