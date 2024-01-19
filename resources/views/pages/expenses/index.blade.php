@@ -5,6 +5,8 @@ $rows = request()->query('rows') ?: 10;
 $filter = request()->query('filter') ?: null;
 $filter_salary = request()->query('filter_salary') ?: null;
 $datefilter = request()->query('datefilter') ?: null;
+$section = request()->query('section') ?: null;
+$sub_service = request()->query('sub_service') ?: null;
 
 $service_filter = request()->query('service_filter') ?: null;
 @endphp
@@ -20,7 +22,7 @@ $service_filter = request()->query('service_filter') ?: null;
                         <a href="{{ route('admin.expenses.create') }}" class="btn btn-success btn-sm" style="color:white">اضافة مصروف جديد</a>
                     </div>
                 </div>
-        <div style="background-color: #eee;">
+                <div style="background-color: #eee;">
                     <form id="filter-data" method="get" class="d-flex justify-content-between" style="flex-wrap: wrap;">
                         <div class="nav-item d-flex align-items-center m-2" style="background-color: #fff;padding: 2px;flex-wrap: nowrap;">
                             <i class="bx bx-search fs-4 lh-0"></i>
@@ -35,7 +37,7 @@ $service_filter = request()->query('service_filter') ?: null;
                             <select name="section" id="SelectSection" class="form-control">
                                 <option value>تحديد القسم</option>
                                 @foreach($main_departments as $main_department)
-                                    <option value="{{ $main_department->id }}">{{ $main_department->department_name }}</option>
+                                    <option value="{{ $main_department->id }}" @if($section == $main_department->id) selected @endif>{{ $main_department->department_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -43,7 +45,7 @@ $service_filter = request()->query('service_filter') ?: null;
                             <select name="sub_service" id="Selectsub"  class="form-control">
                                 <option value>تحديد البند</option>
                                 @foreach($sub_departments as $sub_department)
-                                    <option value="{{ $sub_department->id }}">{{ $sub_department->department_name }}</option>
+                                    <option value="{{ $sub_department->id }}" @if($sub_service == $sub_department->id) selected @endif>{{ $sub_department->department_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -178,7 +180,7 @@ $service_filter = request()->query('service_filter') ?: null;
             url:url,
             type:"GET",
             success: function(data){
-                let option = "";
+                let option = "<option value>تحديد البند</option>";
                 data.sub_departments.forEach(function(item){
                     option +=`<option value="${item.id}">${item.department_name}</option>`;
                 });
